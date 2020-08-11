@@ -71,7 +71,6 @@ public class ConversationActivity extends TitleBaseActivity {
     private AnnouceView annouceView;
     private ConversationViewModel conversationViewModel;
     private GroupManagementViewModel groupManagementViewModel;
-    private PrivateChatSettingViewModel privateChatSettingViewModel;
     private String title;
     private boolean isExtensionHeightInit = false;
     private boolean isSoftKeyOpened = false;
@@ -209,25 +208,7 @@ public class ConversationActivity extends TitleBaseActivity {
                         return;
                     }
                 }
-                ThreadManager.getInstance().runOnUIThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //在主线程注册 observeForever 因为截屏时候可能使得 activity 处于 pause 状态，无法发送消息
-                        LiveData<Resource<Void>> result = conversationViewModel.sendScreenShotMsg(conversationType.getValue(), targetId);
-                        result.observeForever(new Observer<Resource<Void>>() {
-                            @Override
-                            public void onChanged(Resource<Void> voidResource) {
-                                if (voidResource.status == Status.SUCCESS) {
-                                    result.removeObserver(this);
-                                    SLog.d(TAG, "sendScreenShotMsg===Success");
-                                } else if (voidResource.status == Status.ERROR) {
-                                    result.removeObserver(this);
-                                    SLog.d(TAG, "sendScreenShotMsg===Error");
-                                }
-                            }
-                        });
-                    }
-                });
+//
             }
 
             @Override

@@ -23,12 +23,14 @@ import java.util.List;
 
 import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.common.IntentExtra;
+import cn.rongcloud.im.niko.db.model.FriendDescription;
 import cn.rongcloud.im.niko.db.model.FriendDetailInfo;
 import cn.rongcloud.im.niko.db.model.FriendShipInfo;
 import cn.rongcloud.im.niko.event.DeleteFriendEvent;
 import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.ScreenCaptureResult;
 import cn.rongcloud.im.niko.model.Status;
+import cn.rongcloud.im.niko.ui.dialog.CommonDialog;
 import cn.rongcloud.im.niko.ui.view.SealTitleBar;
 import cn.rongcloud.im.niko.ui.view.SettingItemView;
 import cn.rongcloud.im.niko.ui.widget.SelectableRoundedImageView;
@@ -37,22 +39,18 @@ import cn.rongcloud.im.niko.utils.ImageLoaderUtils;
 import cn.rongcloud.im.niko.utils.ToastUtils;
 import cn.rongcloud.im.niko.viewmodel.PrivateChatSettingViewModel;
 import cn.rongcloud.im.niko.utils.log.SLog;
+import cn.rongcloud.im.niko.viewmodel.UserDetailViewModel;
 import io.rong.eventbus.EventBus;
 import io.rong.imkit.utilities.PromptPopupDialog;
 import io.rong.imlib.model.Conversation;
 
 public class PrivateChatSettingActivity extends TitleBaseActivity implements View.OnClickListener {
     private final String TAG = "PrivateChatSettingActivity";
-    /**
-     * 发起创建群组
-     */
-    private final int REQUEST_START_GROUP = 1000;
+
 
     private PrivateChatSettingViewModel privateChatSettingViewModel;
 
-    private SettingItemView isNotifySb;
     private SettingItemView isTopSb;
-    private SettingItemView isScreenShotSiv;
 
     private String targetId;
     private String name;
@@ -60,10 +58,11 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
     private Conversation.ConversationType conversationType;
     private SelectableRoundedImageView portraitIv;
     private TextView nameTv;
-    private boolean isScreenShotSivClicked = false;
+    private SettingItemView sivDescription;
+    private SettingItemView blacklistSiv;
+    private UserDetailViewModel userDetailViewModel;
+    private boolean isInBlackList = false;
 
-    private final int REQUEST_CODE_PERMISSION = 114;
-    private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,67 +88,33 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
 
     private void initView() {
         portraitIv = findViewById(R.id.profile_siv_user_header);
-        portraitIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PrivateChatSettingActivity.this, UserDetailActivity.class);
-                intent.putExtra(IntentExtra.STR_TARGET_ID, targetId);
-                startActivity(intent);
-            }
-        });
+//        portraitIv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(PrivateChatSettingActivity.this, UserDetailActivity.class);
+//                intent.putExtra(IntentExtra.STR_TARGET_ID, targetId);
+//                startActivity(intent);
+//            }
+//        });
 
         // 用户名
         nameTv = findViewById(R.id.profile_tv_user_name);
 
-        // 添加用户至群聊
-        findViewById(R.id.profile_iv_add_member).setOnClickListener(this);
-
-        // 查询聊天记录
-        findViewById(R.id.siv_search_messages).setOnClickListener(this);
-        // 清除聊天记录
-        findViewById(R.id.siv_clean_chat_message).setOnClickListener(this);
-
-        isNotifySb = findViewById(R.id.siv_user_notification);
-        isNotifySb.setSwitchCheckListener((buttonView, isChecked) ->
-                privateChatSettingViewModel.setIsNotifyConversation(!isChecked));
         isTopSb = findViewById(R.id.siv_conversation_top);
         isTopSb.setSwitchCheckListener((buttonView, isChecked) ->
                 privateChatSettingViewModel.setConversationOnTop(isChecked));
 
-        isScreenShotSiv = findViewById(R.id.profile_siv_group_screen_shot_notification);
-        isScreenShotSiv.setSwitchTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (!isScreenShotSivClicked) {
-                    isScreenShotSivClicked = true;
-                }
-                return false;
-            }
-        });
-        isScreenShotSiv.setSwitchCheckListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //初始化不触发逻辑
-                if (!isScreenShotSivClicked) {
-                    return;
-                }
-                // 0 关闭 1 打开
-                if (isChecked) {
-                    //没有权限不开启设置
-                    if (!requestReadPermissions()) {
-                        return;
-                    }
-                    privateChatSettingViewModel.setScreenCaptureStatus(1);
-                } else {
-                    privateChatSettingViewModel.setScreenCaptureStatus(0);
-                }
-            }
-        });
+
+        // 设置备注
+        sivDescription = findViewById(R.id.profile_siv_detail_alias);
+        sivDescription.setOnClickListener(this);
+
+        // 加入，移除黑名单
+        blacklistSiv = findViewById(R.id.profile_siv_detail_blacklist);
+        blacklistSiv.setOnClickListener(this);
     }
 
-    private boolean requestReadPermissions() {
-        return CheckPermissionUtils.requestPermissions(this, permissions, REQUEST_CODE_PERMISSION);
-    }
+
 
     private void initViewModel() {
         privateChatSettingViewModel = ViewModelProviders.of(this, new PrivateChatSettingViewModel.Factory(getApplication(), targetId, conversationType)).get(PrivateChatSettingViewModel.class);
@@ -175,24 +140,6 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
             }
         });
 
-        // 获取是否通知消息状态
-        privateChatSettingViewModel.getIsNotify().observe(this, resource -> {
-            if (resource.data != null) {
-                if (resource.status == Status.SUCCESS) {
-                    isNotifySb.setChecked(!resource.data);
-                } else {
-                    isNotifySb.setCheckedImmediately(!resource.data);
-                }
-            }
-
-            if (resource.status == Status.ERROR) {
-                if (resource.data != null) {
-                    ToastUtils.showToast(R.string.common_set_failed);
-                } else {
-                    // do nothing
-                }
-            }
-        });
 
         // 获取是否消息置顶状态
         privateChatSettingViewModel.getIsTop().observe(this, resource -> {
@@ -213,26 +160,64 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
             }
         });
 
-        // 获取清除历史消息结果
-        privateChatSettingViewModel.getCleanHistoryMessageResult().observe(this, resource -> {
-            if (resource.status == Status.SUCCESS) {
-                ToastUtils.showToast(R.string.common_clear_success);
-            } else if (resource.status == Status.ERROR) {
-                ToastUtils.showToast(R.string.common_clear_failure);
+        userDetailViewModel = ViewModelProviders.of(this, new UserDetailViewModel.Factory(getApplication(), targetId)).get(UserDetailViewModel.class);
+
+        // 获取黑名单状态
+        userDetailViewModel.getIsInBlackList().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isInBlackList) {
+                updateBlackListItem(isInBlackList);
             }
         });
 
-        // 获取设置截屏通知结果
-        privateChatSettingViewModel.getSetScreenCaptureResult().observe(this, new Observer<Resource<Void>>() {
+        // 获取添加到黑名单结果
+        userDetailViewModel.getAddBlackListResult().observe(this, new Observer<Resource<Boolean>>() {
             @Override
-            public void onChanged(Resource<Void> voidResource) {
-                if (voidResource.status == Status.SUCCESS) {
-                    ToastUtils.showToast(getString(R.string.seal_set_clean_time_success));
-                } else if (voidResource.status == Status.ERROR) {
-                    ToastUtils.showToast(getString(R.string.seal_set_clean_time_fail));
+            public void onChanged(Resource<Boolean> resource) {
+                if (resource.status == Status.SUCCESS) {
+                    ToastUtils.showToast(R.string.common_add_successful);
+                } else if (resource.status == Status.ERROR) {
+                    ToastUtils.showToast(resource.message);
                 }
             }
         });
+
+        // 获取移除黑名单结果
+        userDetailViewModel.getRemoveBlackListResult().observe(this, new Observer<Resource<Boolean>>() {
+            @Override
+            public void onChanged(Resource<Boolean> resource) {
+                if (resource.status == Status.SUCCESS) {
+                    ToastUtils.showToast(R.string.common_remove_successful);
+                } else if (resource.status == Status.ERROR) {
+                    ToastUtils.showToast(resource.message);
+                }
+            }
+        });
+
+
+        userDetailViewModel.getFriendDescription().observe(this, new Observer<Resource<FriendDescription>>() {
+            @Override
+            public void onChanged(Resource<FriendDescription> friendDescriptionResource) {
+                if (friendDescriptionResource.status != Status.LOADING && friendDescriptionResource.data != null) {
+                    updateDescription(friendDescriptionResource.data);
+                }
+            }
+        });
+
+    }
+
+    /**
+     * 刷新更多中黑名单选项
+     *
+     * @param isInBlackList
+     */
+    private void updateBlackListItem(boolean isInBlackList) {
+        this.isInBlackList = isInBlackList;
+        if (isInBlackList) {
+            blacklistSiv.setContent(R.string.profile_detail_remove_from_blacklist);
+        } else {
+            blacklistSiv.setContent(R.string.profile_detail_join_the_blacklist);
+        }
     }
 
     private void initData() {
@@ -242,103 +227,70 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.siv_clean_chat_message:
-                showCleanMessageDialog();
+            case R.id.profile_siv_detail_alias:
+                toSetAliasName();
                 break;
-            case R.id.siv_search_messages:
-                goSearchChatMessage();
-                break;
-            case R.id.profile_iv_add_member:
-                addOtherMemberToGroup();
+            case R.id.profile_siv_detail_blacklist:
+                toBlackList(!isInBlackList);
                 break;
             default:
         }
     }
 
     /**
-     * 显示清除聊天消息对话框
+     * 是否加到黑名单
+     *
+     * @param isToBlack true 代表加到黑名单，false 代表移除掉黑名单
      */
-    private void showCleanMessageDialog() {
-        PromptPopupDialog.newInstance(this,
-                getString(R.string.profile_clean_private_chat_history)).setLayoutRes(io.rong.imkit.R.layout.rc_dialog_popup_prompt_warning)
-                .setPromptButtonClickedListener(() -> {
-                    privateChatSettingViewModel.cleanHistoryMessage();
-                }).show();
-    }
-
-    /**
-     * 跳转到聊天记录搜索界面
-     */
-    private void goSearchChatMessage() {
-        Intent intent = new Intent(this, SearchHistoryMessageActivity.class);
-        intent.putExtra(IntentExtra.STR_TARGET_ID, targetId);
-        intent.putExtra(IntentExtra.SERIA_CONVERSATION_TYPE, conversationType);
-        intent.putExtra(IntentExtra.STR_CHAT_NAME, name);
-        intent.putExtra(IntentExtra.STR_CHAT_PORTRAIT, portraitUrl);
-        startActivity(intent);
-    }
-
-    /**
-     * 添加其他人发起群聊
-     */
-    private void addOtherMemberToGroup() {
-        Intent intent = new Intent(this, SelectCreateGroupActivity.class);
-        ArrayList<String> friendIdList = new ArrayList<>();
-        friendIdList.add(targetId);
-        intent.putStringArrayListExtra(IntentExtra.LIST_CAN_NOT_CHECK_ID_LIST, friendIdList);
-        startActivityForResult(intent, REQUEST_START_GROUP);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_START_GROUP && resultCode == RESULT_OK) {
-            ArrayList<String> memberList = data.getStringArrayListExtra(IntentExtra.LIST_STR_ID_LIST);
-            // 添加该好友的id
-            memberList.add(targetId);
-            SLog.i(TAG, "memberList.size = " + memberList.size());
-            Intent intent = new Intent(this, CreateGroupActivity.class);
-            intent.putExtra(IntentExtra.LIST_STR_ID_LIST, memberList);
-            startActivity(intent);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_CODE_PERMISSION && !CheckPermissionUtils.allPermissionGranted(grantResults)) {
-            List<String> permissionsNotGranted = new ArrayList<>();
-            for (String permission : permissions) {
-                if (!ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
-                    permissionsNotGranted.add(permission);
-                }
-            }
-            if (permissionsNotGranted.size() > 0) {
-                DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case DialogInterface.BUTTON_POSITIVE:
-                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                                intent.setData(uri);
-                                startActivityForResult(intent, requestCode);
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                break;
-                            default:
-                                break;
+    private void toBlackList(boolean isToBlack) {
+        if (isToBlack) {
+            // 显示确认对话框
+            CommonDialog commonDialog = new CommonDialog.Builder()
+                    .setContentMessage(getString(R.string.profile_add_to_blacklist_tips))
+                    .setDialogButtonClickListener(new CommonDialog.OnDialogButtonClickListener() {
+                        @Override
+                        public void onPositiveClick(View v, Bundle bundle) {
+                            userDetailViewModel.addToBlackList();
                         }
-                    }
-                };
-                CheckPermissionUtils.showPermissionAlert(this, getResources().getString(R.string.seal_grant_permissions) + CheckPermissionUtils.getNotGrantedPermissionMsg(this, permissionsNotGranted), listener);
-            } else {
-                ToastUtils.showToast(getString(R.string.seal_set_clean_time_fail));
-            }
+
+                        @Override
+                        public void onNegativeClick(View v, Bundle bundle) {
+                        }
+                    })
+                    .build();
+            commonDialog.show(getSupportFragmentManager(), null);
         } else {
-            //权限获得后在请求次网络设置状态
-            privateChatSettingViewModel.setScreenCaptureStatus(1);
+            userDetailViewModel.removeFromBlackList();
         }
+    }
+
+
+    private void updateDescription(FriendDescription data) {
+        if (!TextUtils.isEmpty(data.getDescription())) {
+            sivDescription.setContent(R.string.profile_set_display_des);
+            sivDescription.setValue(data.getDescription());
+            sivDescription.getValueView().setSingleLine();
+            sivDescription.getValueView().setMaxEms(10);
+            sivDescription.getValueView().setEllipsize(TextUtils.TruncateAt.END);
+        } else {
+            // 同时为空显示'设置备注和描述'
+            if (TextUtils.isEmpty(data.getPhone())) {
+                sivDescription.setContent(R.string.profile_set_display_name);
+            } else {
+                sivDescription.setContent(R.string.profile_set_display_des);
+            }
+            sivDescription.setValue("");
+        }
+
+    }
+
+    /**
+     * 跳转到设置备注名
+     */
+    private void toSetAliasName() {
+        Intent intent = new Intent(this, EditUserDescribeActivity.class);//EditAliasActivity
+        intent.putExtra(IntentExtra.STR_TARGET_ID, targetId);
+        startActivity(intent);
     }
 
     @Override

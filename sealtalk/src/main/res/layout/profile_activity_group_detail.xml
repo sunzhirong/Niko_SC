@@ -76,26 +76,6 @@
                 android:layout_height="wrap_content"
                 app:item_content="@string/profile_group_name"
                 app:item_divider="true">
-
-            </cn.rongcloud.im.niko.ui.view.SettingItemView>
-
-            <cn.rongcloud.im.niko.ui.view.SettingItemView
-                android:id="@+id/profile_siv_group_qrcode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:item_content="@string/profile_group_qrcode"
-                app:item_divider="true"
-                app:item_right_image="@drawable/profile_ic_qrcode">
-
-            </cn.rongcloud.im.niko.ui.view.SettingItemView>
-
-            <cn.rongcloud.im.niko.ui.view.SettingItemView
-                android:id="@+id/profile_siv_group_notice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:item_content="@string/profile_group_notice"
-                app:item_divider="true">
-
             </cn.rongcloud.im.niko.ui.view.SettingItemView>
 
 

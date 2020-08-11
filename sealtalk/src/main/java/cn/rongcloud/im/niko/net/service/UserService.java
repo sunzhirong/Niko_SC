@@ -15,6 +15,7 @@ import cn.rongcloud.im.niko.model.RegisterResult;
 import cn.rongcloud.im.niko.model.Result;
 import cn.rongcloud.im.niko.model.UploadTokenResult;
 import cn.rongcloud.im.niko.model.VerifyResult;
+import cn.rongcloud.im.niko.model.niko.ProfileHeadInfo;
 import cn.rongcloud.im.niko.model.niko.ProfileInfo;
 import cn.rongcloud.im.niko.net.ScUrl;
 import cn.rongcloud.im.niko.net.SealTalkUrl;
@@ -60,31 +61,31 @@ public interface UserService {
     LiveData<Result> changePassword(@Body RequestBody body);
 
 
-    /**
-     * 获取黑名单信息
-     *
-     * @return
-     */
-    @GET(SealTalkUrl.GET_BLACK_LIST)
-    LiveData<Result<List<FriendBlackInfo>>> getFriendBlackList();
-
-    /**
-     * 添加到黑名单
-     *
-     * @param body
-     * @return
-     */
-    @POST(SealTalkUrl.ADD_BLACK_LIST)
-    LiveData<Result> addToBlackList(@Body RequestBody body);
-
-    /**
-     * 移除黑名单
-     *
-     * @param body
-     * @return
-     */
-    @POST(SealTalkUrl.REMOVE_BLACK_LIST)
-    LiveData<Result> removeFromBlackList(@Body RequestBody body);
+//    /**
+//     * 获取黑名单信息
+//     *
+//     * @return
+//     */
+//    @GET(SealTalkUrl.GET_BLACK_LIST)
+//    LiveData<Result<List<FriendBlackInfo>>> getFriendBlackList();
+//
+//    /**
+//     * 添加到黑名单
+//     *
+//     * @param body
+//     * @return
+//     */
+//    @POST(SealTalkUrl.ADD_BLACK_LIST)
+//    LiveData<Result> addToBlackList(@Body RequestBody body);
+//
+//    /**
+//     * 移除黑名单
+//     *
+//     * @param body
+//     * @return
+//     */
+//    @POST(SealTalkUrl.REMOVE_BLACK_LIST)
+//    LiveData<Result> removeFromBlackList(@Body RequestBody body);
 
     /**
      * 获取通讯录中的群组列表
@@ -127,5 +128,37 @@ public interface UserService {
     @POST(ScUrl.GET_OTHER_PROFILE)
     @Headers(NetConstant.JSON)
     LiveData<Result<ProfileInfo>> getUserInfo(@Body RequestBody body);
+
+
+
+    /**
+     * 获取黑名单信息
+     *
+     * @return
+     */
+
+    @POST(ScUrl.BLOCKS_LIST)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<List<ProfileHeadInfo>>> getFriendBlackList(@Body RequestBody body);
+
+    /**
+     * 添加到黑名单
+     *
+     * @param body
+     * @return
+     */
+    @POST(ScUrl.BLOCKS_ADD)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<Boolean>> addToBlackList(@Body RequestBody body);
+
+    /**
+     * 移除黑名单
+     *
+     * @param body
+     * @return
+     */
+    @POST(ScUrl.BLOCKS_REMOVE)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<Boolean>> removeFromBlackList(@Body RequestBody body);
 
 }

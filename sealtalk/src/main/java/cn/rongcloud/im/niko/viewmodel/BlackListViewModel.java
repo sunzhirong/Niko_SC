@@ -24,7 +24,7 @@ public class BlackListViewModel extends AndroidViewModel {
     private FriendTask friendTask;
 
     private SingleSourceLiveData<Resource<List<UserSimpleInfo>>> blacklistResult = new SingleSourceLiveData<>();
-    private SingleSourceMapLiveData<Resource<Void>, Resource<Void>> removeBlackListResult;
+    private SingleSourceMapLiveData<Resource<Boolean>, Resource<Boolean>> removeBlackListResult;
 
     public BlackListViewModel(@NonNull Application application) {
         super(application);
@@ -33,9 +33,9 @@ public class BlackListViewModel extends AndroidViewModel {
         getBlackList();
 
 
-        removeBlackListResult = new SingleSourceMapLiveData<>(new Function<Resource<Void>, Resource<Void>>() {
+        removeBlackListResult = new SingleSourceMapLiveData<>(new Function<Resource<Boolean>, Resource<Boolean>>() {
             @Override
-            public Resource<Void> apply(Resource<Void> input) {
+            public Resource<Boolean> apply(Resource<Boolean> input) {
                 if(input.status == Status.SUCCESS) {
                     // 在移除黑名单成功后刷新好友列表
                     LiveData<Resource<List<FriendShipInfo>>> allFriends = friendTask.getAllFriends();
@@ -81,7 +81,7 @@ public class BlackListViewModel extends AndroidViewModel {
      *
      * @return
      */
-    public LiveData<Resource<Void>> getRemoveBlackListResult() {
+    public LiveData<Resource<Boolean>> getRemoveBlackListResult() {
         return removeBlackListResult;
     }
 

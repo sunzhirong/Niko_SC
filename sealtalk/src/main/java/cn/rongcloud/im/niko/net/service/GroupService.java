@@ -35,21 +35,8 @@ public interface GroupService {
     @POST(SealTalkUrl.GROUP_JOIN)
     LiveData<Result> joinGroup(@Body RequestBody body);
 
-
-    @POST(SealTalkUrl.GROUP_QUIT)
-    LiveData<Result> quitGroup(@Body RequestBody body);
-
-    @POST(SealTalkUrl.GROUP_DISMISS)
-    LiveData<Result> dismissGroup(@Body RequestBody body);
-
     @POST(SealTalkUrl.GROUP_TRANSFER)
     LiveData<Result> transferGroup(@Body RequestBody body);
-
-    @POST(SealTalkUrl.GROUP_RENAME)
-    LiveData<Result> renameGroup(@Body RequestBody body);
-
-    @POST(SealTalkUrl.GROUP_SET_BULLETIN)
-    LiveData<Result> setGroupBulletin(@Body RequestBody body);
 
     @GET(SealTalkUrl.GROUP_GET_BULLETIN)
     LiveData<Result<GroupNoticeResult>> getGroupBulletin(@Query("groupId") String id);
@@ -131,6 +118,20 @@ public interface GroupService {
     LiveData<Result<Boolean>> kickMember(@Body RequestBody body);
 
 
-//    GROUP_CHAT_END
+
+
+
+    @POST(ScUrl.GROUP_CHAT_END)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<Boolean>> dismissGroup(@Body RequestBody body);
+
+    @POST(ScUrl.GROUP_CHAT_LEAVE)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<Boolean>> quitGroup(@Body RequestBody body);
+
+    @POST(ScUrl.GROUP_CHAT_CONFIG)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<Boolean>> renameGroup(@Body RequestBody body);
+
 
 }

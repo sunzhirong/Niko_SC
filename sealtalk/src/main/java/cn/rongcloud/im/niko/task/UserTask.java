@@ -45,6 +45,7 @@ import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.model.UserCacheInfo;
 import cn.rongcloud.im.niko.model.UserSimpleInfo;
 import cn.rongcloud.im.niko.model.VerifyResult;
+import cn.rongcloud.im.niko.model.niko.ProfileHeadInfo;
 import cn.rongcloud.im.niko.model.niko.ProfileInfo;
 import cn.rongcloud.im.niko.model.niko.TokenBean;
 import cn.rongcloud.im.niko.net.HttpClientManager;
@@ -57,7 +58,6 @@ import cn.rongcloud.im.niko.sp.CountryCache;
 import cn.rongcloud.im.niko.sp.UserCache;
 import cn.rongcloud.im.niko.utils.CharacterParser;
 import cn.rongcloud.im.niko.utils.NetworkBoundResource;
-import cn.rongcloud.im.niko.utils.NetworkOnlyLiveData;
 import cn.rongcloud.im.niko.utils.NetworkOnlyResource;
 import cn.rongcloud.im.niko.utils.RongGenerate;
 import cn.rongcloud.im.niko.utils.SearchUtils;
@@ -633,11 +633,23 @@ public class UserTask {
      * @return
      */
     public LiveData<Resource<List<UserSimpleInfo>>> getBlackList() {
-        return new NetworkBoundResource<List<UserSimpleInfo>, Result<List<FriendBlackInfo>>>() {
+        return new NetworkBoundResource<List<UserSimpleInfo>, Result<List<ProfileHeadInfo>>>() {
             @Override
-            protected void saveCallResult(@NonNull Result<List<FriendBlackInfo>> item) {
-                List<FriendBlackInfo> result = item.getRsData();
-                if (result == null) return;
+            protected void saveCallResult(@NonNull Result<List<ProfileHeadInfo>> item) {
+                List<ProfileHeadInfo> rsData = item.getRsData();
+                if (rsData == null||rsData.size()==0) return;
+                List<BlackListUser> result = new ArrayList<>();
+
+                //封装到BlackListUser中
+
+                for(ProfileHeadInfo info : rsData){
+                    BlackListUser blackListUser = new BlackListUser();
+                    blackListUser.setId(String.valueOf(info.getUID()));
+                    blackListUser.setNickname(info.getName());
+                    blackListUser.setPortraitUri(GlideImageLoaderUtil.getScString(info.getUserIcon()));
+                    result.add(blackListUser);
+                }
+
 
                 List<BlackListEntity> blackList = new ArrayList<>();
                 BlackListEntity addBlack;
@@ -645,9 +657,9 @@ public class UserTask {
 
                 UserDao userDao = dbManager.getUserDao();
 
-                for (FriendBlackInfo blackInfo : result) {
-                    BlackListUser blackUser = blackInfo.getUser();
-                    if (blackUser == null) continue;
+                for (BlackListUser blackUser : result) {
+//                    BlackListUser blackUser = blackInfo.getUser();
+//                    if (blackUser == null) continue;
 
                     // 将黑名单中的用户信息更新用户表
                     user = new UserInfo();
@@ -699,8 +711,11 @@ public class UserTask {
 
             @NonNull
             @Override
-            protected LiveData<Result<List<FriendBlackInfo>>> createCall() {
-                return userService.getFriendBlackList();
+            protected LiveData<Result<List<ProfileHeadInfo>>> createCall() {
+                HashMap<String, Object> bodyMap = new HashMap<>();
+                bodyMap.put("Skip", NetConstant.SKIP);
+                bodyMap.put("Take", NetConstant.TAKE);
+                return userService.getFriendBlackList(RetrofitUtil.createJsonRequest(bodyMap));
             }
         }.asLiveData();
     }
@@ -711,10 +726,10 @@ public class UserTask {
      *
      * @return
      */
-    public LiveData<Resource<Void>> addToBlackList(String userId) {
-        return new NetworkOnlyResource<Void, Result>() {
+    public LiveData<Resource<Boolean>> addToBlackList(String userId) {
+        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
             @Override
-            protected void saveCallResult(@NonNull Void item) {
+            protected void saveCallResult(@NonNull Boolean item) {
                 FriendDao friendDao = dbManager.getFriendDao();
                 if (friendDao != null) {
                     BlackListEntity blackListEntity = new BlackListEntity();
@@ -727,9 +742,9 @@ public class UserTask {
 
             @NonNull
             @Override
-            protected LiveData<Result> createCall() {
+            protected LiveData<Result<Boolean>> createCall() {
                 HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("friendId", userId);
+                bodyMap.put("Data", Integer.parseInt(userId));
                 return userService.addToBlackList(RetrofitUtil.createJsonRequest(bodyMap));
             }
         }.asLiveData();
@@ -740,10 +755,10 @@ public class UserTask {
      *
      * @return
      */
-    public LiveData<Resource<Void>> removeFromBlackList(String userId) {
-        return new NetworkOnlyResource<Void, Result>() {
+    public LiveData<Resource<Boolean>> removeFromBlackList(String userId) {
+        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
             @Override
-            protected void saveCallResult(@NonNull Void item) {
+            protected void saveCallResult(@NonNull Boolean item) {
                 FriendDao friendDao = dbManager.getFriendDao();
                 if (friendDao != null) {
                     friendDao.removeFromBlackList(userId);
@@ -752,9 +767,9 @@ public class UserTask {
 
             @NonNull
             @Override
-            protected LiveData<Result> createCall() {
+            protected LiveData<Result<Boolean>> createCall() {
                 HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("friendId", userId);
+                bodyMap.put("Data", Integer.parseInt(userId));
                 return userService.removeFromBlackList(RetrofitUtil.createJsonRequest(bodyMap));
             }
         }.asLiveData();
@@ -923,7 +938,8 @@ public class UserTask {
         paramsMap.put("grant_type", "password");
         paramsMap.put("scope", "jjApiScope");
         paramsMap.put("UserName", "13622315970");
-        paramsMap.put("Password", ScInterceptor.getDV() + "9999");
+//        paramsMap.put("Password", ScInterceptor.getDV() + "9999");
+        paramsMap.put("Password","20200210" + "9999");
         paramsMap.put("VCode", "9999");
         NetConstant.Authorization = "Basic ampBcHBBcGlDbGllbnQ6Q2lyY2xlMjAyMEBXb3JsZA==";
         Map<String, RequestBody> stringRequestBodyMap = RetrofitUtil.generateRequestBody(paramsMap);

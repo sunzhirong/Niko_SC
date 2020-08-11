@@ -23,6 +23,7 @@ public class RetrofitUtil {
     public static RequestBody createJsonRequest(HashMap<String,Object> paramsMap){
         Gson gson = new Gson();
         String strEntity = gson.toJson(paramsMap);
+        Log.e("retrofit RequestBody", strEntity+"");
         return RequestBody.create(MEDIA_TYPE_JSON,strEntity);
     }
 

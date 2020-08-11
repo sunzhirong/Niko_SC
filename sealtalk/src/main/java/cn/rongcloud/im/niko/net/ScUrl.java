@@ -34,16 +34,20 @@ public class ScUrl {
 
 
     public static final String GET_IM_TOKEN = "/api/ScIM/GetImUserToken";
-    public static final String CREATE_GROUP = "/api/ScIM/GroupChatStart";
-    public static final String GROUP_CHAT_INFO = "/api/ScIM/GroupChatInfo";
-    public static final String GROUP_CHAT_INVITE = "/api/ScIM/GroupChatInvite";
-    public static final String GROUP_CHAT_KICK = "/api/ScIM/GroupChatKick";
-    public static final String GROUP_CHAT_END = "/api/ScIM/GroupChatEnd";
+    public static final String CREATE_GROUP = "/api/ScIM/GroupChatStart";//创建群组
+    public static final String GROUP_CHAT_INFO = "/api/ScIM/GroupChatInfo";//获取群信息 群名和用户信息
+    public static final String GROUP_CHAT_INVITE = "/api/ScIM/GroupChatInvite";//群聊邀请
+    public static final String GROUP_CHAT_KICK = "/api/ScIM/GroupChatKick";//提出群聊
+    public static final String GROUP_CHAT_END = "/api/ScIM/GroupChatEnd";//解散群聊
+    public static final String GROUP_CHAT_LEAVE = "/api/ScIM/GroupChatLeave";//离开群聊
+    public static final String GROUP_CHAT_CONFIG = "/api/ScIM/GroupChatConfig";//设置群信息 标题和公告
 
 
     //单聊设置
     public static final String SET_FRIEND_ALIAS = "/api/ScUser/FriendAlias";
     public static final String BLOCKS_ADD = "/api/ScUser/BlocksAdd";
+    public static final String BLOCKS_REMOVE = "/api/ScUser/BlocksRemove";
+    public static final String BLOCKS_LIST = "/api/ScUser/BlocksList";
 
 
 

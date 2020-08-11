@@ -42,23 +42,16 @@ public class GroupDetailViewModel extends AndroidViewModel {
     private String groupId;
     private Conversation.ConversationType conversationType;
     private GroupTask groupTask;
-    private PrivacyTask privacyTask;
 
     private SingleSourceLiveData<Resource<Boolean>> isNotifyLiveData = new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Boolean>> isTopLiveData = new SingleSourceLiveData<>();
-    private SingleSourceLiveData<Resource<Boolean>> cleanMessageResult = new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Void>> uploadPortraitResult = new SingleSourceLiveData<>();
     private SingleSourceMapLiveData<Resource<Boolean>, Resource<Boolean>> addGroupMemberResult;
     private SingleSourceMapLiveData<Resource<Boolean>, Resource<Boolean>> removeGroupMemberResult;
-    private SingleSourceLiveData<Resource<Void>> renameGroupNameResult = new SingleSourceLiveData<>();
-    private SingleSourceLiveData<Resource<Void>> exitGroupResult = new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Resource<Boolean>> renameGroupNameResult = new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Resource<Boolean>> exitGroupResult = new SingleSourceLiveData<>();
     private MediatorLiveData<GroupMember> myselfInfo = new MediatorLiveData<>();
 
-    private SingleSourceLiveData<Resource<Void>> saveToContactResult = new SingleSourceLiveData<>();
-    private SingleSourceLiveData<Resource<Void>> removeFromContactResult = new SingleSourceLiveData<>();
-
-
-    private SingleSourceLiveData<Resource<Void>> setCleanTimeResult = new SingleSourceLiveData<>();
     private IMManager imManager;
 
     public GroupDetailViewModel(@NonNull Application application) {
@@ -73,7 +66,6 @@ public class GroupDetailViewModel extends AndroidViewModel {
         this.groupId = targetId;
         this.conversationType = conversationType;
 
-        privacyTask = new PrivacyTask(application);
         groupTask = new GroupTask(application);
         imManager = IMManager.getInstance();
 
@@ -144,7 +136,6 @@ public class GroupDetailViewModel extends AndroidViewModel {
             }
         });
 
-        requestGroupNotice(groupId);
     }
 
     /**
@@ -205,21 +196,7 @@ public class GroupDetailViewModel extends AndroidViewModel {
         return isTopLiveData;
     }
 
-    /**
-     * 清除历史消息
-     */
-    public void cleanHistoryMessage() {
-        cleanMessageResult.setSource(imManager.cleanHistoryMessage(conversationType, groupId));
-    }
 
-    /**
-     * 获取清除历史消息结果
-     *
-     * @return
-     */
-    public LiveData<Resource<Boolean>> getCleanHistoryMessageResult() {
-        return cleanMessageResult;
-    }
 
     /**
      * 获取群组信息
@@ -323,7 +300,7 @@ public class GroupDetailViewModel extends AndroidViewModel {
      *
      * @return
      */
-    public LiveData<Resource<Void>> getRenameGroupResult() {
+    public LiveData<Resource<Boolean>> getRenameGroupResult() {
         return renameGroupNameResult;
     }
 
@@ -346,7 +323,7 @@ public class GroupDetailViewModel extends AndroidViewModel {
      *
      * @return
      */
-    public LiveData<Resource<Void>> getExitGroupResult() {
+    public LiveData<Resource<Boolean>> getExitGroupResult() {
         return exitGroupResult;
     }
 
@@ -359,64 +336,9 @@ public class GroupDetailViewModel extends AndroidViewModel {
         return myselfInfo;
     }
 
-    /**
-     * 保存到通讯录
-     */
-    public void saveToContact() {
-        Resource<GroupEntity> value = groupInfoLiveData.getValue();
-        if (value != null && value.data != null && value.data.getIsInContact() == 1) return;
-        saveToContactResult.setSource(groupTask.saveGroupToContact(groupId));
-    }
-
-    /**
-     * 获取保存到通讯录结果
-     *
-     * @return
-     */
-    public LiveData<Resource<Void>> getSaveToContact() {
-        return saveToContactResult;
-    }
-
-    /**
-     * 从通讯录中删除
-     */
-    public void removeFromContact() {
-        Resource<GroupEntity> value = groupInfoLiveData.getValue();
-        if (value != null && value.data != null && value.data.getIsInContact() == 0) return;
-
-        removeFromContactResult.setSource(groupTask.removeGroupFromContact(groupId));
-    }
-
-    /**
-     * 获取通讯录删除结果
-     *
-     * @return
-     */
-    public LiveData<Resource<Void>> getRemoveFromContactResult() {
-        return removeFromContactResult;
-    }
-
-    /**
-     * 请求群公告
-     *
-     * @param groupId
-     */
-    public void requestGroupNotice(String groupId) {
-        groupNotice.setSource(groupTask.getGroupNotice(groupId));
-    }
 
 
 
-
-
-    /**
-     * 设置定时清理群消息结果
-     *
-     * @return
-     */
-    public LiveData<Resource<Void>> getRegularClearResult() {
-        return setCleanTimeResult;
-    }
 
 
     /**

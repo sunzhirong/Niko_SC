@@ -3,12 +3,8 @@ package cn.rongcloud.im.niko.task;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
-
-import com.alibaba.fastjson.JSON;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -18,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import cn.rongcloud.im.niko.common.LogTag;
 import cn.rongcloud.im.niko.common.NetConstant;
 import cn.rongcloud.im.niko.common.ThreadManager;
 import cn.rongcloud.im.niko.contact.PhoneContactManager;
@@ -42,16 +37,12 @@ import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Result;
 import cn.rongcloud.im.niko.model.SearchFriendInfo;
 import cn.rongcloud.im.niko.model.SimplePhoneContactInfo;
-import cn.rongcloud.im.niko.model.Status;
-import cn.rongcloud.im.niko.model.UserCacheInfo;
 import cn.rongcloud.im.niko.model.niko.FriendBean;
-import cn.rongcloud.im.niko.model.niko.ProfileInfo;
 import cn.rongcloud.im.niko.net.HttpClientManager;
 import cn.rongcloud.im.niko.net.RetrofitUtil;
 import cn.rongcloud.im.niko.net.service.FriendService;
 import cn.rongcloud.im.niko.utils.CharacterParser;
 import cn.rongcloud.im.niko.utils.NetworkBoundResource;
-import cn.rongcloud.im.niko.utils.NetworkOnlyLiveData;
 import cn.rongcloud.im.niko.utils.NetworkOnlyResource;
 import cn.rongcloud.im.niko.utils.RongGenerate;
 import cn.rongcloud.im.niko.utils.SearchUtils;
@@ -440,54 +431,54 @@ public class FriendTask {
         return dbManager.getFriendDao().searchFriendShip(match);
     }
 
-    /**
-     * 设置好友备注名
-     *
-     * @param friendId
-     * @param alias
-     * @return
-     */
-    public LiveData<Resource<Void>> setFriendAliasName(String friendId, String alias) {
-        return new NetworkOnlyResource<Void, Result>() {
-            @Override
-            protected void saveCallResult(@NonNull Void item) {
-                UserDao userDao = dbManager.getUserDao();
-                if (userDao != null) {
-                    String aliasSpelling = CharacterParser.getInstance().getSpelling(alias);
-                    userDao.updateAlias(friendId, alias, aliasSpelling);
-
-                    UserInfo userInfo = userDao.getUserByIdSync(friendId);
-                    // 更新 IMKit 显示缓存
-                    String name = userInfo.getAlias();
-                    if (TextUtils.isEmpty(name)) {
-                        name = userInfo.getName();
-                    }
-                    IMManager.getInstance().updateUserInfoCache(userInfo.getId(), name, Uri.parse(userInfo.getPortraitUri()));
-                    // 需要获取此用户所在自己的哪些群组， 然后遍历修改其群组的个人信息。
-                    // 用于当有备注的好友在群组时， 显示备注名称
-                    GroupMemberDao groupMemberDao = dbManager.getGroupMemberDao();
-                    List<String> groupIds = groupMemberDao.getGroupIdListByUserId(friendId);
-                    if (groupIds != null && groupIds.size() > 0) {
-                        for (String groupId : groupIds) {
-                            //如果有设置群昵称，则不设置好友别名
-                            if (TextUtils.isEmpty(groupMemberDao.getGroupMemberInfoDes(groupId, friendId).getGroupNickname())) {
-                                IMManager.getInstance().updateGroupMemberInfoCache(groupId, friendId, name);
-                            }
-                        }
-                    }
-                }
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<Result> createCall() {
-                HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("friendId", friendId);
-                bodyMap.put("displayName", alias);
-                return friendService.setFriendAlias(RetrofitUtil.createJsonRequest(bodyMap));
-            }
-        }.asLiveData();
-    }
+//    /**
+//     * 设置好友备注名
+//     *
+//     * @param friendId
+//     * @param alias
+//     * @return
+//     */
+//    public LiveData<Resource<Void>> setFriendAliasName(String friendId, String alias) {
+//        return new NetworkOnlyResource<Void, Result>() {
+//            @Override
+//            protected void saveCallResult(@NonNull Void item) {
+//                UserDao userDao = dbManager.getUserDao();
+//                if (userDao != null) {
+//                    String aliasSpelling = CharacterParser.getInstance().getSpelling(alias);
+//                    userDao.updateAlias(friendId, alias, aliasSpelling);
+//
+//                    UserInfo userInfo = userDao.getUserByIdSync(friendId);
+//                    // 更新 IMKit 显示缓存
+//                    String name = userInfo.getAlias();
+//                    if (TextUtils.isEmpty(name)) {
+//                        name = userInfo.getName();
+//                    }
+//                    IMManager.getInstance().updateUserInfoCache(userInfo.getId(), name, Uri.parse(userInfo.getPortraitUri()));
+//                    // 需要获取此用户所在自己的哪些群组， 然后遍历修改其群组的个人信息。
+//                    // 用于当有备注的好友在群组时， 显示备注名称
+//                    GroupMemberDao groupMemberDao = dbManager.getGroupMemberDao();
+//                    List<String> groupIds = groupMemberDao.getGroupIdListByUserId(friendId);
+//                    if (groupIds != null && groupIds.size() > 0) {
+//                        for (String groupId : groupIds) {
+//                            //如果有设置群昵称，则不设置好友别名
+//                            if (TextUtils.isEmpty(groupMemberDao.getGroupMemberInfoDes(groupId, friendId).getGroupNickname())) {
+//                                IMManager.getInstance().updateGroupMemberInfoCache(groupId, friendId, name);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//
+//            @NonNull
+//            @Override
+//            protected LiveData<Result> createCall() {
+//                HashMap<String, Object> bodyMap = new HashMap<>();
+//                bodyMap.put("friendId", friendId);
+//                bodyMap.put("displayName", alias);
+//                return friendService.setAlias(RetrofitUtil.createJsonRequest(bodyMap));
+//            }
+//        }.asLiveData();
+//    }
 
 
     /**
@@ -808,69 +799,32 @@ public class FriendTask {
      *
      * @param friendId
      * @param displayName
-     * @param region
-     * @param phone
-     * @param description
-     * @param imageUri
      * @return
      */
-    public LiveData<Resource<Void>> setFriendDescription(String friendId, String displayName, String region
-            , String phone, String description, String imageUri) {
-        if (!TextUtils.isEmpty(imageUri) && !(imageUri.toLowerCase().startsWith("http://")
-                || imageUri.toLowerCase().startsWith("https://"))) {
-            String uriStr = imageUri;
-//            if (!uriStr.toLowerCase().startsWith("file://")){
-//                uriStr = "file://"+uriStr;
-//            }
-            return setDesAndUploadImage(friendId, displayName, region
-                    , phone, description, Uri.parse(uriStr));
-        }
-        return new NetworkOnlyResource<Void, Result<Void>>() {
+    public LiveData<Resource<Boolean>> setFriendDescription(String friendId, String displayName) {
+
+        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
 
             @NonNull
             @Override
-            protected LiveData<Result<Void>> createCall() {
+            protected LiveData<Result<Boolean>> createCall() {
                 HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("friendId", friendId);
-                if (displayName != null) {
-                    bodyMap.put("displayName", displayName);
-                }
-                if (region != null) {
-                    bodyMap.put("region", region);
-                }
-                if (phone != null) {
-                    bodyMap.put("phone", phone);
-                }
-                if (description != null) {
-                    bodyMap.put("description", description);
-                }
-                if (imageUri != null) {
-                    bodyMap.put("imageUri", imageUri);
-                }
-                return friendService.setFriendDescription(RetrofitUtil.createJsonRequest(bodyMap));
+                HashMap<String, Object> dataMap = new HashMap<>();
+                dataMap.put("UID", Integer.parseInt(friendId));
+                dataMap.put("Alias", displayName);
+                bodyMap.put("Data",dataMap);
+                return friendService.setAlias(RetrofitUtil.createJsonRequest(bodyMap));
             }
 
             @Override
-            protected void saveCallResult(@NonNull Void item) {
-                super.saveCallResult(item);
+            protected void saveCallResult(@NonNull Boolean item) {
+//                super.saveCallResult(item);
                 FriendDescription friendDescription = new FriendDescription();
                 friendDescription.setId(friendId);
                 if (displayName != null) {
                     friendDescription.setDisplayName(displayName);
                     //更新用户别名 以及缓存信息
                     updateAlias(friendId, displayName);
-                }
-                if (region != null) {
-                    friendDescription.setRegion(region);
-                }
-                if (phone != null) {
-                    friendDescription.setPhone(phone);
-                }
-                if (description != null) {
-                    friendDescription.setDescription(description);
-                }
-                if (imageUri != null) {
-                    friendDescription.setImageUri(imageUri);
                 }
                 FriendDao friendDao = dbManager.getFriendDao();
                 friendDao.insertFriendDescription(friendDescription);
@@ -912,57 +866,5 @@ public class FriendTask {
         }
     }
 
-    /**
-     * 上传图片后设置朋友描述
-     *
-     * @param friendId
-     * @param displayName
-     * @param region
-     * @param phone
-     * @param description
-     * @param imageUri
-     * @return
-     */
-    public LiveData<Resource<Void>> setDesAndUploadImage(String friendId, String displayName, String region
-            , String phone, String description, Uri imageUri) {
-        MediatorLiveData<Resource<Void>> result = new MediatorLiveData<>();
-        // 先上传图片文件
-        Log.e("setDesAndUploadImage", imageUri.toString());
-        LiveData<Resource<String>> uploadResource = fileManager.uploadCompressImage(imageUri);
-        result.addSource(uploadResource, resource -> {
-            if (resource.status != Status.LOADING) {
-                result.removeSource(uploadResource);
-            }
-
-            if (resource.status == Status.ERROR) {
-                result.setValue(Resource.error(resource.code, null));
-                return;
-            }
-
-            if (resource.status == Status.SUCCESS) {
-                String uploadUrl = resource.data;
-
-                // 获取上传成功的地址后更新地址
-                LiveData<Resource<Void>> setFriendDescription = setFriendDescription(friendId, displayName
-                        , region, phone, description, uploadUrl);
-                result.addSource(setFriendDescription, portraitResultResource -> {
-                    if (portraitResultResource.status != Status.LOADING) {
-                        result.removeSource(setFriendDescription);
-                    }
-
-                    if (portraitResultResource.status == Status.ERROR) {
-                        result.setValue(Resource.error(portraitResultResource.code, null));
-                        return;
-                    }
-
-                    if (portraitResultResource.status == Status.SUCCESS) {
-                        result.setValue(Resource.success(null));
-                    }
-                });
-            }
-        });
-
-        return result;
-    }
 
 }

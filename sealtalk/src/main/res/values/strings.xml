@@ -159,7 +159,7 @@
     <!-- 私聊详细-->
     <string name="profile_search_message">查找聊天记录</string>
     <string name="profile_message_notice">消息免打扰</string>
-    <string name="profile_set_top">会话置顶</string>
+    <string name="profile_set_top">顶置聊天</string>
     <string name="profile_clean_message">清除聊天记录</string>
     <string name="profile_screen_shot_notification">截屏通知</string>
     <string name="profile_screen_shot_notification_tips">开启后，在对话中截屏，所有成员都是收到通知</string>
@@ -191,7 +191,7 @@
     <string name="profile_group_notice_prefix">\@所有人\n</string>
     <string name="profile_confirm_quit_group">确认退出群组?</string>
     <string name="profile_confirm_dismiss_group">确认解散群组?</string>
-    <string name="profile_set_display_name">设置备注和描述</string>
+    <string name="profile_set_display_name">设置备注名</string>
     <string name="profile_picture_detail">图片详情</string>
     <string name="profile_picture_more">更多</string>
     <string name="profile_set_group_info">个人信息</string>

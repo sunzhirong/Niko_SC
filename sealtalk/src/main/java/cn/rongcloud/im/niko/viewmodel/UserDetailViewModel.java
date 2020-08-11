@@ -35,8 +35,8 @@ import cn.rongcloud.im.niko.utils.SingleSourceMapLiveData;
 public class UserDetailViewModel extends AndroidViewModel {
     private MediatorLiveData<Resource<UserInfo>> userInfoLiveData = new MediatorLiveData<>();
     private SingleSourceMapLiveData<Resource<AddFriendResult>, Resource<AddFriendResult>> inviteResult;
-    private SingleSourceMapLiveData<Resource<Void>, Resource<Void>> addBlackListResult;
-    private SingleSourceMapLiveData<Resource<Void>, Resource<Void>> removeBlackListResult;
+    private SingleSourceMapLiveData<Resource<Boolean>, Resource<Boolean>> addBlackListResult;
+    private SingleSourceMapLiveData<Resource<Boolean>, Resource<Boolean>> removeBlackListResult;
     private SingleSourceLiveData<Resource<Void>> removeFriendResult = new SingleSourceLiveData<>();
     private LiveData<Boolean> isInBlackList;
     private SingleSourceLiveData<Resource<FriendDescription>> friendDescription = new SingleSourceLiveData<>();
@@ -77,9 +77,9 @@ public class UserDetailViewModel extends AndroidViewModel {
             return data != null;
         });
 
-        addBlackListResult = new SingleSourceMapLiveData<>(new Function<Resource<Void>, Resource<Void>>() {
+        addBlackListResult = new SingleSourceMapLiveData<>(new Function<Resource<Boolean>, Resource<Boolean>>() {
             @Override
-            public Resource<Void> apply(Resource<Void> input) {
+            public Resource<Boolean> apply(Resource<Boolean> input) {
                 if (input.status == Status.SUCCESS) {
                     // 在添加黑名单成功后刷新好友列表
                     updateFriendList();
@@ -88,9 +88,9 @@ public class UserDetailViewModel extends AndroidViewModel {
             }
         });
 
-        removeBlackListResult = new SingleSourceMapLiveData<>(new Function<Resource<Void>, Resource<Void>>() {
+        removeBlackListResult = new SingleSourceMapLiveData<>(new Function<Resource<Boolean>, Resource<Boolean>>() {
             @Override
-            public Resource<Void> apply(Resource<Void> input) {
+            public Resource<Boolean> apply(Resource<Boolean> input) {
                 if (input.status == Status.SUCCESS) {
                     // 在移除黑名单成功后刷新好友列表
                     updateFriendList();
@@ -177,7 +177,7 @@ public class UserDetailViewModel extends AndroidViewModel {
      *
      * @return
      */
-    public LiveData<Resource<Void>> getAddBlackListResult() {
+    public LiveData<Resource<Boolean>> getAddBlackListResult() {
         return addBlackListResult;
     }
 
@@ -186,7 +186,7 @@ public class UserDetailViewModel extends AndroidViewModel {
      *
      * @return
      */
-    public LiveData<Resource<Void>> getRemoveBlackListResult() {
+    public LiveData<Resource<Boolean>> getRemoveBlackListResult() {
         return removeBlackListResult;
     }
 

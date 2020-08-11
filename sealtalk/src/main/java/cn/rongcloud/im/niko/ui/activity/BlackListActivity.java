@@ -86,9 +86,9 @@ public class BlackListActivity extends TitleBaseActivity {
         });
 
         // 获取移除黑名单结果
-        blackListViewModel.getRemoveBlackListResult().observe(this, new Observer<Resource<Void>>() {
+        blackListViewModel.getRemoveBlackListResult().observe(this, new Observer<Resource<Boolean>>() {
             @Override
-            public void onChanged(Resource<Void> resource) {
+            public void onChanged(Resource<Boolean> resource) {
                 if (resource.status == Status.SUCCESS) {
                     ToastUtils.showToast(R.string.common_remove_successful);
                 } else if (resource.status == Status.ERROR) {

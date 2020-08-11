@@ -59,14 +59,14 @@ public interface FriendService {
     @POST(SealTalkUrl.INGORE_FRIENDS)
     LiveData<Result<Void>> ingoreFriend(@Body RequestBody body);
 
-    /**
-     * 设置好友备注名
-     *
-     * @param body
-     * @return
-     */
-    @POST(SealTalkUrl.SET_DISPLAY_NAME)
-    LiveData<Result> setFriendAlias(@Body RequestBody body);
+//    /**
+//     * 设置好友备注名
+//     *
+//     * @param body
+//     * @return
+//     */
+//    @POST(SealTalkUrl.SET_DISPLAY_NAME)
+//    LiveData<Result> setAlias(@Body RequestBody body);
 
     /**
      * 申请添加好友
@@ -98,14 +98,14 @@ public interface FriendService {
     @POST(SealTalkUrl.GET_CONTACTS_INFO)
     LiveData<Result<List<GetContactInfoResult>>> getContactsInfo(@Body RequestBody body);
 
-    /**
-     * 设置朋友备注和描述
-     *
-     * @param body
-     * @return
-     */
-    @POST(SealTalkUrl.SET_FRIEND_DESCRIPTION)
-    LiveData<Result<Void>> setFriendDescription(@Body RequestBody body);
+//    /**
+//     * 设置朋友备注和描述
+//     *
+//     * @param body
+//     * @return
+//     */
+//    @POST(SealTalkUrl.SET_FRIEND_DESCRIPTION)
+//    LiveData<Result<Void>> setFriendDescription(@Body RequestBody body);
 
     @POST(SealTalkUrl.GET_FRIEND_DESCRIPTION)
     LiveData<Result<FriendDescription>> getFriendDescription(@Body RequestBody body);
@@ -129,4 +129,14 @@ public interface FriendService {
     @POST(ScUrl.FOLLOWERS_LIST)
     @Headers(NetConstant.JSON)
     LiveData<Result<List<FriendBean>>> getAllFriendList(@Body RequestBody body);
+
+    /**
+     * 设置朋友备注和描述
+     *
+     * @param body
+     * @return
+     */
+    @POST(ScUrl.SET_FRIEND_ALIAS)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<Boolean>> setAlias(@Body RequestBody body);
 }

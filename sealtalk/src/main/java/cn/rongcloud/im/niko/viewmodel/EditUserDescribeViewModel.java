@@ -19,7 +19,7 @@ import cn.rongcloud.im.niko.utils.SingleSourceLiveData;
 public class EditUserDescribeViewModel extends AndroidViewModel {
 
     private SingleSourceLiveData<Resource<FriendDescription>> friendDescription = new SingleSourceLiveData<>();
-    private SingleSourceLiveData<Resource<Void>> setFriendDescriptionResult = new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Resource<Boolean>> setFriendDescriptionResult = new SingleSourceLiveData<>();
     private FriendTask friendTask;
     private String userId;
 
@@ -50,18 +50,12 @@ public class EditUserDescribeViewModel extends AndroidViewModel {
      *
      * @param friendId
      * @param displayName
-     * @param region
-     * @param phone
-     * @param description
-     * @param imageUri
      */
-    public void setFriendDescription(String friendId, String displayName, String region
-            , String phone, String description, String imageUri) {
-        setFriendDescriptionResult.setSource(friendTask.setFriendDescription(friendId, displayName
-                , region, phone, description, imageUri));
+    public void setFriendDescription(String friendId, String displayName) {
+        setFriendDescriptionResult.setSource(friendTask.setFriendDescription(friendId, displayName));
     }
 
-    public LiveData<Resource<Void>> setFriendDescriptionResult() {
+    public LiveData<Resource<Boolean>> setFriendDescriptionResult() {
         return setFriendDescriptionResult;
     }
 

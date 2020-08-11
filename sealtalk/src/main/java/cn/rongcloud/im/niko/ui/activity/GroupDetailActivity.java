@@ -93,9 +93,6 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
     private SettingItemView groupNameSiv;
     private SettingItemView notifyNoticeSiv;
     private SettingItemView onTopSiv;
-    private SettingItemView groupNoticeSiv;
-    private String lastGroupNoticeContent;
-    private long lastGroupNoticeTime;
     private String groupCreatorId;
 
     private final int REQUEST_CODE_PERMISSION = 115;
@@ -159,9 +156,6 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
         // 群名称
         groupNameSiv = findViewById(R.id.profile_siv_group_name_container);
         groupNameSiv.setOnClickListener(this);
-        // 群公告
-        groupNoticeSiv = findViewById(R.id.profile_siv_group_notice);
-        groupNoticeSiv.setOnClickListener(this);
 
 
 
@@ -186,9 +180,6 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
 
     }
 
-    private boolean requestReadPermissions() {
-        return CheckPermissionUtils.requestPermissions(this, permissions, REQUEST_CODE_PERMISSION);
-    }
 
     private void initViewModel() {
         groupDetailViewModel = ViewModelProviders.of(this,
@@ -286,14 +277,6 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
             }
         });
 
-        // 获取清除历史消息结果
-        groupDetailViewModel.getCleanHistoryMessageResult().observe(this, resource -> {
-            if (resource.status == Status.SUCCESS) {
-                ToastUtils.showToast(R.string.common_clear_success);
-            } else if (resource.status == Status.ERROR) {
-                ToastUtils.showToast(R.string.common_clear_failure);
-            }
-        });
 
         // 获取上传群头像结果
         groupDetailViewModel.getUploadPortraitResult().observe(this, resource -> {
@@ -341,9 +324,9 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
         });
 
         // 修改群组名称结果
-        groupDetailViewModel.getRenameGroupResult().observe(this, new Observer<Resource<Void>>() {
+        groupDetailViewModel.getRenameGroupResult().observe(this, new Observer<Resource<Boolean>>() {
             @Override
-            public void onChanged(Resource<Void> resource) {
+            public void onChanged(Resource<Boolean> resource) {
                 if (resource.status == Status.ERROR) {
                     ToastUtils.showToast(resource.message);
                 } else if (resource.status == Status.SUCCESS) {
@@ -354,9 +337,9 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
         });
 
         // 退出群组结果
-        groupDetailViewModel.getExitGroupResult().observe(this, new Observer<Resource<Void>>() {
+        groupDetailViewModel.getExitGroupResult().observe(this, new Observer<Resource<Boolean>>() {
             @Override
-            public void onChanged(Resource<Void> resource) {
+            public void onChanged(Resource<Boolean> resource) {
                 if (resource.status == Status.SUCCESS) {
                     backToMain();
                 } else if (resource.status == Status.ERROR) {
@@ -364,58 +347,6 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
                 }
             }
         });
-
-        // 保存到通讯录结果
-        groupDetailViewModel.getSaveToContact().observe(this, new Observer<Resource<Void>>() {
-            @Override
-            public void onChanged(Resource<Void> resource) {
-                if (resource.status == Status.SUCCESS) {
-                    ToastUtils.showToast(R.string.common_add_successful);
-                } else if (resource.status == Status.ERROR) {
-                    ToastUtils.showErrorToast(resource.code);
-                }
-            }
-        });
-
-        // 从通讯录中移除的结果
-        groupDetailViewModel.getRemoveFromContactResult().observe(this, new Observer<Resource<Void>>() {
-            @Override
-            public void onChanged(Resource<Void> resource) {
-                if (resource.status == Status.SUCCESS) {
-                    ToastUtils.showToast(R.string.common_remove_successful);
-                } else if (resource.status == Status.ERROR) {
-                    ToastUtils.showErrorToast(resource.code);
-                }
-            }
-        });
-
-        // 获取群公告
-        groupDetailViewModel.getGroupNoticeResult().observe(this, new Observer<Resource<GroupNoticeResult>>() {
-            @Override
-            public void onChanged(Resource<GroupNoticeResult> resource) {
-                if (resource.status == Status.SUCCESS) {
-                    GroupNoticeResult lastGroupNotice = resource.data;
-                    if (lastGroupNotice != null) {
-                        lastGroupNoticeContent = lastGroupNotice.getContent();
-                        lastGroupNoticeTime = lastGroupNotice.getTimestamp();
-                    }
-                }
-            }
-        });
-
-        groupDetailViewModel.getRegularClearResult().observe(this, new Observer<Resource<Void>>() {
-            @Override
-            public void onChanged(Resource<Void> resultResource) {
-                if (resultResource.status == Status.SUCCESS) {
-                    ToastUtils.showToast(getString(R.string.seal_set_clean_time_success));
-                    //groupDetailViewModel.requestRegularState(groupId);
-                } else if (resultResource.status == Status.ERROR) {
-                    ToastUtils.showToast(getString(R.string.seal_set_clean_time_fail));
-                }
-            }
-        });
-
-
 
     }
 
@@ -503,9 +434,6 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
                 break;
             case R.id.profile_siv_group_name_container:
                 editGroupName();
-                break;
-            case R.id.profile_siv_group_notice:
-                showGroupNotice();
                 break;
             case R.id.profile_btn_group_quit:
                 quitOrDeleteGroup();
@@ -627,23 +555,6 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
         dialog.show(getSupportFragmentManager(), null);
     }
 
-    /**
-     * 编辑群公告
-     */
-    private void showGroupNotice() {
-        // 判断是否是群组或管理员
-        if (isGroupOwner() || isGroupManager()) {
-            Intent intent = new Intent(this, GroupNoticeActivity.class);
-            intent.putExtra(IntentExtra.STR_TARGET_ID, groupId);
-            intent.putExtra(IntentExtra.SERIA_CONVERSATION_TYPE, Conversation.ConversationType.GROUP);
-            startActivity(intent);
-        } else {
-            GroupNoticeDialog commonDialog = new GroupNoticeDialog();
-            commonDialog.setNoticeContent(lastGroupNoticeContent);
-            commonDialog.setNoticeUpdateTime(lastGroupNoticeTime);
-            commonDialog.show(getSupportFragmentManager(), null);
-        }
-    }
 
     /**
      * 退出或删除群组

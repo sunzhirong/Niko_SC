@@ -194,9 +194,9 @@ public class UserDetailActivity extends TitleBaseActivity implements View.OnClic
         });
 
         // 获取添加到黑名单结果
-        userDetailViewModel.getAddBlackListResult().observe(this, new Observer<Resource<Void>>() {
+        userDetailViewModel.getAddBlackListResult().observe(this, new Observer<Resource<Boolean>>() {
             @Override
-            public void onChanged(Resource<Void> resource) {
+            public void onChanged(Resource<Boolean> resource) {
                 if (!isInDeleteAction){
                     if (resource.status == Status.SUCCESS) {
                         ToastUtils.showToast(R.string.common_add_successful);
@@ -208,9 +208,9 @@ public class UserDetailActivity extends TitleBaseActivity implements View.OnClic
         });
 
         // 获取移除黑名单结果
-        userDetailViewModel.getRemoveBlackListResult().observe(this, new Observer<Resource<Void>>() {
+        userDetailViewModel.getRemoveBlackListResult().observe(this, new Observer<Resource<Boolean>>() {
             @Override
-            public void onChanged(Resource<Void> resource) {
+            public void onChanged(Resource<Boolean> resource) {
                 if (resource.status == Status.SUCCESS) {
                     ToastUtils.showToast(R.string.common_remove_successful);
                 } else if (resource.status == Status.ERROR) {

@@ -35,11 +35,7 @@ public class PrivateChatSettingViewModel extends AndroidViewModel {
     private Conversation.ConversationType conversationType;
     private SingleSourceLiveData<Resource<Boolean>> isNotifyLiveData = new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Boolean>> isTopLiveData = new SingleSourceLiveData<>();
-    private SingleSourceLiveData<Resource<Boolean>> cleanMessageResult = new SingleSourceLiveData<>();
-    private SingleSourceLiveData<Resource<ScreenCaptureResult>> screenCaptureResult = new SingleSourceLiveData<>();
-    private SingleSourceLiveData<Resource<Void>> setScreenCaptureResult = new SingleSourceLiveData<>();
     private FriendTask friendTask;
-    private PrivacyTask privacyTask;
     private IMManager imManager;
 
     public PrivateChatSettingViewModel(@NonNull Application application) {
@@ -53,7 +49,6 @@ public class PrivateChatSettingViewModel extends AndroidViewModel {
 
         userTask = new UserTask(application);
         friendTask = new FriendTask(application);
-        privacyTask = new PrivacyTask(application);
         imManager = IMManager.getInstance();
         this.targetId = targetId;
         this.conversationType = conversationType;
@@ -64,24 +59,9 @@ public class PrivateChatSettingViewModel extends AndroidViewModel {
 
 
     /**
-     * 设置是否开启截屏通知
-     *
-     * @param status
-     */
-    public void setScreenCaptureStatus(int status) {
-        setScreenCaptureResult.setSource(privacyTask.setScreenCapture(conversationType.getValue(), targetId, status));
-    }
-
-    public LiveData<Resource<Void>> getSetScreenCaptureResult(){
-        return  setScreenCaptureResult;
-    }
-
-
-    /**
      * 请求好友信息.
      */
     public void requestFriendInfo() {
-
         // 支持加入信息是自己的话，支持查看自己， 则需要查询自己的信息
         if (IMManager.getInstance().getCurrentId().equals(targetId)) {
             friendShipInfoLiveData.addSource(userTask.getUserInfo(targetId), new Observer<Resource<UserInfo>>() {
@@ -124,17 +104,6 @@ public class PrivateChatSettingViewModel extends AndroidViewModel {
         return friendShipInfoLiveData;
     }
 
-    /**
-     * 设置是否消息免打扰
-     *
-     * @param isNotify
-     */
-    public void setIsNotifyConversation(final boolean isNotify) {
-        Resource<Boolean> value = isNotifyLiveData.getValue();
-        if (value != null && value.data != null && value.data == isNotify) return;
-
-        isNotifyLiveData.setSource(imManager.setConversationNotificationStatus(conversationType, targetId, isNotify));
-    }
 
     /**
      * 设置会话置顶
@@ -148,14 +117,6 @@ public class PrivateChatSettingViewModel extends AndroidViewModel {
         isTopLiveData.setSource(imManager.setConversationToTop(conversationType, targetId, isTop));
     }
 
-    /**
-     * 获取会话是否接受消息通知
-     *
-     * @return
-     */
-    public MutableLiveData<Resource<Boolean>> getIsNotify() {
-        return isNotifyLiveData;
-    }
 
     /**
      * 获取会话是否置顶
@@ -166,21 +127,7 @@ public class PrivateChatSettingViewModel extends AndroidViewModel {
         return isTopLiveData;
     }
 
-    /**
-     * 清除历史消息
-     */
-    public void cleanHistoryMessage() {
-        cleanMessageResult.setSource(imManager.cleanHistoryMessage(conversationType, targetId));
-    }
 
-    /**
-     * 获取清除历史消息结果
-     *
-     * @return
-     */
-    public LiveData<Resource<Boolean>> getCleanHistoryMessageResult() {
-        return cleanMessageResult;
-    }
 
     public static class Factory implements ViewModelProvider.Factory {
         private String targetId;

@@ -166,10 +166,10 @@ public class GroupTask {
      * @param groupId
      * @return
      */
-    public LiveData<Resource<Void>> quitGroup(String groupId) {
-        return new NetworkOnlyResource<Void, Result>() {
+    public LiveData<Resource<Boolean>> quitGroup(String groupId) {
+        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
             @Override
-            protected void saveCallResult(@NonNull Void item) {
+            protected void saveCallResult(@NonNull Boolean item) {
                 GroupDao groupDao = dbManager.getGroupDao();
                 if (groupDao != null) {
                     groupDao.deleteGroup(groupId);
@@ -185,9 +185,9 @@ public class GroupTask {
 
             @NonNull
             @Override
-            protected LiveData<Result> createCall() {
+            protected LiveData<Result<Boolean>> createCall() {
                 HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("groupId", groupId);
+                bodyMap.put("Data", Integer.parseInt(groupId));
                 return groupService.quitGroup(RetrofitUtil.createJsonRequest(bodyMap));
             }
         }.asLiveData();
@@ -199,10 +199,10 @@ public class GroupTask {
      * @param groupId
      * @return
      */
-    public LiveData<Resource<Void>> dismissGroup(String groupId) {
-        return new NetworkOnlyResource<Void, Result>() {
+    public LiveData<Resource<Boolean>> dismissGroup(String groupId) {
+        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
             @Override
-            protected void saveCallResult(@NonNull Void item) {
+            protected void saveCallResult(@NonNull Boolean item) {
                 GroupDao groupDao = dbManager.getGroupDao();
                 if (groupDao != null) {
                     groupDao.deleteGroup(groupId);
@@ -218,9 +218,9 @@ public class GroupTask {
 
             @NonNull
             @Override
-            protected LiveData<Result> createCall() {
+            protected LiveData<Result<Boolean>> createCall() {
                 HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("groupId", groupId);
+                bodyMap.put("Data", Integer.parseInt(groupId));
                 return groupService.dismissGroup(RetrofitUtil.createJsonRequest(bodyMap));
             }
         }.asLiveData();
@@ -254,10 +254,10 @@ public class GroupTask {
      * @param groupName
      * @return
      */
-    public LiveData<Resource<Void>> renameGroup(String groupId, String groupName) {
-        return new NetworkOnlyResource<Void, Result>() {
+    public LiveData<Resource<Boolean>> renameGroup(String groupId, String groupName) {
+        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
             @Override
-            protected void saveCallResult(@NonNull Void item) {
+            protected void saveCallResult(@NonNull Boolean item) {
                 // 更新数据库中群组的名称
                 GroupDao groupDao = dbManager.getGroupDao();
                 if (groupDao != null) {
@@ -277,60 +277,19 @@ public class GroupTask {
 
             @NonNull
             @Override
-            protected LiveData<Result> createCall() {
+            protected LiveData<Result<Boolean>> createCall() {
                 HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("groupId", groupId);
-                bodyMap.put("name", groupName);
+                HashMap<String, Object> dataMap = new HashMap<>();
+                dataMap.put("ChatGrpID",Integer.parseInt(groupId));
+                dataMap.put("Title",groupName);
+                dataMap.put("Note","");
+                bodyMap.put("Data",dataMap);
                 return groupService.renameGroup(RetrofitUtil.createJsonRequest(bodyMap));
             }
         }.asLiveData();
     }
 
 
-
-    /**
-     * 设置群公告
-     *
-     * @param groupId
-     * @param bulletin
-     * @return
-     */
-    public LiveData<Resource<Void>> setGroupNotice(String groupId, String bulletin) {
-        return new NetworkOnlyResource<Void, Result>() {
-            @NonNull
-            @Override
-            protected LiveData<Result> createCall() {
-                HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("groupId", groupId);
-                bodyMap.put("bulletin", bulletin);
-                return groupService.setGroupBulletin(RetrofitUtil.createJsonRequest(bodyMap));
-            }
-        }.asLiveData();
-    }
-
-    /**
-     * 获取群公告
-     *
-     * @param groupId
-     * @return
-     */
-    public LiveData<Resource<GroupNoticeResult>> getGroupNotice(String groupId) {
-        return new NetworkOnlyResource<GroupNoticeResult, Result<GroupNoticeResult>>() {
-            @Override
-            protected void saveCallResult(@NonNull GroupNoticeResult result) {
-                GroupDao groupDao = dbManager.getGroupDao();
-                if (groupDao != null) {
-                    groupDao.updateGroupNotice(groupId, result.getContent(), result.getTimestamp());
-                }
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<Result<GroupNoticeResult>> createCall() {
-                return groupService.getGroupBulletin(groupId);
-            }
-        }.asLiveData();
-    }
 
     /**
      * 上传并设置群组头像
