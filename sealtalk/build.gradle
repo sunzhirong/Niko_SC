@@ -52,6 +52,8 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+    implementation 'com.alibaba:fastjson:1.2.21'
+
     implementation 'com.huawei.hms:push:4.0.2.300'
     implementation 'androidx.appcompat:appcompat:1.1.0-beta01'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'

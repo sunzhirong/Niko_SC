@@ -1,5 +1,7 @@
 package cn.rongcloud.im.niko.utils;
 
+import com.alibaba.fastjson.JSON;
+
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,14 +18,15 @@ import cn.rongcloud.im.niko.common.NetConstant;
 import cn.rongcloud.im.niko.common.ThreadManager;
 import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Result;
+import cn.rongcloud.im.niko.model.niko.ProfileInfo;
 import cn.rongcloud.im.niko.utils.log.SLog;
 
 /**
  * 此类用于结合处理网络请求和数据库请求。
  * 返回结果始终来源于数据库，当有网络请求时将请求保存至数据库后返回数据库中结果。
  *
- * @param <ResultType>  网络请求结果
- * @param <RequestType> 数据库中数据结果
+ * @param <ResultType>  数据库中数据结果
+ * @param <RequestType> 网络请求结果
  */
 public abstract class NetworkBoundResource<ResultType, RequestType> {
     private final ThreadManager threadManager;
@@ -79,25 +82,28 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
                         result.addSource(dbSource,
                                 newData -> setValue(Resource.error(code, newData)));
                         return;
-                    } else {
+                    }
+                    else {
                         // do nothing
+                        threadManager.runOnWorkThread(() -> {
+                            // 保存网络请求结果至数据库
+                            try {
+                                saveCallResult(processResponse(response));
+                            } catch (Exception e) {
+                                SLog.e(LogTag.DB, "NetworkBoundResource saveCallResult failed:" + e.toString());
+                                SLog.e(LogTag.DB, "NetworkBoundResource saveCallResult failed:" + JSON.toJSONString(response));
+                            }
+
+                            threadManager.runOnUIThread(() ->
+                                    // 重新从数据库中获取结果，防止从旧数据源中获取到加载网络前的数据
+
+                                    result.addSource(safeLoadFromDb(),
+                                            newData -> setValue(Resource.success(newData)))
+                            );
+                        });
                     }
                 }
-                threadManager.runOnWorkThread(() -> {
-                    // 保存网络请求结果至数据库
-                    try {
-                        saveCallResult(processResponse(response));
-                    } catch (Exception e) {
-                        SLog.e(LogTag.DB, "saveCallResult failed:" + e.toString());
-                    }
 
-                    threadManager.runOnUIThread(() ->
-                            // 重新从数据库中获取结果，防止从旧数据源中获取到加载网络前的数据
-
-                            result.addSource(safeLoadFromDb(),
-                                    newData -> setValue(Resource.success(newData)))
-                    );
-                });
             } else {
                 onFetchFailed();
                 result.addSource(dbSource,

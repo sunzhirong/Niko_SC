@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+
+import com.heytap.mcssdk.utils.LogUtil;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
@@ -16,13 +19,20 @@ import androidx.lifecycle.ViewModelProviders;
 
 import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.common.IntentExtra;
+import cn.rongcloud.im.niko.common.NetConstant;
 import cn.rongcloud.im.niko.model.CountryInfo;
 import cn.rongcloud.im.niko.model.Resource;
+import cn.rongcloud.im.niko.model.Result;
 import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.model.UserCacheInfo;
+import cn.rongcloud.im.niko.model.niko.ProfileInfo;
+import cn.rongcloud.im.niko.model.niko.TokenBean;
+import cn.rongcloud.im.niko.sp.ProfileUtils;
+import cn.rongcloud.im.niko.sp.SPUtils;
 import cn.rongcloud.im.niko.ui.activity.MainActivity;
 import cn.rongcloud.im.niko.ui.activity.SelectCountryActivity;
 import cn.rongcloud.im.niko.ui.widget.ClearWriteEditText;
+import cn.rongcloud.im.niko.utils.log.SLog;
 import cn.rongcloud.im.niko.viewmodel.LoginViewModel;
 
 public class LoginFragment extends BaseFragment {
@@ -115,6 +125,88 @@ public class LoginFragment extends BaseFragment {
                 passwordEdit.setText(userInfo.getPassword());
             }
         });
+
+
+        loginViewModel.getGetTokenResult().observe(this, new Observer<TokenBean>() {
+            @Override
+            public void onChanged(TokenBean tokenBean) {
+                if (tokenBean != null && !TextUtils.isEmpty(tokenBean.getAccess_token())) {
+                    showToast("成功");
+                    //获取msg需要赋值
+                    NetConstant.Authorization = "Bearer "+tokenBean.getAccess_token();
+                    loginViewModel.getSms();
+//                    loginViewModel.verifySms();
+
+//                    loginViewModel.getUserToken();
+
+                } else {
+                    showToast("失败");
+                }
+            }
+        });
+
+
+        loginViewModel.getGetSmsResult().observe(this, new Observer<Result>() {
+            @Override
+            public void onChanged(Result result) {
+                if (result!=null&&result.RsCode == 3) {
+                    showToast("成功");
+                    loginViewModel.verifySms();
+                } else {
+                    showToast("失败");
+                }
+            }
+        });
+
+        loginViewModel.getVerifyResult().observe(this, new Observer<Result>() {
+            @Override
+            public void onChanged(Result result) {
+                if (result.RsCode == 3) {
+                    showToast("成功");
+                    loginViewModel.getUserToken();
+                } else {
+                    showToast("失败");
+                }
+            }
+        });
+
+        loginViewModel.getGetUserTokenResult().observe(this, new Observer<TokenBean>() {
+            @Override
+            public void onChanged(TokenBean tokenBean) {
+                if (tokenBean != null && !TextUtils.isEmpty(tokenBean.getAccess_token())) {
+                    showToast("成功");
+                    NetConstant.Authorization = "Bearer "+tokenBean.getAccess_token();
+                    SPUtils.setUserToken(getContext(),tokenBean.getAccess_token());
+                    SPUtils.setLogin(getContext(),true);
+                    ProfileUtils.sProfileInfo = new ProfileInfo();
+                    ProfileUtils.sProfileInfo.setId(tokenBean.getUID());
+
+                    loginViewModel.login("","","");
+                } else {
+                    showToast("失败");
+
+                }
+            }
+        });
+
+
+//        loginViewModel.getGetTokenResult().observe(this, new Observer<TokenBean>() {
+//            @Override
+//            public void onChanged(TokenBean tokenBean) {
+//                if (tokenBean != null && !TextUtils.isEmpty(tokenBean.getAccess_token())) {
+//                    SLog.d("login","GetToken 成功");
+//                    NetConstant.Authorization = "Bearer "+tokenBean.getAccess_token();
+//                    SPUtils.setUserToken(getContext(),tokenBean.getAccess_token());
+//                    SPUtils.setLogin(getContext(),true);
+//                    ProfileUtils.sProfileInfo = new ProfileInfo();
+//                    login("","","");
+//                } else {
+//                    SLog.d("login","GetToken 失败");
+//                }
+//            }
+//        });
+
+
     }
 
 
@@ -122,38 +214,11 @@ public class LoginFragment extends BaseFragment {
     protected void onClick(View v, int id) {
         switch (id) {
             case R.id.btn_login:
-                String phoneStr = phoneNumberEdit.getText().toString().trim();
-                String passwordStr = passwordEdit.getText().toString().trim();
-                String countryCodeStr = countryCodeTv.getText().toString().trim();
-
-                if (TextUtils.isEmpty(phoneStr)) {
-                    showToast(R.string.seal_login_toast_phone_number_is_null);
-                    phoneNumberEdit.setShakeAnimation();
-                    break;
-                }
-
-                if (TextUtils.isEmpty(passwordStr)) {
-                    showToast(R.string.seal_login_toast_password_is_null);
-                    passwordEdit.setShakeAnimation();
-                    return;
-                }
-
-                if (passwordStr.contains(" ")) {
-                    showToast(R.string.seal_login_toast_password_cannot_contain_spaces);
-                    passwordEdit.setShakeAnimation();
-                    return;
-                }
-                if(TextUtils.isEmpty(countryCodeStr)){
-                    countryCodeStr = "86";
-                }else if(countryCodeStr.startsWith("+")){
-                    countryCodeStr = countryCodeStr.substring(1);
-                }
-
-                login(countryCodeStr, phoneStr, passwordStr);
+//                login("", "", "");
+                loginViewModel.getToken();
                 break;
             case R.id.ll_country_select:
-                // 跳转区域选择界面
-                startActivityForResult(new Intent(getActivity(), SelectCountryActivity.class), REQUEST_CODE_SELECT_COUNTRY);
+                loginViewModel.getToken();
                 break;
             default:
                 break;

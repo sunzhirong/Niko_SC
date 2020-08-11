@@ -3,6 +3,10 @@ package cn.rongcloud.im.niko.task;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
+
+import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -13,8 +17,11 @@ import androidx.lifecycle.Observer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.rongcloud.im.niko.common.ErrorCode;
+import cn.rongcloud.im.niko.common.LogTag;
+import cn.rongcloud.im.niko.common.NetConstant;
 import cn.rongcloud.im.niko.common.ResultCallback;
 import cn.rongcloud.im.niko.db.DbManager;
 import cn.rongcloud.im.niko.db.dao.FriendDao;
@@ -38,16 +45,23 @@ import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.model.UserCacheInfo;
 import cn.rongcloud.im.niko.model.UserSimpleInfo;
 import cn.rongcloud.im.niko.model.VerifyResult;
+import cn.rongcloud.im.niko.model.niko.ProfileInfo;
+import cn.rongcloud.im.niko.model.niko.TokenBean;
 import cn.rongcloud.im.niko.net.HttpClientManager;
 import cn.rongcloud.im.niko.net.RetrofitUtil;
+import cn.rongcloud.im.niko.net.ScInterceptor;
+import cn.rongcloud.im.niko.net.service.TokenService;
 import cn.rongcloud.im.niko.net.service.UserService;
+import cn.rongcloud.im.niko.net.token.TokenHttpClientManager;
 import cn.rongcloud.im.niko.sp.CountryCache;
 import cn.rongcloud.im.niko.sp.UserCache;
 import cn.rongcloud.im.niko.utils.CharacterParser;
 import cn.rongcloud.im.niko.utils.NetworkBoundResource;
+import cn.rongcloud.im.niko.utils.NetworkOnlyLiveData;
 import cn.rongcloud.im.niko.utils.NetworkOnlyResource;
 import cn.rongcloud.im.niko.utils.RongGenerate;
 import cn.rongcloud.im.niko.utils.SearchUtils;
+import cn.rongcloud.im.niko.utils.glideutils.GlideImageLoaderUtil;
 import cn.rongcloud.im.niko.utils.log.SLog;
 import io.rong.imlib.model.Conversation;
 import okhttp3.RequestBody;
@@ -58,6 +72,7 @@ import okhttp3.RequestBody;
 public class UserTask {
     private FileManager fileManager;
     private UserService userService;
+    private TokenService tokenService;
     private Context context;
     private DbManager dbManager;
     private IMManager imManager;
@@ -69,6 +84,8 @@ public class UserTask {
     public UserTask(Context context) {
         this.context = context.getApplicationContext();
         userService = HttpClientManager.getInstance(context).getClient().createService(UserService.class);
+        tokenService = TokenHttpClientManager.getInstance(context).getClient().createService(TokenService.class);
+
         dbManager = DbManager.getInstance(context.getApplicationContext());
         fileManager = new FileManager(context.getApplicationContext());
         userCache = new UserCache(context.getApplicationContext());
@@ -84,31 +101,29 @@ public class UserTask {
      * @param password 密码
      */
     public LiveData<Resource<String>> login(String region, String phone, String password) {
+
+
         MediatorLiveData<Resource<String>> result = new MediatorLiveData<>();
         result.setValue(Resource.loading(null));
-        LiveData<Resource<LoginResult>> login = new NetworkOnlyResource<LoginResult, Result<LoginResult>>() {
+        LiveData<Resource<String>> resourceLiveData = new NetworkOnlyResource<String, Result<String>>() {
+
             @NonNull
             @Override
-            protected LiveData<Result<LoginResult>> createCall() {
-                HashMap<String, Object> paramsMap = new HashMap<>();
-                paramsMap.put("region", region);
-                paramsMap.put("phone", phone);
-                paramsMap.put("password", password);
-                RequestBody body = RetrofitUtil.createJsonRequest(paramsMap);
-                return userService.loginLiveData(body);
+            protected LiveData<Result<String>> createCall() {
+                return userService.getIMToken();
             }
         }.asLiveData();
-        result.addSource(login, loginResultResource -> {
+        result.addSource(resourceLiveData, loginResultResource -> {
             if (loginResultResource.status == Status.SUCCESS) {
-                result.removeSource(login);
-                LoginResult loginResult = loginResultResource.data;
-                if (loginResult != null) {
-                    imManager.connectIM(loginResult.token, true, new ResultCallback<String>() {
+                result.removeSource(resourceLiveData);
+                String data = loginResultResource.data;
+                if (!TextUtils.isEmpty(data)) {
+                    imManager.connectIM(data, true, new ResultCallback<String>() {
                         @Override
                         public void onSuccess(String s) {
                             result.postValue(Resource.success(s));
                             // 存储当前登录成功的用户信息
-                            UserCacheInfo info = new UserCacheInfo(s, loginResult.token, phone, password, region, countryCache.getCountryInfoByRegion(region));
+                            UserCacheInfo info = new UserCacheInfo(s, data, phone, password, region, countryCache.getCountryInfoByRegion(region));
                             userCache.saveUserCache(info);
                         }
 
@@ -136,11 +151,21 @@ public class UserTask {
      * @return
      */
     public LiveData<Resource<UserInfo>> getUserInfo(final String userId) {
-        return new NetworkBoundResource<UserInfo, Result<UserInfo>>() {
+        return new NetworkBoundResource<UserInfo, Result<ProfileInfo>>() {
             @Override
-            protected void saveCallResult(@NonNull Result<UserInfo> item) {
-                if (item.getRsData() == null) return;
-                UserInfo userInfo = item.getRsData();
+            protected void saveCallResult(@NonNull Result<ProfileInfo> item) {
+                ProfileInfo rsData = item.getRsData();
+                UserInfo userInfo = new UserInfo();
+
+                if (rsData == null) {
+                    return;
+                }
+                userInfo.setId(String.valueOf(rsData.getHead().getUID()));
+                userInfo.setAlias(rsData.getHead().getAlias());
+                userInfo.setAliasSpelling(SearchUtils.fullSearchableString(rsData.getHead().getAlias()));
+                userInfo.setName(rsData.getHead().getName());
+                userInfo.setPortraitUri(GlideImageLoaderUtil.getScString(rsData.getHead().getUserIcon()));
+                SLog.e(LogTag.DB, "NetworkBoundResource saveCallResult Impl:" + JSON.toJSONString(userInfo));
 
                 UserDao userDao = dbManager.getUserDao();
                 if (userDao != null) {
@@ -191,7 +216,6 @@ public class UserTask {
             @NonNull
             @Override
             protected LiveData<UserInfo> loadFromDb() {
-
                 UserDao userDao = dbManager.getUserDao();
                 if (userDao != null) {
                     return userDao.getUserById(userId);
@@ -202,10 +226,110 @@ public class UserTask {
 
             @NonNull
             @Override
-            protected LiveData<Result<UserInfo>> createCall() {
-                return userService.getUserInfo(userId);
+            protected LiveData<Result<ProfileInfo>> createCall() {
+                HashMap<String, Object> paramsMap = new HashMap<>();
+                paramsMap.put("Data", userId);
+                RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+                return userService.getUserInfo(requestBody);
             }
+
         }.asLiveData();
+//        return new NetworkBoundResource<UserInfo, Result<UserInfo>>() {
+//            @Override
+//            protected void saveCallResult(@NonNull Result<UserInfo> item) {
+//                UserInfo userInfo = item.getRsData();
+//                SLog.e(LogTag.DB, "NetworkBoundResource saveCallResult Impl:" + JSON.toJSONString(userInfo));
+//
+//                UserDao userDao = dbManager.getUserDao();
+//                if (userDao != null) {
+//                    String nameSpelling = SearchUtils.fullSearchableString(userInfo.getName());
+//
+//                    userInfo.setNameSpelling(nameSpelling);
+//                    String portraitUri = userInfo.getPortraitUri();
+//
+//                    // 当没有头像时生成默认头像
+//                    if (TextUtils.isEmpty(portraitUri)) {
+//                        portraitUri = RongGenerate.generateDefaultAvatar(context, userInfo.getId(), userInfo.getName());
+//                        userInfo.setPortraitUri(portraitUri);
+//                    }
+//
+//                    String stAccount = userInfo.getStAccount();
+//                    if (!TextUtils.isEmpty(stAccount)) {
+//                        userDao.updateSAccount(userInfo.getId(), stAccount);
+//                    }
+//                    String gender = userInfo.getGender();
+//                    if (!TextUtils.isEmpty(gender)) {
+//                        userDao.updateGender(userInfo.getId(), gender);
+//                    }
+//                    // 更新现有用户信息若没有则创建新的用户信息，防止覆盖其他已有字段
+//                    int resultCount = userDao.updateNameAndPortrait(userInfo.getId(), userInfo.getName(), nameSpelling, portraitUri);
+//                    if (resultCount == 0) {
+//                        // 当前用户的话， 判断是否有电话号码， 没有则从缓存中取出
+//                        if (userInfo.getId().equals(imManager.getCurrentId())) {
+//                            UserCacheInfo cacheInfo = userCache.getUserCache();
+//                            if (cacheInfo != null && cacheInfo.getId().equals(userInfo.getId())) {
+//                                userInfo.setPhoneNumber(cacheInfo.getPhoneNumber());
+//                            }
+//                        }
+//
+//                        userDao.insertUser(userInfo);
+//                    }
+//                }
+//
+//                // 更新 IMKit 显示缓存
+//                String alias = "";
+//                if (userDao != null) {
+//                    alias = userDao.getUserByIdSync(userInfo.getId()).getAlias();
+//                }
+//                //有备注名的时，使用备注名
+//                String name = TextUtils.isEmpty(alias) ? userInfo.getName() : alias;
+//                IMManager.getInstance().updateUserInfoCache(userInfo.getId(), name, Uri.parse(userInfo.getPortraitUri()));
+//            }
+//
+//            @NonNull
+//            @Override
+//            protected LiveData<UserInfo> loadFromDb() {
+//
+//                UserDao userDao = dbManager.getUserDao();
+//                if (userDao != null) {
+//                    return userDao.getUserById(userId);
+//                } else {
+//                    return new MediatorLiveData<>();
+//                }
+//            }
+//
+//
+//            @NonNull
+//            @Override
+//            protected LiveData<Result<UserInfo>> createCall() {
+//
+//                return new NetworkOnlyLiveData<Result<UserInfo>, Result<ProfileInfo>>() {
+//                    @NonNull
+//                    @Override
+//                    protected LiveData<Result<ProfileInfo>> createCall() {
+//                        HashMap<String, Object> paramsMap = new HashMap<>();
+//                        paramsMap.put("Data", userId);
+//                        RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+//                        return userService.getUserInfo(requestBody);
+//                    }
+//                    @Override
+//                    protected Result<UserInfo> transformRequestType(Result<ProfileInfo> info){
+//                        ProfileInfo rsData = info.getRsData();
+//                        UserInfo userInfo = new UserInfo();
+//                        Result<UserInfo> userInfoResult = new Result<UserInfo>();
+//                        if(userInfoResult.RsData==null){return  null;}
+//                        userInfoResult.RsCode = info.RsCode;
+//                        userInfo.setId(String.valueOf(rsData.getHead().getUID()));
+//                        userInfo.setAlias(rsData.getHead().getAlias());
+//                        userInfo.setAliasSpelling(SearchUtils.fullSearchableString(rsData.getHead().getAlias()));
+//                        userInfo.setName(rsData.getHead().getName());
+//                        userInfo.setPortraitUri(GlideImageLoaderUtil.getScString(rsData.getHead().getUserIcon()));
+//                        userInfoResult.setRsData(userInfo);
+//                        return userInfoResult;
+//                    }
+//                }.asLiveData();
+//            }
+//        }.asLiveData();
     }
 
     /**
@@ -216,92 +340,6 @@ public class UserTask {
      */
     public UserInfo getUserInfoSync(final String userId) {
         return dbManager.getUserDao().getUserByIdSync(userId);
-    }
-
-
-    /**
-     * 发送验证码
-     *
-     * @param region
-     * @param phoneNumber
-     * @return
-     */
-    public LiveData<Resource<String>> sendCode(String region, String phoneNumber) {
-        return new NetworkOnlyResource<String, Result<String>>() {
-
-            @NonNull
-            @Override
-            protected LiveData<Result<String>> createCall() {
-                HashMap<String, Object> paramsMap = new HashMap<>();
-                paramsMap.put("region", region);
-                paramsMap.put("phone", phoneNumber);
-                RequestBody body = RetrofitUtil.createJsonRequest(paramsMap);
-                return userService.sendCode(body);
-            }
-        }.asLiveData();
-    }
-
-    /**
-     * 注册请求
-     *
-     * @param phoneCode
-     * @param phoneNumber
-     * @param shortMsgCode
-     * @param nickName
-     * @param password
-     * @return
-     */
-    public LiveData<Resource<RegisterResult>> register(String phoneCode, String phoneNumber, String shortMsgCode, String nickName, String password) {
-        MediatorLiveData<Resource<RegisterResult>> result = new MediatorLiveData<>();
-        result.setValue(Resource.loading(null));
-        LiveData<Resource<VerifyResult>> verify = new NetworkOnlyResource<VerifyResult, Result<VerifyResult>>() {
-            @NonNull
-            @Override
-            protected LiveData<Result<VerifyResult>> createCall() {
-                HashMap<String, Object> paramsMap = new HashMap<>();
-                paramsMap.put("region", phoneCode);
-                paramsMap.put("phone", phoneNumber);
-                paramsMap.put("code", shortMsgCode);
-                RequestBody body = RetrofitUtil.createJsonRequest(paramsMap);
-                return userService.verifyCode(body);
-            }
-        }.asLiveData();
-        result.addSource(verify, verifyResult -> {
-            if (verifyResult.status == Status.SUCCESS) {
-                String verifyToken = verifyResult.data.verification_token;
-                LiveData<Resource<RegisterResult>> register = new NetworkOnlyResource<RegisterResult, Result<RegisterResult>>() {
-                    @NonNull
-                    @Override
-                    protected LiveData<Result<RegisterResult>> createCall() {
-                        HashMap<String, Object> paramsMap = new HashMap<>();
-                        paramsMap.put("nickname", nickName);
-                        paramsMap.put("password", password);
-                        paramsMap.put("verification_token", verifyToken);
-                        RequestBody body = RetrofitUtil.createJsonRequest(paramsMap);
-                        return userService.register(body);
-                    }
-                }.asLiveData();
-
-                result.addSource(register, registerResult -> {
-                    if (registerResult.status == Status.SUCCESS) {
-                        if (registerResult != null) {
-                            result.postValue(registerResult);
-                        } else {
-                            result.setValue(Resource.error(ErrorCode.API_ERR_OTHER.getCode(), null));
-                        }
-                    } else if (registerResult.status == Status.ERROR) {
-                        result.setValue(Resource.error(registerResult.code, null));
-                    }
-                });
-
-            } else if (verifyResult.status == Status.ERROR) {
-                result.setValue(Resource.error(verifyResult.code, null));
-            } else {
-                result.setValue(Resource.loading(null));
-            }
-        });
-
-        return result;
     }
 
     /**
@@ -320,94 +358,6 @@ public class UserTask {
         }.asLiveData();
     }
 
-    /**
-     * 检测手机号是否注册了
-     *
-     * @param phoneCode
-     * @param phoneNumber
-     * @return
-     */
-    public LiveData<Resource<Boolean>> checkPhoneAvailable(String phoneCode, String phoneNumber) {
-        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
-
-            @NonNull
-            @Override
-            protected LiveData<Result<Boolean>> createCall() {
-                HashMap<String, Object> paramsMap = new HashMap<>();
-                paramsMap.put("region", phoneCode);
-                paramsMap.put("phone", phoneNumber);
-                RequestBody body = RetrofitUtil.createJsonRequest(paramsMap);
-                return userService.checkPhoneAvailable(body);
-            }
-        }.asLiveData();
-    }
-
-    /**
-     * 重置密码
-     *
-     * @param countryCode
-     * @param phoneNumber
-     * @param shortMsgCode
-     * @param password
-     * @return
-     */
-    public LiveData<Resource<String>> resetPassword(String countryCode, String phoneNumber, String shortMsgCode, String password) {
-        MediatorLiveData<Resource<String>> result = new MediatorLiveData<>();
-        result.setValue(Resource.loading(null));
-        LiveData<Resource<VerifyResult>> verify = new NetworkOnlyResource<VerifyResult, Result<VerifyResult>>() {
-            @NonNull
-            @Override
-            protected LiveData<Result<VerifyResult>> createCall() {
-                HashMap<String, Object> paramsMap = new HashMap<>();
-                paramsMap.put("region", countryCode);
-                paramsMap.put("phone", phoneNumber);
-                paramsMap.put("code", shortMsgCode);
-                RequestBody body = RetrofitUtil.createJsonRequest(paramsMap);
-                return userService.verifyCode(body);
-            }
-        }.asLiveData();
-
-        result.addSource(verify, verifyResult -> {
-            if (verifyResult != null) {
-                if (verifyResult.status == Status.SUCCESS) {
-                    String verifyToken = verifyResult.data.verification_token;
-                    LiveData<Resource<String>> resetPassword = new NetworkOnlyResource<String, Result<String>>() {
-
-                        @NonNull
-                        @Override
-                        protected LiveData<Result<String>> createCall() {
-                            HashMap<String, Object> paramsMap = new HashMap<>();
-                            paramsMap.put("password", password);
-                            paramsMap.put("verification_token", verifyToken);
-                            RequestBody body = RetrofitUtil.createJsonRequest(paramsMap);
-                            return userService.resetPassword(body);
-                        }
-                    }.asLiveData();
-
-                    result.addSource(resetPassword, resetPasswordResult -> {
-                        if (resetPasswordResult.status == Status.SUCCESS) {
-                            if (resetPasswordResult != null) {
-                                result.postValue(resetPasswordResult);
-                            } else {
-                                result.setValue(Resource.error(ErrorCode.API_ERR_OTHER.getCode(), null));
-                            }
-                        } else if (resetPasswordResult.status == Status.ERROR) {
-                            result.setValue(Resource.error(resetPasswordResult.code, null));
-                        }
-                    });
-
-                } else if (verifyResult.status == Status.ERROR) {
-                    result.setValue(Resource.error(verifyResult.code, null));
-                } else {
-                    result.setValue(Resource.loading(null));
-                }
-            } else if (verifyResult.status == Status.ERROR) {
-                result.setValue(Resource.error(verifyResult.code, null));
-            }
-
-        });
-        return result;
-    }
 
     /**
      * 设置自己的昵称
@@ -940,22 +890,53 @@ public class UserTask {
         }.asLiveData();
     }
 
-    /**
-     * 获取是否接收戳一下消息状态
-     *
-     * @return
-     */
-    public LiveData<Resource<GetPokeResult>> getReceivePokeMessageState() {
-        return new NetworkOnlyResource<GetPokeResult, Result<GetPokeResult>>() {
-            @Override
-            protected void saveCallResult(@NonNull GetPokeResult item) {
-                IMManager.getInstance().updateReceivePokeMessageStatus(item.isReceivePokeMessage());
-            }
+
+    public LiveData<TokenBean> getAccessToken() {
+        HashMap<String, String> paramsMap = new HashMap<>();
+        paramsMap.put("grant_type", "client_credentials");
+        paramsMap.put("scope", "jjApiScope");
+        NetConstant.Authorization = "Basic ampBcHBBcGlDbGllbnQ6Q2lyY2xlMjAyMEBXb3JsZA==";
+
+        Map<String, RequestBody> stringRequestBodyMap = RetrofitUtil.generateRequestBody(paramsMap);
+        return tokenService.connectToken(stringRequestBodyMap);
+    }
+
+    public LiveData<Result> getSms() {
+        HashMap<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put("PhoneNumber", "13622315970");
+        paramsMap.put("PhoneCountry", "86");
+        RequestBody body = RetrofitUtil.createJsonRequest(paramsMap);
+        return userService.getSms(body);
+    }
+
+    public LiveData<Result> smsVerify() {
+        HashMap<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put("PhoneNumber", "13622315970");
+        paramsMap.put("PhoneCountry", "86");
+        paramsMap.put("VCode", "9999");
+        RequestBody body = RetrofitUtil.createJsonRequest(paramsMap);
+        return userService.verifyCodeNiko(body);
+    }
+
+    public LiveData<TokenBean> getUserToken() {
+        HashMap<String, String> paramsMap = new HashMap<>();
+        paramsMap.put("grant_type", "password");
+        paramsMap.put("scope", "jjApiScope");
+        paramsMap.put("UserName", "13622315970");
+        paramsMap.put("Password", ScInterceptor.getDV() + "9999");
+        paramsMap.put("VCode", "9999");
+        NetConstant.Authorization = "Basic ampBcHBBcGlDbGllbnQ6Q2lyY2xlMjAyMEBXb3JsZA==";
+        Map<String, RequestBody> stringRequestBodyMap = RetrofitUtil.generateRequestBody(paramsMap);
+        return tokenService.connectToken(stringRequestBodyMap);
+    }
+
+    public LiveData<Resource<String>> getImToken() {
+        return new NetworkOnlyResource<String, Result<String>>() {
 
             @NonNull
             @Override
-            protected LiveData<Result<GetPokeResult>> createCall() {
-                return userService.getReceivePokeMessageStatus();
+            protected LiveData<Result<String>> createCall() {
+                return userService.getIMToken();
             }
         }.asLiveData();
     }

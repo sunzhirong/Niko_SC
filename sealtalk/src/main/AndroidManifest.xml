@@ -21,20 +21,20 @@
 <!--    <uses-permission android:name="cn.rongcloud.im.permission.C2D_MESSAGE" />-->
 <!--    &lt;!&ndash; GCM 配置结束 < &ndash;&gt;-->
 <!--    &lt;!&ndash; 华为 配置开始 < &ndash;&gt;-->
-<!--    &lt;!&ndash;HMS-SDK引导升级HMS功能，访问OTA服务器需要网络权限&ndash;&gt;-->
-<!--    <uses-permission android:name="android.permission.INTERNET" />-->
-<!--    &lt;!&ndash;HMS-SDK引导升级HMS功能，保存下载的升级包需要SD卡写权限&ndash;&gt;-->
-<!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
-<!--    &lt;!&ndash;检测网络状态&ndash;&gt;-->
-<!--    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
-<!--    &lt;!&ndash;检测wifi状态&ndash;&gt;-->
-<!--    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />-->
-<!--    &lt;!&ndash;为了获取用户手机的IMEI，用来唯一的标识用户。&ndash;&gt;-->
-<!--    <uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
+    <!--HMS-SDK引导升级HMS功能，访问OTA服务器需要网络权限-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!--HMS-SDK引导升级HMS功能，保存下载的升级包需要SD卡写权限-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--检测网络状态-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--检测wifi状态-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!--为了获取用户手机的IMEI，用来唯一的标识用户。-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-<!--    &lt;!&ndash;如果是安卓8.0，应用编译配置的targetSdkVersion>=26，请务必添加以下权限 &ndash;&gt;-->
-<!--    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />-->
-<!--    &lt;!&ndash; 华为 配置结束 < &ndash;&gt;-->
+    <!--如果是安卓8.0，应用编译配置的targetSdkVersion>=26，请务必添加以下权限 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!-- 华为 配置结束 < -->
 
 <!--    &lt;!&ndash; MeiZu 配置开始 < &ndash;&gt;-->
 <!--    &lt;!&ndash; 兼容 flyme5.0 以下版本，魅族内部集成 pushSDK 必填，不然无法收到 消息&ndash;&gt;-->
@@ -47,9 +47,9 @@
 <!--    <uses-permission android:name="com.meizu.c2dm.permission.RECEIVE" />-->
 <!--    &lt;!&ndash; MeiZu 配置结束 < &ndash;&gt;-->
 
-<!--    &lt;!&ndash; OPPPO 权限配置&ndash;&gt;-->
-<!--    <uses-permission android:name="com.coloros.mcs.permission.SEND_MCS_MESSAGE" />-->
-<!--    &lt;!&ndash; OPPO 配置结束&ndash;&gt;-->
+    <!-- OPPPO 权限配置-->
+    <uses-permission android:name="com.coloros.mcs.permission.SEND_MCS_MESSAGE" />
+    <!-- OPPO 配置结束-->
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />

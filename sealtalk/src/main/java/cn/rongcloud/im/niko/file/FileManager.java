@@ -315,29 +315,4 @@ public class FileManager {
         return saveFileDirectory.getAbsolutePath();
     }
 
-    /**
-     * 下载文件
-     *
-     * @param downloadFilePath
-     * @param saveFilePath
-     * @return
-     */
-    public LiveData<Resource<String>> downloadFile(String downloadFilePath, String saveFilePath) {
-        MutableLiveData<Resource<String>> result = new MutableLiveData<>();
-        appService.downloadFile(downloadFilePath).enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                InputStream inputStream = response.body().byteStream();
-                File saveFile = new File(saveFilePath);
-
-                //TODO input 写进 file
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-        });
-        return result;
-    }
 }

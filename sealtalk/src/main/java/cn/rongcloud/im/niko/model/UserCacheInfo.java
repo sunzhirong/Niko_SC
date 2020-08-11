@@ -24,21 +24,6 @@ public class UserCacheInfo extends UserInfo {
             setPassword(password);
     }
 
-    public void setUserInfo(UserInfo info) {
-        if (getId() != null && info != null && !getId().equals(info.getId())) {
-            return;
-        }
-        setId(info.getId());
-        setPortraitUri(info.getPortraitUri());
-        setName(info.getName());
-        setNameSpelling(info.getNameSpelling());
-        setAlias(info.getAlias());
-        setAliasSpelling(info.getAliasSpelling());
-        setRegion(info.getRegion());
-        setPhoneNumber(info.getPhoneNumber());
-        setFriendStatus(info.getFriendStatus());
-        setOrderSpelling(info.getOrderSpelling());
-    }
 
     public void setUserCacheInfo(UserCacheInfo info) {
         setId(info.getId());

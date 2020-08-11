@@ -11,6 +11,7 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,6 +22,7 @@ import cn.rongcloud.im.niko.common.IntentExtra;
 import cn.rongcloud.im.niko.model.AddMemberResult;
 import cn.rongcloud.im.niko.model.GroupResult;
 import cn.rongcloud.im.niko.model.Status;
+import cn.rongcloud.im.niko.net.request.GroupDataReq;
 import cn.rongcloud.im.niko.ui.dialog.SelectPictureBottomDialog;
 import cn.rongcloud.im.niko.ui.view.SealTitleBar;
 import cn.rongcloud.im.niko.utils.ToastUtils;
@@ -29,7 +31,11 @@ import cn.rongcloud.im.niko.viewmodel.CreateGroupViewModel;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.emoticon.AndroidEmoji;
 import io.rong.imkit.widget.AsyncImageView;
+import io.rong.imlib.IRongCallback;
+import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.Message;
+import io.rong.message.TextMessage;
 
 /**
  * 创建群组
@@ -98,13 +104,13 @@ public class CreateGroupActivity extends TitleBaseActivity implements View.OnCli
                 processCreateResult(resource.data);
             } else if (resource.status == Status.ERROR) {
                 // 当有结果时代表群组创建成功，但上传图片失败
-                if (resource.data != null) {
-                    // 处理创建群组结果
-                    processCreateResult(resource.data);
-                } else {
-                    // 仅有创建失败时重置创建群组状态
-                    isCreatingGroup = false;
-                }
+//                if (resource.data != null) {
+//                    // 处理创建群组结果
+//                    processCreateResult(resource.data);
+//                } else {
+//                    // 仅有创建失败时重置创建群组状态
+//                    isCreatingGroup = false;
+//                }
 
                 ToastUtils.showToast(resource.message);
             }
@@ -163,7 +169,21 @@ public class CreateGroupActivity extends TitleBaseActivity implements View.OnCli
 
         // 标记创建群组状态
         isCreatingGroup = true;
-        createGroupViewModel.createGroup(groupName, groupPortraitUri, memberList);
+
+        GroupDataReq groupDataReq = new GroupDataReq();
+        groupDataReq.setTitle(createGroupName);
+        groupDataReq.setChatGrpID(0);
+        List<Integer> integers = new ArrayList<>();
+        try {
+            for(String id:memberList){
+                integers.add(Integer.parseInt(id));
+            }
+        }catch (Exception e){
+
+        }
+
+        groupDataReq.setUIDs(integers);
+        createGroupViewModel.createGroup(groupDataReq);
     }
 
     /**
@@ -171,24 +191,8 @@ public class CreateGroupActivity extends TitleBaseActivity implements View.OnCli
      *
      * @param groupResult
      */
-    private void processCreateResult(GroupResult groupResult) {
-        String groupId = "";
-        if (groupResult != null) {
-            groupId = groupResult.id;
-
-            // 判断是否有人需要同意加入群，显示提示信息
-            if (groupResult.userStatus != null && groupResult.userStatus.size() > 0) {
-                String tips = getString(R.string.seal_create_success);
-                //1 为已加入, 2 为等待管理员同意, 3 为等待被邀请者同意
-                for (AddMemberResult result : groupResult.userStatus) {
-                    if (result.status == 3) {
-                        tips = getString(R.string.seal_add_need_member_agree);
-                        break;
-                    }
-                }
-                ToastUtils.showToast(tips);
-            }
-        }
+    private void processCreateResult(Integer groupResult) {
+        String groupId = groupResult.toString();
 
         // 返回结果时候设置结果并结束
         if (isReturnResult) {
@@ -200,6 +204,47 @@ public class CreateGroupActivity extends TitleBaseActivity implements View.OnCli
             //不返回结果时，创建成功后跳转到群组聊天中
             toGroupChat(groupId);
         }
+        sendMsg(groupId);
+
+    }
+    private void sendMsg(String groupId) {
+        // 构造 TextMessage 实例
+        TextMessage myTextMessage = TextMessage.obtain("欢迎加入"+createGroupName+"群聊");
+
+        /* 生成 Message 对象。
+         * "7127" 为目标 Id。根据不同的 conversationType，可能是用户 Id、群组 Id 或聊天室 Id。
+         * Conversation.ConversationType.PRIVATE 为私聊会话类型，根据需要，也可以传入其它会话类型，如群组。
+         */
+        Message myMessage = Message.obtain(groupId, Conversation.ConversationType.GROUP, myTextMessage);
+
+        /**
+         * <p>发送消息。
+         * 通过 {@link io.rong.imlib.IRongCallback.ISendMessageCallback}
+         * 中的方法回调发送的消息状态及消息体。</p>
+         *
+         * @param message     将要发送的消息体。
+         * @param pushContent 当下发 push 消息时，在通知栏里会显示这个字段。
+         *                    如果发送的是自定义消息，该字段必须填写，否则无法收到 push 消息。
+         *                    如果发送 sdk 中默认的消息类型，例如 RC:TxtMsg, RC:VcMsg, RC:ImgMsg，则不需要填写，默认已经指定。
+         * @param pushData    push 附加信息。如果设置该字段，用户在收到 push 消息时，能通过 {@link io.rong.push.notification.PushNotificationMessage#getPushData()} 方法获取。
+         * @param callback    发送消息的回调，参考 {@link io.rong.imlib.IRongCallback.ISendMessageCallback}。
+         */
+        RongIM.getInstance().sendMessage(myMessage, null, null, new IRongCallback.ISendMessageCallback() {
+            @Override
+            public void onAttached(Message message) {
+                //消息本地数据库存储成功的回调
+            }
+
+            @Override
+            public void onSuccess(Message message) {
+                //消息通过网络发送成功的回调
+            }
+
+            @Override
+            public void onError(Message message, RongIMClient.ErrorCode errorCode) {
+                //消息发送失败的回调
+            }
+        });
     }
 
     /**

@@ -35,26 +35,6 @@ public class AppTask {
         this.context = context.getApplicationContext();
     }
 
-    /**
-     * 获取当前的最新版本
-     *
-     * @return
-     */
-    public LiveData<Resource<VersionInfo>> getNewVersion() {
-        return new NetworkOnlyResource<VersionInfo, VersionInfo>() {
-
-            @NonNull
-            @Override
-            protected LiveData<VersionInfo> createCall() {
-                return appsService.getNewVersion();
-            }
-
-            @Override
-            protected VersionInfo transformRequestType(VersionInfo response) {
-                return response;
-            }
-        }.asLiveData();
-    }
 
     /**
      * SDK 版本号
@@ -65,20 +45,6 @@ public class AppTask {
         return BuildVar.SDK_VERSION;
     }
 
-    /**
-     * 获取聊天室
-     *
-     * @return
-     */
-    public LiveData<Resource<List<ChatRoomResult>>> getDiscoveryChatRoom() {
-        return new NetworkOnlyResource<List<ChatRoomResult>, Result<List<ChatRoomResult>>>() {
-            @NonNull
-            @Override
-            protected LiveData<Result<List<ChatRoomResult>>> createCall() {
-                return appsService.getDiscoveryChatRoom();
-            }
-        }.asLiveData();
-    }
 
     /**
      * 获取当前app 的语音设置

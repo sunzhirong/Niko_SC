@@ -48,21 +48,6 @@ public class MainDiscoveryFragment extends BaseFragment {
 
         appViewModel = ViewModelProviders.of(getActivity()).get(AppViewModel.class);
 
-        // 获取聊天室列表
-        appViewModel.getChatRoonList().observe(this, listResource -> {
-            List<ChatRoomResult> chatRoomResultList = listResource.data;
-            if (chatRoomResultList != null) {
-                latestChatRoomList = new ArrayList<>();
-                /**
-                 * 筛选出结果中 type 为 chatroom 的结果
-                 */
-                for (ChatRoomResult roomResult : chatRoomResultList) {
-                    if ("chatroom".equals(roomResult.getType())) {
-                        latestChatRoomList.add(roomResult);
-                    }
-                }
-            }
-        });
 
 
         /*
@@ -111,7 +96,6 @@ public class MainDiscoveryFragment extends BaseFragment {
     private void enterChatRoom(int roomIndex, String roomTitle) {
         if (roomIndex >= (latestChatRoomList != null ? latestChatRoomList.size() : 0)) {
             ToastUtils.showToast(R.string.discovery_join_chat_room_error);
-            appViewModel.requestChatRoomList();
             return;
         }
 

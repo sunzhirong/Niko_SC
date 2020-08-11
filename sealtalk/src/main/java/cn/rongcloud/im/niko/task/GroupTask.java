@@ -28,6 +28,7 @@ import cn.rongcloud.im.niko.file.FileManager;
 import cn.rongcloud.im.niko.im.IMManager;
 import cn.rongcloud.im.niko.model.AddMemberResult;
 import cn.rongcloud.im.niko.model.CopyGroupResult;
+import cn.rongcloud.im.niko.model.GroupInfoBean;
 import cn.rongcloud.im.niko.model.GroupMember;
 import cn.rongcloud.im.niko.model.GroupMemberInfoResult;
 import cn.rongcloud.im.niko.model.GroupNoticeInfoResult;
@@ -38,14 +39,17 @@ import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Result;
 import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.model.UserSimpleInfo;
+import cn.rongcloud.im.niko.model.niko.ProfileHeadInfo;
 import cn.rongcloud.im.niko.net.HttpClientManager;
 import cn.rongcloud.im.niko.net.RetrofitUtil;
+import cn.rongcloud.im.niko.net.request.GroupDataReq;
 import cn.rongcloud.im.niko.net.service.GroupService;
 import cn.rongcloud.im.niko.ui.adapter.models.SearchGroupMember;
 import cn.rongcloud.im.niko.utils.NetworkBoundResource;
 import cn.rongcloud.im.niko.utils.NetworkOnlyResource;
 import cn.rongcloud.im.niko.utils.RongGenerate;
 import cn.rongcloud.im.niko.utils.SearchUtils;
+import cn.rongcloud.im.niko.utils.glideutils.GlideImageLoaderUtil;
 import io.rong.imkit.tools.CharacterParser;
 import io.rong.imlib.model.Conversation;
 import okhttp3.RequestBody;
@@ -66,19 +70,17 @@ public class GroupTask {
     /**
      * 创建群组
      *
-     * @param groupName
-     * @param memberList
      * @return
      */
-    public LiveData<Resource<GroupResult>> createGroup(String groupName, List<String> memberList) {
-        return new NetworkOnlyResource<GroupResult, Result<GroupResult>>() {
+    public LiveData<Resource<Integer>> createGroup(GroupDataReq data) {
+        return new NetworkOnlyResource<Integer, Result<Integer>>() {
             @NonNull
             @Override
-            protected LiveData<Result<GroupResult>> createCall() {
-                HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("name", groupName);
-                bodyMap.put("memberIds", memberList);
-                return groupService.createGroup(RetrofitUtil.createJsonRequest(bodyMap));
+            protected LiveData<Result<Integer>> createCall() {
+                HashMap<String, Object> paramsMap = new HashMap<>();
+                paramsMap.put("Data", data);
+                RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+                return groupService.createGroup(requestBody);
             }
         }.asLiveData();
     }
@@ -86,19 +88,17 @@ public class GroupTask {
     /**
      * 添加群成员
      *
-     * @param groupId
-     * @param memberList
      * @return
      */
-    public LiveData<Resource<List<AddMemberResult>>> addGroupMember(String groupId, List<String> memberList) {
-        return new NetworkOnlyResource<List<AddMemberResult>, Result<List<AddMemberResult>>>() {
+    public LiveData<Resource<Boolean>> addGroupMember(GroupDataReq data) {
+        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
             @NonNull
             @Override
-            protected LiveData<Result<List<AddMemberResult>>> createCall() {
-                HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("groupId", groupId);
-                bodyMap.put("memberIds", memberList);
-                return groupService.addGroupMember(RetrofitUtil.createJsonRequest(bodyMap));
+            protected LiveData<Result<Boolean>> createCall() {
+                HashMap<String, Object> paramsMap = new HashMap<>();
+                paramsMap.put("Data", data);
+                RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+                return groupService.addGroupMember(requestBody);
             }
         }.asLiveData();
     }
@@ -128,23 +128,34 @@ public class GroupTask {
      * @param memberList
      * @return
      */
-    public LiveData<Resource<Void>> kickGroupMember(String groupId, List<String> memberList) {
-        return new NetworkOnlyResource<Void, Result>() {
+    public LiveData<Resource<Boolean>> kickGroupMember(String groupId, List<String> memberList) {
+        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
             @Override
-            protected void saveCallResult(@NonNull Void item) {
-                GroupMemberDao groupMemberDao = dbManager.getGroupMemberDao();
-                if (groupMemberDao != null) {
-                    groupMemberDao.deleteGroupMember(groupId, memberList);
+            protected void saveCallResult(@NonNull Boolean item) {
+                if(item) {
+                    GroupMemberDao groupMemberDao = dbManager.getGroupMemberDao();
+                    if (groupMemberDao != null) {
+                        groupMemberDao.deleteGroupMember(groupId, memberList);
+                    }
                 }
             }
 
             @NonNull
             @Override
-            protected LiveData<Result> createCall() {
-                HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("groupId", groupId);
-                bodyMap.put("memberIds", memberList);
-                return groupService.kickMember(RetrofitUtil.createJsonRequest(bodyMap));
+            protected LiveData<Result<Boolean>> createCall() {
+
+                GroupDataReq groupDataReq = new GroupDataReq();
+                groupDataReq.setChatGrpID(Integer.parseInt(groupId));
+                List<Integer> list = new ArrayList<>();
+                for (String id : memberList){
+                    list.add(Integer.parseInt(id));
+                }
+                groupDataReq.setUIDs(list);
+
+                HashMap<String, Object> paramsMap = new HashMap<>();
+                paramsMap.put("Data", groupDataReq);
+                RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+                return groupService.kickMember(requestBody);
             }
         }.asLiveData();
     }
@@ -275,74 +286,7 @@ public class GroupTask {
         }.asLiveData();
     }
 
-    /**
-     * 获取定时清理状态信息
-     *
-     * @param groupId
-     * @return
-     */
-    public LiveData<Resource<Integer>> getRegularClearState(String groupId) {
-        return new NetworkBoundResource<Integer, Result<RegularClearStatusResult>>() {
 
-            @Override
-            protected void saveCallResult(@NonNull Result<RegularClearStatusResult> item) {
-                if (item.RsCode == 200 && item.RsData != null) {
-                    updateGroupRegularClearStateInDB(groupId, item.RsData.clearStatus);
-                }
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<Integer> loadFromDb() {
-                GroupDao groupDao = dbManager.getGroupDao();
-                LiveData<Integer> regularClearState = null;
-                if (groupDao != null) {
-                    regularClearState = groupDao.getRegularClear(groupId);
-                }
-                return regularClearState;
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<Result<RegularClearStatusResult>> createCall() {
-                HashMap<String, Object> paramMap = new HashMap<>();
-                paramMap.put("groupId", groupId);
-                return groupService.getRegularClearState(RetrofitUtil.createJsonRequest(paramMap));
-            }
-        }.asLiveData();
-    }
-
-    /**
-     * 设置定时清理群消息
-     *
-     * @param groupId
-     * @param clearStatus
-     * @return
-     */
-    public LiveData<Resource<Void>> setRegularClear(String groupId, int clearStatus) {
-        return new NetworkOnlyResource<Void, Result>() {
-            @NonNull
-            @Override
-            protected LiveData<Result> createCall() {
-                HashMap<String, Object> paramMap = new HashMap<>();
-                paramMap.put("groupId", groupId);
-                paramMap.put("clearStatus", clearStatus);
-                return groupService.setRegularClear(RetrofitUtil.createJsonRequest(paramMap));
-            }
-
-            @Override
-            protected void saveCallResult(@NonNull Void item) {
-                updateGroupRegularClearStateInDB(groupId, clearStatus);
-            }
-        }.asLiveData();
-    }
-
-    private void updateGroupRegularClearStateInDB(String groupId, int state) {
-        GroupDao groupDao = dbManager.getGroupDao();
-        if (groupDao == null) return;
-
-        groupDao.updateRegularClearState(groupId, state);
-    }
 
     /**
      * 设置群公告
@@ -497,12 +441,17 @@ public class GroupTask {
      * @return
      */
     public LiveData<Resource<GroupEntity>> getGroupInfo(final String groupId) {
-        return new NetworkBoundResource<GroupEntity, Result<GroupEntity>>() {
+        return new NetworkBoundResource<GroupEntity, Result<GroupInfoBean>>() {
             @Override
-            protected void saveCallResult(@NonNull Result<GroupEntity> item) {
+            protected void saveCallResult(@NonNull Result<GroupInfoBean> item) {
                 if (item.getRsData() == null) return;
 
-                GroupEntity groupEntity = item.getRsData();
+                GroupInfoBean rsData = item.getRsData();
+                GroupEntity groupEntity = new GroupEntity();
+
+                groupEntity.setId(String.valueOf(rsData.getChatGrpID()));
+                groupEntity.setName(rsData.getTitle());
+                groupEntity.setBulletin(rsData.getNote());
                 GroupDao groupDao = dbManager.getGroupDao();
                 if (groupDao != null) {
                     // 判断是否在通讯录中
@@ -541,8 +490,11 @@ public class GroupTask {
 
             @NonNull
             @Override
-            protected LiveData<Result<GroupEntity>> createCall() {
-                return groupService.getGroupInfo(groupId);
+            protected LiveData<Result<GroupInfoBean>> createCall() {
+                HashMap<String, Object> paramsMap = new HashMap<>();
+                paramsMap.put("Data", groupId);
+                RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+                return groupService.getGroupInfo(requestBody);
             }
         }.asLiveData();
     }
@@ -557,15 +509,6 @@ public class GroupTask {
         return dbManager.getGroupDao().getGroupInfoSync(groupId);
     }
 
-    /**
-     * 获取群组 list 信息 ( 同步方法 )
-     *
-     * @param groupIds
-     * @return
-     */
-    public List<GroupEntity> getGroupInfoListSync(String[] groupIds) {
-        return dbManager.getGroupDao().getGroupInfoListSync(groupIds);
-    }
 
     /**
      * 获取群组 list 信息 ( 异步 )
@@ -603,10 +546,12 @@ public class GroupTask {
      * @return
      */
     public LiveData<Resource<List<GroupMember>>> getGroupMemberInfoList(final String groupId, String filterByName) {
-        return new NetworkBoundResource<List<GroupMember>, Result<List<GroupMemberInfoResult>>>() {
+        return new NetworkBoundResource<List<GroupMember>, Result<GroupInfoBean>>() {
             @Override
-            protected void saveCallResult(@NonNull Result<List<GroupMemberInfoResult>> item) {
+            protected void saveCallResult(@NonNull Result<GroupInfoBean> item) {
                 if (item.getRsData() == null) return;
+                GroupInfoBean rsData = item.getRsData();
+                if(rsData.getUserHeads()==null||rsData.getUserHeads().size()==0)return;
 
                 GroupMemberDao groupMemberDao = dbManager.getGroupMemberDao();
                 UserDao userDao = dbManager.getUserDao();
@@ -615,17 +560,19 @@ public class GroupTask {
                 if (groupMemberDao != null) {
                     groupMemberDao.deleteGroupMember(groupId);
                 }
-
-                List<GroupMemberInfoResult> result = item.getRsData();
+                List<ProfileHeadInfo> result = rsData.getUserHeads();
                 List<GroupMemberInfoEntity> groupEntityList = new ArrayList<>();
                 List<UserInfo> newUserList = new ArrayList<>();
-                for (GroupMemberInfoResult info : result) {
-                    UserSimpleInfo user = info.getUser();
+                for (ProfileHeadInfo info : result) {
+                    if(info.getUID()==0||TextUtils.isEmpty(info.getName())){continue;}
+                    UserSimpleInfo user = new UserSimpleInfo();
                     GroupMemberInfoEntity groupEntity = new GroupMemberInfoEntity();
                     groupEntity.setGroupId(groupId);
-
+                    user.setId(String.valueOf(info.getUID()));
+                    user.setPortraitUri(GlideImageLoaderUtil.getScString(info.getUserIcon()));
+                    user.setName(TextUtils.isEmpty(info.getAlias()) ? info.getName() : info.getAlias());
                     // 默认优先显示群备注名。当没有群备注时，则看此用户为当前用户的好友，如果是好友则显示备注名称。其次再试显示用户名
-                    String displayName = TextUtils.isEmpty(info.getDisplayName()) ? "" : info.getDisplayName();
+                    String displayName = TextUtils.isEmpty(info.getAlias()) ? info.getName() : info.getAlias();
                     String nameInKitCache = displayName;
 
                     if (TextUtils.isEmpty(nameInKitCache)) {
@@ -635,10 +582,10 @@ public class GroupTask {
                     groupEntity.setNickName(displayName);
                     groupEntity.setNickNameSpelling(SearchUtils.fullSearchableString(displayName));
                     groupEntity.setUserId(user.getId());
-                    groupEntity.setRole(info.getRole());
-                    groupEntity.setCreateTime(info.getCreatedTime());
-                    groupEntity.setUpdateTime(info.getUpdatedTime());
-                    groupEntity.setJoinTime(info.getTimestamp());
+                    groupEntity.setRole(info.getUID() == rsData.getCreatorUID()?GroupMember.Role.GROUP_OWNER.getValue():GroupMember.Role.MEMBER.getValue());
+//                    groupEntity.setCreateTime(info.getCreatedTime());
+//                    groupEntity.setUpdateTime(info.getUpdatedTime());
+//                    groupEntity.setJoinTime(info.getTimestamp());
                     groupEntityList.add(groupEntity);
 
                     // 更新 IMKit 缓存群组成员数据
@@ -705,8 +652,11 @@ public class GroupTask {
 
             @NonNull
             @Override
-            protected LiveData<Result<List<GroupMemberInfoResult>>> createCall() {
-                return groupService.getGroupMemberList(groupId);
+            protected LiveData<Result<GroupInfoBean>> createCall() {
+                HashMap<String, Object> paramsMap = new HashMap<>();
+                paramsMap.put("Data", groupId);
+                RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+                return groupService.getGroupMemberList(requestBody);
             }
         }.asLiveData();
     }
@@ -884,10 +834,6 @@ public class GroupTask {
      */
     public LiveData<List<GroupEntity>> getAllGroupInfoList() {
         return dbManager.getGroupDao().getAllGroupInfoList();
-    }
-
-    public LiveData<GroupEntity> getGroupInfoFromDB(String groupId) {
-        return dbManager.getGroupDao().getGroupInfo(groupId);
     }
 
     /**

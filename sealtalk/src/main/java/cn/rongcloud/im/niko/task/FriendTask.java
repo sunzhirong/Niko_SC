@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -16,6 +18,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import cn.rongcloud.im.niko.common.LogTag;
+import cn.rongcloud.im.niko.common.NetConstant;
 import cn.rongcloud.im.niko.common.ThreadManager;
 import cn.rongcloud.im.niko.contact.PhoneContactManager;
 import cn.rongcloud.im.niko.db.DbManager;
@@ -23,6 +27,7 @@ import cn.rongcloud.im.niko.db.dao.FriendDao;
 import cn.rongcloud.im.niko.db.dao.GroupMemberDao;
 import cn.rongcloud.im.niko.db.dao.UserDao;
 import cn.rongcloud.im.niko.db.model.FriendDescription;
+import cn.rongcloud.im.niko.db.model.FriendDetailInfo;
 import cn.rongcloud.im.niko.db.model.FriendInfo;
 import cn.rongcloud.im.niko.db.model.FriendShipInfo;
 import cn.rongcloud.im.niko.db.model.FriendStatus;
@@ -38,14 +43,19 @@ import cn.rongcloud.im.niko.model.Result;
 import cn.rongcloud.im.niko.model.SearchFriendInfo;
 import cn.rongcloud.im.niko.model.SimplePhoneContactInfo;
 import cn.rongcloud.im.niko.model.Status;
+import cn.rongcloud.im.niko.model.UserCacheInfo;
+import cn.rongcloud.im.niko.model.niko.FriendBean;
+import cn.rongcloud.im.niko.model.niko.ProfileInfo;
 import cn.rongcloud.im.niko.net.HttpClientManager;
 import cn.rongcloud.im.niko.net.RetrofitUtil;
 import cn.rongcloud.im.niko.net.service.FriendService;
 import cn.rongcloud.im.niko.utils.CharacterParser;
 import cn.rongcloud.im.niko.utils.NetworkBoundResource;
+import cn.rongcloud.im.niko.utils.NetworkOnlyLiveData;
 import cn.rongcloud.im.niko.utils.NetworkOnlyResource;
 import cn.rongcloud.im.niko.utils.RongGenerate;
 import cn.rongcloud.im.niko.utils.SearchUtils;
+import cn.rongcloud.im.niko.utils.glideutils.GlideImageLoaderUtil;
 import cn.rongcloud.im.niko.utils.log.SLog;
 import io.rong.imlib.model.Conversation;
 import okhttp3.RequestBody;
@@ -71,8 +81,108 @@ public class FriendTask {
      */
     public LiveData<Resource<List<FriendShipInfo>>> getAllFriends() {
         SLog.i(TAG, "getAllFriends()");
+        return new NetworkBoundResource<List<FriendShipInfo>, Result<List<FriendBean>>>() {
+            @Override
+            protected void saveCallResult(@NonNull Result<List<FriendBean>> item) {
+                List<FriendBean> rsData = item.getRsData();
+                List<FriendShipInfo> list = new ArrayList<>();
+                if(rsData==null||rsData.size()==0){return;}
+                for(FriendBean friendBean : rsData){
+                    FriendShipInfo friendShipInfo = new FriendShipInfo();
+                    friendShipInfo.setDisplayName(friendBean.getAlias());
+                    friendShipInfo.setStatus(friendBean.isIsFriend()?FriendStatus.IS_FRIEND.getStatusCode():FriendStatus.NONE.getStatusCode());
+                    FriendDetailInfo detailInfo = new FriendDetailInfo();
+                    detailInfo.setId(String.valueOf(friendBean.getUID()));
+                    detailInfo.setNickname(friendBean.getName());
+                    detailInfo.setPortraitUri(GlideImageLoaderUtil.getScString(friendBean.getUserIcon()));
+                    friendShipInfo.setUser(detailInfo);
+                    list.add(friendShipInfo);
+                }
+                //将freindbean转成
+                SLog.i(TAG, "saveCallResult() list.size() :" + list.size());
+                UserInfo userInfo = null;
+                FriendInfo friendInfo = null;
+                List<UserInfo> userInfoList = new ArrayList<>();
+                List<FriendInfo> friendInfoList = new ArrayList<>();
+                for (FriendShipInfo friendShipInfo : list) {
+                    userInfo = new UserInfo();
+                    friendInfo = new FriendInfo();
+                    userInfo.setId(friendShipInfo.getUser().getId());
+                    userInfo.setName(friendShipInfo.getUser().getNickname());
 
-        return new NetworkBoundResource<List<FriendShipInfo>, Result<List<FriendShipInfo>>>() {
+                    String portraitUri = friendShipInfo.getUser().getPortraitUri();
+                    // 若头像为空则生成默认头像
+                    if (TextUtils.isEmpty(portraitUri)) {
+                        portraitUri = RongGenerate.generateDefaultAvatar(context, friendShipInfo.getUser().getId(), friendShipInfo.getUser().getNickname());
+                    }
+                    userInfo.setPortraitUri(portraitUri);
+                    userInfo.setAlias(friendShipInfo.getDisplayName());
+                    userInfo.setFriendStatus(friendShipInfo.getStatus());
+                    userInfo.setPhoneNumber(friendShipInfo.getUser().getPhone());
+                    userInfo.setRegion(friendShipInfo.getUser().getRegion());
+                    userInfo.setAliasSpelling(SearchUtils.fullSearchableString(friendShipInfo.getDisplayName()));
+                    userInfo.setAliasSpellingInitial(SearchUtils.initialSearchableString(friendShipInfo.getDisplayName()));
+
+                    userInfo.setNameSpelling(SearchUtils.fullSearchableString(friendShipInfo.getUser().getNickname()));
+                    userInfo.setNameSpellingInitial(SearchUtils.initialSearchableString(friendShipInfo.getUser().getNickname()));
+
+                    if (!TextUtils.isEmpty(friendShipInfo.getDisplayName())) {
+                        userInfo.setOrderSpelling(CharacterParser.getInstance().getSpelling(friendShipInfo.getDisplayName()));
+                    } else {
+                        userInfo.setOrderSpelling(CharacterParser.getInstance().getSpelling(friendShipInfo.getUser().getNickname()));
+                    }
+
+                    friendInfo.setId(friendShipInfo.getUser().getId());
+                    friendInfo.setMessage(friendShipInfo.getMessage());
+                    friendInfo.setUpdatedAt(friendShipInfo.getUpdatedAt());
+                    userInfoList.add(userInfo);
+                    friendInfoList.add(friendInfo);
+
+                    // 更新 IMKit 显示缓存
+                    String name = userInfo.getAlias();
+                    if (TextUtils.isEmpty(name)) {
+                        name = userInfo.getName();
+                    }
+                    IMManager.getInstance().updateUserInfoCache(userInfo.getId(), name, Uri.parse(userInfo.getPortraitUri()));
+                }
+
+                UserDao userDao = dbManager.getUserDao();
+                if (userDao != null) {
+                    userDao.insertUserList(userInfoList);
+                }
+
+                FriendDao friendDao = dbManager.getFriendDao();
+                if (friendDao != null) {
+                    friendDao.insertFriendShipList(friendInfoList);
+                }
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<FriendShipInfo>> loadFromDb() {
+                SLog.i(TAG, "getAllFriends() loadFromDb()");
+                FriendDao friendDao = dbManager.getFriendDao();
+                if (friendDao != null) {
+                    return friendDao.getAllFriendListDB();
+                } else {
+                    return new MutableLiveData<>(null);
+                }
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<Result<List<FriendBean>>> createCall() {
+                HashMap<String, Object> paramsMap = new HashMap<>();
+                paramsMap.put("Skip", NetConstant.SKIP);
+                paramsMap.put("Take", NetConstant.TAKE);
+                paramsMap.put("Data", 0);
+                RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+                return friendService.getAllFriendList(requestBody);
+            }
+
+        }.asLiveData();
+
+    /*    return new NetworkBoundResource<List<FriendShipInfo>, Result<List<FriendShipInfo>>>() {
             @Override
             protected void saveCallResult(@NonNull Result<List<FriendShipInfo>> item) {
                 List<FriendShipInfo> list = item.getRsData();
@@ -150,14 +260,51 @@ public class FriendTask {
             @Override
             protected LiveData<Result<List<FriendShipInfo>>> createCall() {
                 SLog.i(TAG, "getAllFriends() createCall()");
-                return friendService.getAllFriendList();
+//                return friendService.getAllFriendList();
+                return new NetworkOnlyLiveData<Result<List<FriendShipInfo>>, Result<List<FriendBean>>>() {
+                    @NonNull
+                    @Override
+                    protected LiveData<Result<List<FriendBean>>> createCall() {
+                        HashMap<String, Object> paramsMap = new HashMap<>();
+                            paramsMap.put("Skip", NetConstant.SKIP);
+                            paramsMap.put("Take", NetConstant.TAKE);
+                            paramsMap.put("Data", 0);
+                            RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+                            return friendService.getAllFriendList(requestBody);
+                    }
+                    @Override
+                    protected Result<List<FriendShipInfo>> transformRequestType(Result<List<FriendBean>> info){
+                        List<FriendBean> rsData = info.getRsData();
+                        if(rsData==null||rsData.size()==0){return null;}
+                        Result<List<FriendShipInfo>> result = new Result<>();
+                        List<FriendShipInfo> list = new ArrayList<>();
+                        for (FriendBean friendInfo:rsData){
+                            FriendShipInfo friendShipInfo = new FriendShipInfo();
+
+                            friendShipInfo.setDisplayName(friendInfo.getAlias());
+                            friendShipInfo.setStatus(friendInfo.isIsFriend()?FriendStatus.IS_FRIEND.getStatusCode():FriendStatus.NONE.getStatusCode());
+                            FriendDetailInfo detailInfo = new FriendDetailInfo();
+                            detailInfo.setId(String.valueOf(friendInfo.getUID()));
+                            detailInfo.setNickname(friendInfo.getName());
+                            detailInfo.setPortraitUri(GlideImageLoaderUtil.getScString(friendInfo.getUserIcon()));
+
+                            friendShipInfo.setUser(detailInfo);
+                            list.add(friendShipInfo);
+                        }
+
+
+                        return result;
+                    }
+
+
+                }.asLiveData();
             }
 
             @Override
             protected boolean shouldFetch(@Nullable List<FriendShipInfo> data) {
                 return true;
             }
-        }.asLiveData();
+        }.asLiveData();*/
     }
 
     /**

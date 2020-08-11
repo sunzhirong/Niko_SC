@@ -107,20 +107,6 @@ public class NewMessageRemindActivity extends TitleBaseActivity {
             }
         });
 
-        // 获取接受戳一下消息状态结果
-        newMessageViewModel.getReceivePokeMsgStatusResult().observe(this, new Observer<Resource<GetPokeResult>>() {
-            @Override
-            public void onChanged(Resource<GetPokeResult> resultResource) {
-                if (resultResource.status == Status.SUCCESS) {
-                    GetPokeResult data = resultResource.data;
-                    if (data != null) {
-                        pokeSiv.setCheckedImmediatelyWithOutEvent(data.isReceivePokeMessage());
-                    }
-                } else if (resultResource.status == Status.LOADING) {
-                    pokeSiv.setCheckedImmediatelyWithOutEvent(IMManager.getInstance().getReceivePokeMessageStatus());
-                }
-            }
-        });
 
         // 获取设置戳一下消息状态结果
         newMessageViewModel.getSetReceivePokeMessageStatusResult().observe(this, new Observer<Resource<Void>>() {
@@ -134,8 +120,6 @@ public class NewMessageRemindActivity extends TitleBaseActivity {
             }
         });
 
-        // 更新接受戳一下消息状态
-        newMessageViewModel.requestReceivePokeMessageStatus();
     }
 
     /**

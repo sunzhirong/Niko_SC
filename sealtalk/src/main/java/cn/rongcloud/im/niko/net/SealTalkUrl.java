@@ -41,9 +41,7 @@ public class SealTalkUrl {
 
     public static final String GROUP_RENAME = "group/rename";
 
-    public static final String GROUP_SET_REGULAR_CLEAR = "group/set_regular_clear";
 
-    public static final String GROUP_GET_REGULAR_CLEAR_STATE = "group/get_regular_clear";
 
     public static final String GROUP_SET_BULLETIN = "group/set_bulletin";
 
@@ -127,7 +125,7 @@ public class SealTalkUrl {
 
     public static final String GET_PRIVACY = "user/get_privacy";
 
-    public static final String GET_SCREEN_CAPTURE = "misc/get_screen_capture";
+//    public static final String GET_SCREEN_CAPTURE = "misc/get_screen_capture";
 
     public static final String SET_SCREEN_CAPTURE = "misc/set_screen_capture";
 
@@ -135,12 +133,18 @@ public class SealTalkUrl {
 
     public static final String SET_RECEIVE_POKE_MESSAGE_STATUS = "user/set_poke";
 
-    public static final String GET_RECEIVE_POKE_MESSAGE_STATUS = "user/get_poke";
 
     public static final String SET_FRIEND_DESCRIPTION = "friendship/set_friend_description";
 
     public static final String GET_FRIEND_DESCRIPTION = "friendship/get_friend_description";
 
     public static final String MULTI_DELETE_FRIEND = "friendship/batch_delete";
+
+
+
+    //以上是demo
+
+    public static final String GET_IM_TOKEN = "/api/ScIM/GetImUserToken";
+
 
 }

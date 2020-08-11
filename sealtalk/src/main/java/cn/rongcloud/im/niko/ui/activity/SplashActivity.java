@@ -9,9 +9,13 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import cn.rongcloud.im.niko.R;
+import cn.rongcloud.im.niko.common.NetConstant;
 import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Status;
+import cn.rongcloud.im.niko.model.niko.ProfileInfo;
 import cn.rongcloud.im.niko.qrcode.SealQrCodeUISelector;
+import cn.rongcloud.im.niko.sp.ProfileUtils;
+import cn.rongcloud.im.niko.sp.SPUtils;
 import cn.rongcloud.im.niko.ui.BaseActivity;
 import cn.rongcloud.im.niko.utils.ToastUtils;
 import cn.rongcloud.im.niko.viewmodel.SplashViewModel;
@@ -65,6 +69,8 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void goToMain() {
+        //初始化user信息
+        NetConstant.Authorization = "Bearer "+SPUtils.getUserToken(this);
         startActivity(new Intent(this, MainActivity.class));
         if (intentUri != null) {
             goWithUri();

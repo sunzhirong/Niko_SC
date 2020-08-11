@@ -58,7 +58,7 @@ public class ApiErrorCodeMap {
             put(SealTalkUrl.GROUP_SET_CERTIFICATION, SealTalkUrlCode.GROUP_SET_CERTIFICATION);
             put(SealTalkUrl.SET_PRIVACY, SealTalkUrlCode.SET_PRIVACY);
             put(SealTalkUrl.GET_PRIVACY, SealTalkUrlCode.GET_PRIVACY);
-            put(SealTalkUrl.GET_SCREEN_CAPTURE, SealTalkUrlCode.GET_SCREEN_CAPTURE);
+//            put(SealTalkUrl.GET_SCREEN_CAPTURE, SealTalkUrlCode.GET_SCREEN_CAPTURE);
             put(SealTalkUrl.SET_SCREEN_CAPTURE, SealTalkUrlCode.SET_SCREEN_CAPTURE);
             put(SealTalkUrl.SEND_SC_MSG, SealTalkUrlCode.SEND_SC_MSG);
         }

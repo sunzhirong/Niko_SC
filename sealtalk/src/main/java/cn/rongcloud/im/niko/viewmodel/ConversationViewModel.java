@@ -315,12 +315,12 @@ public class ConversationViewModel extends AndroidViewModel {
         }
     }
 
-    /**
-     * 获取是否开启截屏通知
-     */
-    public LiveData<Resource<ScreenCaptureResult>> getScreenCaptureStatus(int conversationType, String targetId) {
-        return privacyTask.getScreenCapture(conversationType, targetId);
-    }
+//    /**
+//     * 获取是否开启截屏通知
+//     */
+//    public LiveData<Resource<ScreenCaptureResult>> getScreenCaptureStatus(int conversationType, String targetId) {
+//        return privacyTask.getScreenCapture(conversationType, targetId);
+//    }
 
     /**
      * 发送截屏通知

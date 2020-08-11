@@ -26,7 +26,6 @@ public class NewMessageViewModel extends AndroidViewModel {
     private SingleSourceMapLiveData<Boolean, Boolean> remindStatus;
     private MediatorLiveData<QuietHours> donotDistrabStatus = new MediatorLiveData<>();
     private SingleSourceLiveData<Resource<Void>> setReceivePokeMsgStatusResult = new SingleSourceLiveData<>();
-    private SingleSourceLiveData<Resource<GetPokeResult>> getReceivePokeMsgStatusResult = new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Boolean>> getPushNotifyDetailResult = new SingleSourceLiveData<>();
 
     private UserTask userTask;
@@ -132,21 +131,7 @@ public class NewMessageViewModel extends AndroidViewModel {
         return setReceivePokeMsgStatusResult;
     }
 
-    /**
-     * 请求获取接受戳一下消息状态
-     */
-    public void requestReceivePokeMessageStatus() {
-        getReceivePokeMsgStatusResult.setSource(userTask.getReceivePokeMessageState());
-    }
 
-    /**
-     * 获取接受戳一下消息状态结果
-     *
-     * @return
-     */
-    public SingleSourceLiveData<Resource<GetPokeResult>> getReceivePokeMsgStatusResult() {
-        return getReceivePokeMsgStatusResult;
-    }
 
     /**
      * 设置推送消息通知是否显示详细内容

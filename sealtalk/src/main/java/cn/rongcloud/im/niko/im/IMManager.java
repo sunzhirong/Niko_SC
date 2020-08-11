@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.rongcloud.im.niko.BuildConfig;
 import cn.rongcloud.im.niko.SealApp;
 import cn.rongcloud.im.niko.common.ErrorCode;
 import cn.rongcloud.im.niko.common.IntentExtra;
@@ -45,8 +46,8 @@ import cn.rongcloud.im.niko.model.UserCacheInfo;
 import cn.rongcloud.im.niko.net.CallBackWrapper;
 import cn.rongcloud.im.niko.net.HttpClientManager;
 import cn.rongcloud.im.niko.net.service.UserService;
-import cn.rongcloud.im.niko.BuildConfig;
 import cn.rongcloud.im.niko.R;
+import cn.rongcloud.im.niko.sp.SPUtils;
 import cn.rongcloud.im.niko.sp.UserCache;
 import cn.rongcloud.im.niko.sp.UserConfigCache;
 import cn.rongcloud.im.niko.ui.activity.ConversationActivity;
@@ -189,7 +190,8 @@ public class IMManager {
             return;
         }
 
-        String loginToken = this.userCache.getUserCache().getLoginToken();
+//        String loginToken = this.userCache.getUserCache().getLoginToken();
+        String loginToken = SPUtils.getIMToken(SealApp.getApplication());
         if (TextUtils.isEmpty(loginToken)) {
             autologinResult.setValue(false);
             return;
@@ -1523,7 +1525,6 @@ public class IMManager {
         if (isReceivePokeMessage == null) {
             // 第一次获取时
             boolean receivePokeMessageStatus = configCache.getReceivePokeMessageStatus(getCurrentId());
-            imInfoProvider.refreshReceivePokeMessageStatus();
             isReceivePokeMessage = receivePokeMessageStatus;
         }
 

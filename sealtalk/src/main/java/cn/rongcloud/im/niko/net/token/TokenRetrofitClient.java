@@ -1,4 +1,4 @@
-package cn.rongcloud.im.niko.net;
+package cn.rongcloud.im.niko.net.token;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,6 +17,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import cn.rongcloud.im.niko.common.NetConstant;
+import cn.rongcloud.im.niko.net.LiveDataCallAdapterFactory;
+import cn.rongcloud.im.niko.net.ScInterceptor;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -26,11 +28,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class RetrofitClient {
+public class TokenRetrofitClient {
     private Context mContext;
     private Retrofit mRetrofit;
 
-    public RetrofitClient(Context context, String baseUrl) {
+    public TokenRetrofitClient(Context context, String baseUrl) {
         mContext = context;
 
 //        OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder()
@@ -127,6 +129,7 @@ public class RetrofitClient {
                 config.putStringSet(NetConstant.API_SP_KEY_NET_COOKIE_SET, cookiesSet);
                 config.apply();
             }
+
 
             return originalResponse;
         }

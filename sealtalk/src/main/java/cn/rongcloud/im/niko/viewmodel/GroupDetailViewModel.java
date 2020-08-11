@@ -20,15 +20,15 @@ import java.util.List;
 
 import cn.rongcloud.im.niko.db.model.GroupEntity;
 import cn.rongcloud.im.niko.im.IMManager;
-import cn.rongcloud.im.niko.model.AddMemberResult;
 import cn.rongcloud.im.niko.model.GroupMember;
 import cn.rongcloud.im.niko.model.GroupNoticeResult;
 import cn.rongcloud.im.niko.model.Resource;
-import cn.rongcloud.im.niko.model.ScreenCaptureResult;
+import cn.rongcloud.im.niko.net.request.GroupDataReq;
 import cn.rongcloud.im.niko.task.GroupTask;
 import cn.rongcloud.im.niko.task.PrivacyTask;
 import cn.rongcloud.im.niko.utils.SingleSourceLiveData;
 import cn.rongcloud.im.niko.utils.SingleSourceMapLiveData;
+import cn.rongcloud.im.niko.utils.log.SLog;
 import io.rong.imlib.model.Conversation;
 
 /**
@@ -38,7 +38,6 @@ public class GroupDetailViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<GroupEntity>> groupInfoLiveData = new SingleSourceLiveData<>();
     private SingleSourceMapLiveData<Resource<List<GroupMember>>, Resource<List<GroupMember>>> groupMemberListLiveData;
     private SingleSourceLiveData<Resource<GroupNoticeResult>> groupNotice = new SingleSourceLiveData<>();
-    private SingleSourceLiveData<Resource<Integer>> regularClearState = new SingleSourceLiveData<>();
 
     private String groupId;
     private Conversation.ConversationType conversationType;
@@ -49,8 +48,8 @@ public class GroupDetailViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<Boolean>> isTopLiveData = new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Boolean>> cleanMessageResult = new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Void>> uploadPortraitResult = new SingleSourceLiveData<>();
-    private SingleSourceMapLiveData<Resource<List<AddMemberResult>>, Resource<List<AddMemberResult>>> addGroupMemberResult;
-    private SingleSourceMapLiveData<Resource<Void>, Resource<Void>> removeGroupMemberResult;
+    private SingleSourceMapLiveData<Resource<Boolean>, Resource<Boolean>> addGroupMemberResult;
+    private SingleSourceMapLiveData<Resource<Boolean>, Resource<Boolean>> removeGroupMemberResult;
     private SingleSourceLiveData<Resource<Void>> renameGroupNameResult = new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Void>> exitGroupResult = new SingleSourceLiveData<>();
     private MediatorLiveData<GroupMember> myselfInfo = new MediatorLiveData<>();
@@ -58,8 +57,6 @@ public class GroupDetailViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<Void>> saveToContactResult = new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Void>> removeFromContactResult = new SingleSourceLiveData<>();
 
-    private SingleSourceLiveData<Resource<ScreenCaptureResult>> screenCaptureResult = new SingleSourceLiveData<>();
-    private SingleSourceLiveData<Resource<Void>> setScreenCaptureResult = new SingleSourceLiveData<>();
 
     private SingleSourceLiveData<Resource<Void>> setCleanTimeResult = new SingleSourceLiveData<>();
     private IMManager imManager;
@@ -148,8 +145,6 @@ public class GroupDetailViewModel extends AndroidViewModel {
         });
 
         requestGroupNotice(groupId);
-        requestRegularState(groupId);
-        getScreenCaptureStatus();
     }
 
     /**
@@ -269,7 +264,19 @@ public class GroupDetailViewModel extends AndroidViewModel {
      */
     public void addGroupMember(List<String> memberIdList) {
         if (memberIdList != null && memberIdList.size() > 0) {
-            addGroupMemberResult.setSource(groupTask.addGroupMember(groupId, memberIdList));
+            try {
+                GroupDataReq groupDataReq = new GroupDataReq();
+                groupDataReq.setChatGrpID(Integer.parseInt(groupId));
+                List<Integer> list = new ArrayList<>();
+                for (String id : memberIdList){
+                    list.add(Integer.parseInt(id));
+                }
+                groupDataReq.setUIDs(list);
+                addGroupMemberResult.setSource(groupTask.addGroupMember(groupDataReq));
+            }catch (Exception e){
+                SLog.e("addGroupMember",e.getMessage());
+            }
+
         }
     }
 
@@ -289,7 +296,7 @@ public class GroupDetailViewModel extends AndroidViewModel {
      *
      * @return
      */
-    public LiveData<Resource<List<AddMemberResult>>> getAddGroupMemberResult() {
+    public LiveData<Resource<Boolean>> getAddGroupMemberResult() {
         return addGroupMemberResult;
     }
 
@@ -298,7 +305,7 @@ public class GroupDetailViewModel extends AndroidViewModel {
      *
      * @return
      */
-    public LiveData<Resource<Void>> getRemoveGroupMemberResult() {
+    public LiveData<Resource<Boolean>> getRemoveGroupMemberResult() {
         return removeGroupMemberResult;
     }
 
@@ -398,27 +405,9 @@ public class GroupDetailViewModel extends AndroidViewModel {
         groupNotice.setSource(groupTask.getGroupNotice(groupId));
     }
 
-    /**
-     * 请求设置定时清理时间状态
-     *
-     * @param groupId
-     */
-    public void requestRegularState(String groupId) {
-        regularClearState.setSource(groupTask.getRegularClearState(groupId));
-    }
 
-    public LiveData<Resource<Integer>> getRegularState() {
-        return regularClearState;
-    }
 
-    /**
-     * 设置定时清理群消息
-     *
-     * @param regularClearState
-     */
-    public void setRegularClear(int regularClearState) {
-        setCleanTimeResult.setSource(groupTask.setRegularClear(groupId, regularClearState));
-    }
+
 
     /**
      * 设置定时清理群消息结果
@@ -439,29 +428,8 @@ public class GroupDetailViewModel extends AndroidViewModel {
         return groupNotice;
     }
 
-    /**
-     * 获取是否开启截屏通知(群内聊天 targetId 为 groupId)
-     */
-    private void getScreenCaptureStatus() {
-        screenCaptureResult.setSource(privacyTask.getScreenCapture(conversationType.getValue(), groupId));
-    }
 
-    public LiveData<Resource<ScreenCaptureResult>> getScreenCaptureStatusResult() {
-        return screenCaptureResult;
-    }
 
-    /**
-     * 设置是否开启截屏通知
-     *
-     * @param status
-     */
-    public void setScreenCaptureStatus(int status) {
-        setScreenCaptureResult.setSource(privacyTask.setScreenCapture(conversationType.getValue(), groupId, status));
-    }
-
-    public LiveData<Resource<Void>> getSetScreenCaptureResult(){
-        return  setScreenCaptureResult;
-    }
 
     public static class Factory implements ViewModelProvider.Factory {
         private String targetId;

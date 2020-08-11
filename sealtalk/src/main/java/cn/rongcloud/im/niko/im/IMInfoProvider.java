@@ -111,7 +111,6 @@ public class IMInfoProvider {
     }
 
     private void initData() {
-        refreshReceivePokeMessageStatus();
     }
 
     /**
@@ -419,18 +418,5 @@ public class IMInfoProvider {
         return userInfo;
     }
 
-    /**
-     * 获取接收戳一下消息状态
-     */
-    public void refreshReceivePokeMessageStatus() {
-        ThreadManager.getInstance().runOnUIThread(() -> {
-            LiveData<Resource<GetPokeResult>> receivePokeMessageState = userTask.getReceivePokeMessageState();
-            triggerLiveData.addSource(receivePokeMessageState, resource -> {
-                if (resource.status != Status.LOADING) {
-                    triggerLiveData.removeSource(receivePokeMessageState);
-                }
-            });
-        });
-    }
 
 }

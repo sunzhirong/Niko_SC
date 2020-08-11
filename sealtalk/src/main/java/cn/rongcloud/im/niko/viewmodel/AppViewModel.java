@@ -28,7 +28,6 @@ public class AppViewModel extends AndroidViewModel {
     private SingleSourceMapLiveData<Resource<VersionInfo>, Resource<VersionInfo.AndroidVersion>> hasNew;
     private MutableLiveData<String> sdkVersion = new MutableLiveData<>();
     private MutableLiveData<String> sealTalkVersion = new MutableLiveData<>();
-    private SingleSourceLiveData<Resource<List<ChatRoomResult>>> chatRoomResultList = new SingleSourceLiveData<>();
     private MutableLiveData<LangUtils.RCLocale> languageLocal = new MutableLiveData<>();
     private MutableLiveData<Boolean> debugMode = new MutableLiveData<>();
 
@@ -59,8 +58,6 @@ public class AppViewModel extends AndroidViewModel {
 
         sdkVersion.setValue(getSdkVersion());
         sealTalkVersion.setValue(sealTalkVersionName);
-        checkVersion();
-        requestChatRoomList();
         // 语言
         languageLocal.setValue(appTask.getLanguageLocal());
 
@@ -92,28 +89,13 @@ public class AppViewModel extends AndroidViewModel {
         return sealTalkVersion;
     }
 
-    /**
-     * 检测版本
-     */
-    private void checkVersion() {
-        hasNew.setSource(appTask.getNewVersion());
-    }
 
     /**
      * 请求聊天室列表
      */
     public void requestChatRoomList() {
-        chatRoomResultList.setSource(appTask.getDiscoveryChatRoom());
     }
 
-    /**
-     * 获取聊天室列表
-     *
-     * @return
-     */
-    public LiveData<Resource<List<ChatRoomResult>>> getChatRoonList() {
-        return chatRoomResultList;
-    }
 
     /**
      * 获取SDK版本

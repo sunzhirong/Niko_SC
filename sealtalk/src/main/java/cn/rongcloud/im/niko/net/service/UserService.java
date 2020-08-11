@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import cn.rongcloud.im.niko.common.NetConstant;
 import cn.rongcloud.im.niko.db.model.FriendBlackInfo;
 import cn.rongcloud.im.niko.db.model.UserInfo;
 import cn.rongcloud.im.niko.model.ContactGroupResult;
@@ -14,11 +15,14 @@ import cn.rongcloud.im.niko.model.RegisterResult;
 import cn.rongcloud.im.niko.model.Result;
 import cn.rongcloud.im.niko.model.UploadTokenResult;
 import cn.rongcloud.im.niko.model.VerifyResult;
+import cn.rongcloud.im.niko.model.niko.ProfileInfo;
+import cn.rongcloud.im.niko.net.ScUrl;
 import cn.rongcloud.im.niko.net.SealTalkUrl;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -32,23 +36,10 @@ public interface UserService {
     @GET(SealTalkUrl.GET_USER_INFO)
     LiveData<Result<UserInfo>> getUserInfo(@Path("user_id") String userId);
 
-    @POST(SealTalkUrl.SEND_CODE)
-    LiveData<Result<String>> sendCode(@Body RequestBody body);
-
-    @POST(SealTalkUrl.VERIFY_CODE)
-    LiveData<Result<VerifyResult>> verifyCode(@Body RequestBody body);
-
-    @POST(SealTalkUrl.REGISTER)
-    LiveData<Result<RegisterResult>> register(@Body RequestBody body);
 
     @GET(SealTalkUrl.REGION_LIST)
     LiveData<Result<List<RegionResult>>> getRegionList();
 
-    @POST(SealTalkUrl.CHECK_PHONE_AVAILABLE)
-    LiveData<Result<Boolean>> checkPhoneAvailable(@Body RequestBody body);
-
-    @POST(SealTalkUrl.RESET_PASSWORD)
-    LiveData<Result<String>> resetPassword(@Body RequestBody body);
 
     @POST(SealTalkUrl.SET_NICK_NAME)
     LiveData<Result> setMyNickName(@Body RequestBody requestBody);
@@ -112,11 +103,29 @@ public interface UserService {
     @POST(SealTalkUrl.SET_RECEIVE_POKE_MESSAGE_STATUS)
     LiveData<Result> setReceivePokeMessageStatus(@Body RequestBody body);
 
-    /**
-     * 获取接收戳一下消息状态
-     *
-     * @return
-     */
-    @GET(SealTalkUrl.GET_RECEIVE_POKE_MESSAGE_STATUS)
-    LiveData<Result<GetPokeResult>> getReceivePokeMessageStatus();
+
+
+
+
+
+
+
+
+
+    @POST(ScUrl.USER_GET_SMS)
+    @Headers(NetConstant.JSON)
+    LiveData<Result> getSms(@Body RequestBody body);
+
+    @POST(ScUrl.USER_VERIFY_CODE)
+    @Headers(NetConstant.JSON)
+    LiveData<Result> verifyCodeNiko(@Body RequestBody body);
+
+    @POST(ScUrl.GET_IM_TOKEN)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<String>> getIMToken();
+
+    @POST(ScUrl.GET_OTHER_PROFILE)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<ProfileInfo>> getUserInfo(@Body RequestBody body);
+
 }

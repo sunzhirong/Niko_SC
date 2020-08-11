@@ -470,6 +470,8 @@
     <string name="seal_add_need_member_agree">Invited, Please wait for confirmation</string>
     <string name="seal_add_need_manager_agree">Invited, please wait for group admin to confirm</string>
     <string name="seal_add_success">Added successfully</string>
+    <string name="seal_add_failed">Added failed</string>
+
     <string name="seal_create_success">Created successfully</string>
     <!--group-->
     <string name="seal_conversation_notification_group">Group Notification</string>

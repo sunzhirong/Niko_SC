@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData;
 
 import java.lang.reflect.Type;
 import java.net.ConnectException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import cn.rongcloud.im.niko.common.ApiErrorCodeMap;
@@ -45,13 +47,20 @@ public class LiveDataCallAdapter<R> implements CallAdapter<R, LiveData<R>> {
                             R body = response.body();
                             String path = call.request().url().encodedPath();
 
+                            if(response.code()==401){
+                                //这个是apiservice表示token过期
+                                SLog.e(LogTag.API,"token 过期");
+                                postValue(body);
+                                return;
+                            }
+
                             // 当没有信息体时通过 http code 判断业务错误
                             if (body == null && !response.isSuccessful()) {
                                 Result result = new Result();
                                 int errorCode = ApiErrorCodeMap.getApiErrorCode(path, response.code());
                                 result.setRsCode(errorCode);
                                 try {
-                                    body = (R) result;
+//                                    body = (R) result;
                                 } catch (Exception e) {
                                     // 可能部分接口并不是由 result 包裹，此时无法获取错误码
                                 }
@@ -68,22 +77,47 @@ public class LiveDataCallAdapter<R> implements CallAdapter<R, LiveData<R>> {
 
                         @Override
                         public void onFailure(Call<R> call, Throwable throwable) {
-                            SLog.d(LogTag.API, "onFailure:" + call.request().url().toString() + ", error:" + throwable.getMessage());
-                            if (throwable instanceof ConnectException) {
-                                R body = null;
-                                Result result = new Result();
-                                result.setRsCode(ErrorCode.NETWORK_ERROR.getCode());
-                                try {
-                                    body = (R) result;
-                                } catch (Exception e) {
-                                    // 可能部分接口并不是由 result 包裹，此时无法获取错误码
+                            String url = call.request().url().toString();
+                            SLog.d(LogTag.API, "onFailure:" + url + ", error:" + throwable.getMessage());
+                            //加入 apiurl判断
+                            if (url.contains(ScUrl.TOKEN_BASE_URL)) {
+                                //说明是获取token类型 是没有外层包裹的
+                                postValue(null);
+                            } else if (url.contains(ScUrl.BASE_URL)) {
+                                //都需要塞入list中
+                                if (throwable instanceof ConnectException) {
+                                    R body = null;
+                                    Result result = new Result();
+                                    result.setRsCode(ErrorCode.NETWORK_ERROR.getCode());
+                                    List<Result> list = new ArrayList<>();
+                                    list.add(result);
+                                    try {
+                                        body = (R) list;
+                                    } catch (Exception e) {
+                                        // 可能部分接口并不是由 result 包裹，此时无法获取错误码
+                                    }
+                                    postValue(body);
                                 }
+                            }else if (throwable instanceof ConnectException) {
+                                R body = null;
+                                //暂不处理
+                                SLog.d(LogTag.API, "onFailure: 提示应为" + ErrorCode.NETWORK_ERROR.getCode());
+
+//                                Result result = new Result();
+//                                result.setRsCode(ErrorCode.NETWORK_ERROR.getCode());
+//                                try {
+//                                    body = (R) result;
+//                                } catch (Exception e) {
+//                                    // 可能部分接口并不是由 result 包裹，此时无法获取错误码
+//                                }
                                 postValue(body);
                             } else {
                                 postValue(null);
                             }
                         }
+
                     });
+
                 }
             }
         };

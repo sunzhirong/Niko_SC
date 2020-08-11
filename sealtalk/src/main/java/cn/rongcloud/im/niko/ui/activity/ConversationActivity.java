@@ -306,15 +306,15 @@ public class ConversationActivity extends TitleBaseActivity {
             }
         });
 
-        conversationViewModel.getScreenCaptureStatus(conversationType.getValue(), targetId).observe(this, new Observer<Resource<ScreenCaptureResult>>() {
-            @Override
-            public void onChanged(Resource<ScreenCaptureResult> screenCaptureResultResource) {
-                if (screenCaptureResultResource.status == Status.SUCCESS) {
-                    // 0 关闭 1 打开
-                    //refreshScreenCaptureStatus();
-                }
-            }
-        });
+//        conversationViewModel.getScreenCaptureStatus(conversationType.getValue(), targetId).observe(this, new Observer<Resource<ScreenCaptureResult>>() {
+//            @Override
+//            public void onChanged(Resource<ScreenCaptureResult> screenCaptureResultResource) {
+//                if (screenCaptureResultResource.status == Status.SUCCESS) {
+//                    // 0 关闭 1 打开
+//                    //refreshScreenCaptureStatus();
+//                }
+//            }
+//        });
 
         // 判读是否为群组聊天
         if (conversationType == Conversation.ConversationType.GROUP) {
@@ -349,24 +349,6 @@ public class ConversationActivity extends TitleBaseActivity {
             });
         }
 
-        //判断截屏通知状态
-        if (conversationType == Conversation.ConversationType.GROUP || conversationType == Conversation.ConversationType.PRIVATE) {
-            privateChatSettingViewModel = ViewModelProviders.of(this, new PrivateChatSettingViewModel.Factory(getApplication(), targetId, conversationType)).get(PrivateChatSettingViewModel.class);
-            privateChatSettingViewModel.getScreenCaptureStatusResult().observe(this, new Observer<Resource<ScreenCaptureResult>>() {
-                @Override
-                public void onChanged(Resource<ScreenCaptureResult> screenCaptureResultResource) {
-                    if (screenCaptureResultResource.status == Status.SUCCESS) {
-                        //0 关闭 1 打开
-                        if (screenCaptureResultResource.data != null && screenCaptureResultResource.data.status == 1) {
-                            //判断是否有读取文件的权限
-                            if (!CheckPermissionUtils.requestPermissions(ConversationActivity.this, permissions, REQUEST_CODE_PERMISSION)) {
-                                return;
-                            }
-                        }
-                    }
-                }
-            });
-        }
     }
 
     /**

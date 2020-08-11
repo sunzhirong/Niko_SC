@@ -473,6 +473,7 @@
     <string name="seal_add_need_member_agree">已邀请，等待确认</string>
     <string name="seal_add_need_manager_agree">已邀请，等待管理员确认</string>
     <string name="seal_add_success">添加成功</string>
+    <string name="seal_add_failed">添加失败</string>
     <string name="seal_create_success">创建成功</string>
     <!--group-->
     <string name="seal_conversation_notification_group">群通知</string>

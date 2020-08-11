@@ -222,18 +222,6 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
             }
         });
 
-        // 获取截屏通知结果
-        privateChatSettingViewModel.getScreenCaptureStatusResult().observe(this, new Observer<Resource<ScreenCaptureResult>>() {
-            @Override
-            public void onChanged(Resource<ScreenCaptureResult> screenCaptureResultResource) {
-                if (screenCaptureResultResource.status == Status.SUCCESS) {
-                    //0 关闭 1 打开
-                    if (screenCaptureResultResource.data != null && screenCaptureResultResource.data.status == 1) {
-                        isScreenShotSiv.setCheckedImmediately(true);
-                    }
-                }
-            }
-        });
         // 获取设置截屏通知结果
         privateChatSettingViewModel.getSetScreenCaptureResult().observe(this, new Observer<Resource<Void>>() {
             @Override

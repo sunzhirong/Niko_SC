@@ -1,8 +1,13 @@
 package cn.rongcloud.im.niko.net;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -19,5 +24,23 @@ public class RetrofitUtil {
         Gson gson = new Gson();
         String strEntity = gson.toJson(paramsMap);
         return RequestBody.create(MEDIA_TYPE_JSON,strEntity);
+    }
+
+    /**
+     * 转换为 form-data
+     *
+     * @param requestDataMap
+     * @return
+     */
+    public static Map<String, RequestBody> generateRequestBody(Map<String, String> requestDataMap) {
+        Map<String, RequestBody> requestBodyMap = new HashMap<>();
+        for (String key : requestDataMap.keySet()) {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"),
+                    requestDataMap.get(key) == null ? "" : requestDataMap.get(key));
+            requestBodyMap.put(key, requestBody);
+        }
+        Log.e("retrofit RequestBody", new Gson().toJson(requestDataMap));
+
+        return requestBodyMap;
     }
 }

@@ -60,19 +60,8 @@ public class PrivateChatSettingViewModel extends AndroidViewModel {
 
         isNotifyLiveData.setSource(imManager.getConversationNotificationStatus(conversationType, targetId));
         isTopLiveData.setSource(imManager.getConversationIsOnTop(conversationType, targetId));
-        getScreenCaptureStatus();
     }
 
-    /**
-     * 获取是否开启截屏通知
-     */
-    private void getScreenCaptureStatus() {
-        screenCaptureResult.setSource(privacyTask.getScreenCapture(conversationType.getValue(), targetId));
-    }
-
-    public LiveData<Resource<ScreenCaptureResult>> getScreenCaptureStatusResult() {
-        return screenCaptureResult;
-    }
 
     /**
      * 设置是否开启截屏通知

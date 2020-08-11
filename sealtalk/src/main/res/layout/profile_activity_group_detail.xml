@@ -22,7 +22,7 @@
                 android:background="#ffffff"
                 android:gravity="start"
                 android:listSelector="@android:color/transparent"
-                android:numColumns="4"
+                android:numColumns="5"
                 android:paddingLeft="1dp"
                 android:paddingRight="1dp" />
 
@@ -98,22 +98,7 @@
 
             </cn.rongcloud.im.niko.ui.view.SettingItemView>
 
-            <cn.rongcloud.im.niko.ui.view.SettingItemView
-                android:id="@+id/profile_siv_group_user_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:item_content="@string/profile_group_user_info"
-                app:item_divider="true">
 
-            </cn.rongcloud.im.niko.ui.view.SettingItemView>
-
-            <cn.rongcloud.im.niko.ui.view.SettingItemView
-                android:id="@+id/profile_siv_group_manager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:item_content="@string/profile_group_manager">
-
-            </cn.rongcloud.im.niko.ui.view.SettingItemView>
 
 
             <cn.rongcloud.im.niko.ui.view.SettingItemView
@@ -137,64 +122,13 @@
 
             </cn.rongcloud.im.niko.ui.view.SettingItemView>
 
-            <cn.rongcloud.im.niko.ui.view.SettingItemView
-                android:id="@+id/profile_siv_group_save_to_contact"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:item_content="@string/profile_group_save_to_contact"
-                app:item_divider="true"
-                app:item_switch="true">
-
-            </cn.rongcloud.im.niko.ui.view.SettingItemView>
-
-            <cn.rongcloud.im.niko.ui.view.SettingItemView
-                android:id="@+id/profile_siv_group_screen_shot_notification"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:item_content="@string/profile_screen_shot_notification"
-                app:item_switch="true" />
-
-            <TextView
-                android:id="@+id/tv_screen_shot_tip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_marginLeft="@dimen/seal_group_detail_clean_tips_margin_left"
-                android:layout_marginTop="@dimen/seal_main_item_margin_bottom"
-                android:layout_marginRight="@dimen/seal_group_detail_clean_tips_margin_right"
-                android:layout_marginBottom="@dimen/seal_group_detail_clean_tips_margin_bottom"
-                android:text="@string/profile_screen_shot_notification_tips"
-                android:textColor="@color/seal_group_detail_clean_tips"
-                android:textSize="@dimen/seal_group_detail_clean_tips_size" />
 
 
-            <cn.rongcloud.im.niko.ui.view.SettingItemView
-                android:id="@+id/profile_siv_group_clean_timming"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:item_value_text_color="@color/seal_login_text_button_color"
-                app:item_content="@string/profile_clean_timing" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/seal_group_detail_clean_tips_margin_left"
-                android:layout_marginTop="@dimen/seal_main_item_margin_bottom"
-                android:layout_marginRight="@dimen/seal_group_detail_clean_tips_margin_right"
-                android:layout_marginBottom="@dimen/seal_group_detail_clean_tips_margin_bottom"
-                android:textColor="@color/seal_group_detail_clean_tips"
-                android:text="@string/profile_clean_timing_tips"
-                android:textSize="@dimen/seal_group_detail_clean_tips_size" />
 
-            <cn.rongcloud.im.niko.ui.view.SettingItemView
-                android:id="@+id/profile_siv_group_clean_message"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:item_content="@string/profile_clean_message"
-                app:item_divider="true">
 
-            </cn.rongcloud.im.niko.ui.view.SettingItemView>
+
+
 
             <Button
                 android:id="@+id/profile_btn_group_quit"

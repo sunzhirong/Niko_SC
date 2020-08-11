@@ -5,16 +5,21 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 import java.util.Map;
 
+import cn.rongcloud.im.niko.common.NetConstant;
 import cn.rongcloud.im.niko.db.model.FriendDescription;
+import cn.rongcloud.im.niko.db.model.FriendInfo;
 import cn.rongcloud.im.niko.db.model.FriendShipInfo;
 import cn.rongcloud.im.niko.model.AddFriendResult;
 import cn.rongcloud.im.niko.model.GetContactInfoResult;
 import cn.rongcloud.im.niko.model.Result;
 import cn.rongcloud.im.niko.model.SearchFriendInfo;
+import cn.rongcloud.im.niko.model.niko.FriendBean;
+import cn.rongcloud.im.niko.net.ScUrl;
 import cn.rongcloud.im.niko.net.SealTalkUrl;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
@@ -113,4 +118,15 @@ public interface FriendService {
      */
     @POST(SealTalkUrl.MULTI_DELETE_FRIEND)
     LiveData<Result> deleteMultiFriend(@Body RequestBody body);
+
+
+
+    /**
+     * 获取所有好友信息
+     *
+     * @return
+     */
+    @POST(ScUrl.FOLLOWERS_LIST)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<List<FriendBean>>> getAllFriendList(@Body RequestBody body);
 }

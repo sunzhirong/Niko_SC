@@ -18,9 +18,7 @@ import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.common.IntentExtra;
 import cn.rongcloud.im.niko.ui.BaseActivity;
 import cn.rongcloud.im.niko.ui.dialog.CommonDialog;
-import cn.rongcloud.im.niko.ui.fragment.LoginFindPasswordFragment;
 import cn.rongcloud.im.niko.ui.fragment.LoginFragment;
-import cn.rongcloud.im.niko.ui.fragment.LoginRegisterFragment;
 import cn.rongcloud.im.niko.viewmodel.AppViewModel;
 import io.rong.imkit.utilities.LangUtils;
 
@@ -34,7 +32,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private static final int FRAGMENT_REGISTER = 1;
     private static final int FRAGMENT_FIND_PASSWORD = 2;
     private static final String BUNDLE_LAST_SELECTED_FRAGMENT = "last_select_fragment";
-    private Fragment[] fragments = new Fragment[3];
+    private Fragment[] fragments = new Fragment[1];
 
     private View loginBg;
     private TextView changLang;
@@ -148,32 +146,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             if (fragment == null) {
                 fragment = new LoginFragment();
             }
-        } else if (i == FRAGMENT_REGISTER) {
-            fragment = supportFragmentManager.findFragmentByTag(LoginRegisterFragment.class.getCanonicalName());
-            if (fragment == null) {
-                LoginRegisterFragment loginRegisterFragment = new LoginRegisterFragment();
-                loginRegisterFragment.setOnOnRegisterListener(new LoginRegisterFragment.OnRegisterListener() {
-                    @Override
-                    public void onRegisterSuccess(String phone, String region, String countryName) {
-                        showFragment(FRAGMENT_LOGIN);
-                        ((LoginFragment) fragments[FRAGMENT_LOGIN]).setLoginParams(phone, region, countryName);
-                    }
-                });
-                fragment = loginRegisterFragment;
-            }
-        } else if (i == FRAGMENT_FIND_PASSWORD) {
-            fragment = supportFragmentManager.findFragmentByTag(LoginFindPasswordFragment.class.getCanonicalName());
-            if (fragment == null) {
-                LoginFindPasswordFragment loginFindPasswordFragment = new LoginFindPasswordFragment();
-                loginFindPasswordFragment.setOnResetPasswordListener(new LoginFindPasswordFragment.OnResetPasswordListener() {
-                    @Override
-                    public void onResetPasswordSuccess(String phone, String region, String countryName) {
-                        showFragment(FRAGMENT_LOGIN);
-                        ((LoginFragment) fragments[FRAGMENT_LOGIN]).setLoginParams(phone, region, countryName);
-                    }
-                });
-                fragment = loginFindPasswordFragment;
-            }
         }
         return fragment;
     }
@@ -209,13 +181,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.tv_register_left:
             case R.id.tv_register_right:
-                controlBottomView(FRAGMENT_REGISTER);
+//                controlBottomView(FRAGMENT_REGISTER);
                 break;
             case R.id.tv_login:
-                controlBottomView(FRAGMENT_LOGIN);
+//                controlBottomView(FRAGMENT_LOGIN);
                 break;
             case R.id.tv_find_passsword:
-                controlBottomView(FRAGMENT_FIND_PASSWORD);
+//                controlBottomView(FRAGMENT_FIND_PASSWORD);
                 break;
             case R.id.tv_change_lang:
                 // 切换语言操作
