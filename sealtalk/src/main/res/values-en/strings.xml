@@ -621,4 +621,5 @@
     <string name="modify_pwd">修改密码</string>
     <string name="old_pwd">旧密码</string>
     <string name="common_clear">清理</string>
+    <string name="default_text">---</string>
 </resources>

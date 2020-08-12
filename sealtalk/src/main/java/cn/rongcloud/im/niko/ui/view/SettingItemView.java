@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -182,6 +183,14 @@ public class SettingItemView extends LinearLayout {
                         Drawable rightImage = ta.getDrawable(attr);
                         ivRightImage.setImageDrawable(rightImage);
                         ivRightImage.setVisibility(VISIBLE);
+                        break;
+                    case R.styleable.SettingItemView_item_value_gravity:
+                        String gravity = ta.getString(attr);
+                        if ("right".equals(gravity)) {
+                            tvValue.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+                        } else {
+                            tvValue.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+                        }
                         break;
                 }
             }

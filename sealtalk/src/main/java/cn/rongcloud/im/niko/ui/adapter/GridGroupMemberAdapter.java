@@ -54,7 +54,7 @@ public class GridGroupMemberAdapter extends BaseAdapter {
         if (position == getCount() - 1 && (isAllowDelete || isAllowAdd)) {
             // 允许减员
             if(isAllowDelete){
-                usernameTv.setText("");
+                usernameTv.setText("踢人");
                 ImageLoader.getInstance().cancelDisplayTask(avatarView);
                 avatarView.setImageDrawable(null);
                 avatarView.setBackgroundResource(R.drawable.profile_ic_grid_member_delete);
@@ -64,7 +64,7 @@ public class GridGroupMemberAdapter extends BaseAdapter {
                     }
                 });
             } else if(isAllowAdd){
-                usernameTv.setText("");
+                usernameTv.setText("邀请");
                 ImageLoader.getInstance().cancelDisplayTask(avatarView);
                 avatarView.setImageDrawable(null);
                 avatarView.setBackgroundResource(R.drawable.profile_ic_grid_member_add);

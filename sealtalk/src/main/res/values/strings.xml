@@ -201,7 +201,7 @@
     <string name="profile_detail_start_voice">语音通话</string>
     <string name="profile_detail_start_video">视频聊天</string>
     <string name="profile_detail_add_friend">加为好友</string>
-    <string name="profile_detail_join_the_blacklist">加入黑名单</string>
+    <string name="profile_detail_join_the_blacklist">拉黑</string>
     <string name="profile_detail_remove_from_blacklist">移除黑名单</string>
     <string name="profile_add_friend_hint">加好友信息...</string>
     <string name="profile_invite_friend_description_has_group_format" formatted="true">我是%s群的%s</string>
@@ -622,4 +622,5 @@
     <string name="modify_pwd">修改密码</string>
     <string name="old_pwd">旧密码</string>
     <string name="common_clear">清理</string>
+    <string name="default_text">---</string>
 </resources>

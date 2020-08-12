@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <ScrollView
@@ -14,6 +15,66 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingBottom="30dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="12dp">
+
+                <cn.rongcloud.im.niko.ui.widget.SelectableRoundedImageView
+                    android:id="@+id/profile_siv_user_header"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="centerCrop"
+                    app:sriv_left_bottom_corner_radius="48dp"
+                    app:sriv_left_top_corner_radius="48dp"
+                    app:sriv_right_bottom_corner_radius="48dp"
+                    app:sriv_right_top_corner_radius="48dp" />
+
+                <TextView
+                    android:id="@+id/profile_siv_group_name_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:drawableRight="@drawable/edit"
+                    android:drawablePadding="5dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/default_text"
+                    android:textColor="@color/blackB"
+                    android:textSize="@dimen/rc_reference_text_size_16" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="12dp"
+                android:paddingTop="8dp"
+                android:paddingRight="9dp">
+
+                <TextView
+                    android:id="@+id/profile_siv_all_group_member"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="群聊成员"
+                    android:textColor="@color/blackB"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/seal_ic_arrow_right"
+                    android:text="查看更多"
+                    android:textColor="@color/grayB"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
             <cn.rongcloud.im.niko.ui.widget.WrapHeightGridView
                 android:id="@+id/profile_gv_group_member"
@@ -40,54 +101,20 @@
                     android:background="#dfdfdd" />
             </LinearLayout>
 
-            <cn.rongcloud.im.niko.ui.view.SettingItemView
-                android:id="@+id/profile_siv_all_group_member"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:item_content="@string/profile_all_group_member">
-
-            </cn.rongcloud.im.niko.ui.view.SettingItemView>
 
             <cn.rongcloud.im.niko.ui.view.SettingItemView
                 android:id="@+id/profile_siv_group_search_history_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/seal_profile_group_item_margin"
-                app:item_content="@string/profile_search_message">
-
-            </cn.rongcloud.im.niko.ui.view.SettingItemView>
-
-            <cn.rongcloud.im.niko.ui.view.UserInfoItemView
-                android:id="@+id/profile_uiv_group_portrait_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/seal_profile_group_item_margin"
-                app:item_right_show="true"
-                app:item_userinfo_divider="true"
-                app:item_userinfo_name="@string/profile_group_portrait"
-                app:item_userinfo_portrait_height="@dimen/seal_profile_group_item_protrait_value"
-                app:item_userinfo_portrait_width="@dimen/seal_profile_group_item_protrait_value">
-
-            </cn.rongcloud.im.niko.ui.view.UserInfoItemView>
-
-            <cn.rongcloud.im.niko.ui.view.SettingItemView
-                android:id="@+id/profile_siv_group_name_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:item_content="@string/profile_group_name"
-                app:item_divider="true">
-            </cn.rongcloud.im.niko.ui.view.SettingItemView>
-
-
+                app:item_content="@string/profile_search_message"
+                app:item_right_image="@drawable/seal_ic_arrow_right" />
 
 
             <cn.rongcloud.im.niko.ui.view.SettingItemView
                 android:id="@+id/profile_siv_message_notice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/seal_profile_group_item_margin"
                 app:item_content="@string/profile_message_notice"
-                app:item_divider="true"
                 app:item_switch="true">
 
             </cn.rongcloud.im.niko.ui.view.SettingItemView>
@@ -97,31 +124,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:item_content="@string/profile_set_top"
-                app:item_divider="true"
-                app:item_switch="true">
+                app:item_switch="true" />
 
-            </cn.rongcloud.im.niko.ui.view.SettingItemView>
-
-
-
-
-
-
-
-
-
-            <Button
+            <TextView
                 android:id="@+id/profile_btn_group_quit"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="36dp"
+                android:layout_margin="12dp"
                 android:layout_marginLeft="14dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="14dp"
-                android:background="@drawable/seal_btn_red_selector"
-                android:text="@string/profile_quit_group"
-                android:textColor="#FFF"
-                android:textSize="16sp" />
-
+                android:background="@drawable/shape_group_quit_bg"
+                android:gravity="center"
+                android:text="解散群聊"
+                android:textColor="#7280A7"
+                android:textSize="14sp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

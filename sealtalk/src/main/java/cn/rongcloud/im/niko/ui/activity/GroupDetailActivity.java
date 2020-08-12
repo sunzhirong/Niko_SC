@@ -1,59 +1,46 @@
 package cn.rongcloud.im.niko.ui.activity;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.common.Constant;
 import cn.rongcloud.im.niko.common.IntentExtra;
 import cn.rongcloud.im.niko.db.model.GroupEntity;
 import cn.rongcloud.im.niko.im.IMManager;
-import cn.rongcloud.im.niko.model.AddMemberResult;
 import cn.rongcloud.im.niko.model.GroupMember;
-import cn.rongcloud.im.niko.model.GroupNoticeResult;
-import cn.rongcloud.im.niko.model.RegularClearStatusResult;
 import cn.rongcloud.im.niko.model.Resource;
-import cn.rongcloud.im.niko.model.ScreenCaptureResult;
 import cn.rongcloud.im.niko.model.Status;
-import cn.rongcloud.im.niko.model.qrcode.QrCodeDisplayType;
 import cn.rongcloud.im.niko.ui.adapter.GridGroupMemberAdapter;
 import cn.rongcloud.im.niko.ui.dialog.CommonDialog;
-import cn.rongcloud.im.niko.ui.dialog.GroupNoticeDialog;
 import cn.rongcloud.im.niko.ui.dialog.LoadingDialog;
-import cn.rongcloud.im.niko.ui.dialog.SelectCleanTimeDialog;
 import cn.rongcloud.im.niko.ui.dialog.SelectPictureBottomDialog;
 import cn.rongcloud.im.niko.ui.dialog.SimpleInputDialog;
 import cn.rongcloud.im.niko.ui.view.SealTitleBar;
 import cn.rongcloud.im.niko.ui.view.SettingItemView;
-import cn.rongcloud.im.niko.ui.view.UserInfoItemView;
+import cn.rongcloud.im.niko.ui.widget.SelectableRoundedImageView;
 import cn.rongcloud.im.niko.ui.widget.WrapHeightGridView;
 import cn.rongcloud.im.niko.utils.CheckPermissionUtils;
 import cn.rongcloud.im.niko.utils.ImageLoaderUtils;
 import cn.rongcloud.im.niko.utils.ToastUtils;
-import cn.rongcloud.im.niko.viewmodel.GroupDetailViewModel;
 import cn.rongcloud.im.niko.utils.log.SLog;
+import cn.rongcloud.im.niko.viewmodel.GroupDetailViewModel;
 import io.rong.imkit.emoticon.AndroidEmoji;
 import io.rong.imkit.userInfoCache.RongUserInfoManager;
-import io.rong.imkit.utilities.PromptPopupDialog;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Group;
 
@@ -79,7 +66,7 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
     private SealTitleBar titleBar;
     private WrapHeightGridView groupMemberGv;
 
-    private Button quitGroupBtn;
+    private TextView quitGroupBtn;
     private LoadingDialog loadingDialog;
 
     private String groupId;
@@ -88,9 +75,9 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
     private GridGroupMemberAdapter memberAdapter;
     private String groupName;
     private String grouportraitUrl;
-    private UserInfoItemView groupPortraitUiv;
-    private SettingItemView allGroupMemberSiv;
-    private SettingItemView groupNameSiv;
+    private SelectableRoundedImageView groupPortraitUiv;
+    private TextView allGroupMemberSiv;
+    private TextView groupNameSiv;
     private SettingItemView notifyNoticeSiv;
     private SettingItemView onTopSiv;
     private String groupCreatorId;
@@ -103,7 +90,7 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
         super.onCreate(savedInstanceState);
 
         titleBar = getTitleBar();
-        titleBar.setTitle(R.string.profile_group_info);
+        titleBar.setTitle("群聊设置");
 
         setContentView(R.layout.profile_activity_group_detail);
 
@@ -145,17 +132,16 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
 
         // 全部群成员
         allGroupMemberSiv = findViewById(R.id.profile_siv_all_group_member);
-        allGroupMemberSiv.setOnClickListener(this);
+        findViewById(R.id.tv_more).setOnClickListener(this);
 
         // 查询历史消息
         findViewById(R.id.profile_siv_group_search_history_message).setOnClickListener(this);
         // 群头像
-        groupPortraitUiv = findViewById(R.id.profile_uiv_group_portrait_container);
+        groupPortraitUiv = findViewById(R.id.profile_siv_user_header);
         groupPortraitUiv.setOnClickListener(this);
         // 群名称
         groupNameSiv = findViewById(R.id.profile_siv_group_name_container);
         groupNameSiv.setOnClickListener(this);
-
 
 
         // 消息免打扰
@@ -169,12 +155,9 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
                 groupDetailViewModel.setConversationOnTop(isChecked));
 
 
-
-
         // 退出群组
         quitGroupBtn = findViewById(R.id.profile_btn_group_quit);
         quitGroupBtn.setOnClickListener(this);
-
 
 
     }
@@ -303,9 +286,9 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
                 if (resource.status == Status.ERROR) {
                     ToastUtils.showToast(resource.message);
                 } else if (resource.status == Status.SUCCESS) {
-                    if(resource.data!=null&&resource.data){
+                    if (resource.data != null && resource.data) {
                         ToastUtils.showToast(R.string.seal_add_success);
-                    }else {
+                    } else {
                         ToastUtils.showToast(R.string.seal_add_failed);
                     }
                 }
@@ -350,7 +333,6 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
     }
 
 
-
     /**
      * 是否是群主
      *
@@ -391,18 +373,18 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
      */
     private void updateGroupInfoView(GroupEntity groupInfo) {
         // 标题
-        String title = getString(R.string.profile_group_info) + "(" + groupInfo.getMemberCount() + ")";
-        titleBar.setTitle(title);
+//        String title = getString(R.string.profile_group_info) + "(" + groupInfo.getMemberCount() + ")";
+//        titleBar.setTitle(title);
 
         // 群成员数量
-        String allMemberTxt = getString(R.string.profile_all_group_member) + "(" + groupInfo.getMemberCount() + ")";
-        allGroupMemberSiv.setContent(allMemberTxt);
+//        String allMemberTxt = "群聊成员" + "(" + groupInfo.getMemberCount() + ")";
+//        allGroupMemberSiv.setText(allMemberTxt);
         // 显示群组头像
         grouportraitUrl = groupInfo.getPortraitUri();
-        ImageLoaderUtils.displayGroupPortraitImage(groupInfo.getPortraitUri(), groupPortraitUiv.getHeaderImageView());
+        ImageLoaderUtils.displayGroupPortraitImage(groupInfo.getPortraitUri(), groupPortraitUiv);
         // 群名称
         groupName = groupInfo.getName();
-        groupNameSiv.setValue(groupInfo.getName());
+        groupNameSiv.setText(groupInfo.getName());
 
         // 是否在通讯录中
         int isInContact = groupInfo.getIsInContact();
@@ -422,13 +404,13 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.profile_siv_all_group_member:
+            case R.id.tv_more:
                 showAllGroupMember();
                 break;
             case R.id.profile_siv_group_search_history_message:
                 showSearchHistoryMessage();
                 break;
-            case R.id.profile_uiv_group_portrait_container:
+            case R.id.profile_siv_user_header:
                 setGroupPortrait();
                 break;
             case R.id.profile_siv_group_name_container:
@@ -583,9 +565,6 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
         });
         builder.build().show(getSupportFragmentManager(), null);
     }
-
-
-
 
 
     private void backToMain() {

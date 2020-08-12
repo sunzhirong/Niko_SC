@@ -19,8 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/iv_image"
         android:layout_marginLeft="@dimen/seal_setting_item_margin"
-        android:textColor="@color/seal_setting_item_content"
-        android:textSize="@dimen/seal_setting_item_text_size"
+        android:textColor="@color/blackB"
+        android:textSize="@dimen/callkit_dimen_size_14"
         android:layout_centerVertical="true"
         />
 

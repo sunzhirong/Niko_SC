@@ -16,32 +16,27 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.common.IntentExtra;
-import cn.rongcloud.im.niko.common.ThreadManager;
 import cn.rongcloud.im.niko.event.DeleteFriendEvent;
 import cn.rongcloud.im.niko.im.IMManager;
 import cn.rongcloud.im.niko.model.GroupMember;
 import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.ScreenCaptureData;
-import cn.rongcloud.im.niko.model.ScreenCaptureResult;
-import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.model.TypingInfo;
 import cn.rongcloud.im.niko.sp.UserConfigCache;
 import cn.rongcloud.im.niko.ui.dialog.RencentPicturePopWindow;
@@ -54,7 +49,6 @@ import cn.rongcloud.im.niko.utils.ScreenCaptureUtil;
 import cn.rongcloud.im.niko.utils.log.SLog;
 import cn.rongcloud.im.niko.viewmodel.ConversationViewModel;
 import cn.rongcloud.im.niko.viewmodel.GroupManagementViewModel;
-import cn.rongcloud.im.niko.viewmodel.PrivateChatSettingViewModel;
 import io.rong.eventbus.EventBus;
 import io.rong.imkit.RongContext;
 import io.rong.imkit.RongIM;
@@ -549,12 +543,12 @@ public class ConversationActivity extends TitleBaseActivity {
         });
 
         if (conversationType.equals(Conversation.ConversationType.GROUP)) {
-            getTitleBar().getBtnRight().setImageDrawable(getResources().getDrawable(R.drawable.seal_detail_group));
+            getTitleBar().getBtnRight().setImageDrawable(getResources().getDrawable(R.drawable.seal_ic_title_more));
         } else if (conversationType.equals(Conversation.ConversationType.PRIVATE)
                 || conversationType.equals(Conversation.ConversationType.PUBLIC_SERVICE)
                 || conversationType.equals(Conversation.ConversationType.APP_PUBLIC_SERVICE)
                 || conversationType.equals(Conversation.ConversationType.DISCUSSION)) {
-            getTitleBar().getBtnRight().setImageDrawable(getResources().getDrawable(R.drawable.seal_detail_single));
+            getTitleBar().getBtnRight().setImageDrawable(getResources().getDrawable(R.drawable.seal_ic_title_more));
         } else {
             getTitleBar().getBtnRight().setVisibility(View.GONE);
         }

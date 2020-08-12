@@ -1,26 +1,14 @@
 package cn.rongcloud.im.niko.ui.activity;
 
-import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.common.IntentExtra;
 import cn.rongcloud.im.niko.db.model.FriendDescription;
@@ -28,20 +16,17 @@ import cn.rongcloud.im.niko.db.model.FriendDetailInfo;
 import cn.rongcloud.im.niko.db.model.FriendShipInfo;
 import cn.rongcloud.im.niko.event.DeleteFriendEvent;
 import cn.rongcloud.im.niko.model.Resource;
-import cn.rongcloud.im.niko.model.ScreenCaptureResult;
 import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.ui.dialog.CommonDialog;
 import cn.rongcloud.im.niko.ui.view.SealTitleBar;
 import cn.rongcloud.im.niko.ui.view.SettingItemView;
 import cn.rongcloud.im.niko.ui.widget.SelectableRoundedImageView;
-import cn.rongcloud.im.niko.utils.CheckPermissionUtils;
 import cn.rongcloud.im.niko.utils.ImageLoaderUtils;
 import cn.rongcloud.im.niko.utils.ToastUtils;
-import cn.rongcloud.im.niko.viewmodel.PrivateChatSettingViewModel;
 import cn.rongcloud.im.niko.utils.log.SLog;
+import cn.rongcloud.im.niko.viewmodel.PrivateChatSettingViewModel;
 import cn.rongcloud.im.niko.viewmodel.UserDetailViewModel;
 import io.rong.eventbus.EventBus;
-import io.rong.imkit.utilities.PromptPopupDialog;
 import io.rong.imlib.model.Conversation;
 
 public class PrivateChatSettingActivity extends TitleBaseActivity implements View.OnClickListener {
@@ -68,7 +53,7 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SealTitleBar titleBar = getTitleBar();
-        titleBar.setTitle(R.string.profile_user_details);
+        titleBar.setTitle("聊天设置");
 
         setContentView(R.layout.profile_activity_private_chat_setting);
 
@@ -113,7 +98,6 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
         blacklistSiv = findViewById(R.id.profile_siv_detail_blacklist);
         blacklistSiv.setOnClickListener(this);
     }
-
 
 
     private void initViewModel() {

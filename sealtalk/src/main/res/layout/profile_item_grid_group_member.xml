@@ -7,15 +7,15 @@
 
         <cn.rongcloud.im.niko.ui.widget.SelectableRoundedImageView
             android:id="@+id/profile_iv_grid_member_avatar"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="14dp"
             android:scaleType="centerCrop"
-            app:sriv_left_bottom_corner_radius="3dip"
-            app:sriv_left_top_corner_radius="3dip"
-            app:sriv_right_bottom_corner_radius="3dip"
-            app:sriv_right_top_corner_radius="3dip" />
+            app:sriv_left_bottom_corner_radius="48dp"
+            app:sriv_left_top_corner_radius="48dp"
+            app:sriv_right_bottom_corner_radius="48dp"
+            app:sriv_right_top_corner_radius="48dp" />
 
         <TextView
             android:id="@+id/profile_iv_grid_tv_username"
@@ -28,6 +28,6 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:textColor="@color/color_gray_text"
-            android:textSize="14sp" />
+            android:textColor="@color/blackB"
+            android:textSize="12sp" />
 </RelativeLayout>
