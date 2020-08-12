@@ -308,17 +308,11 @@
             android:name=".ui.activity.JoinGroupActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.GroupManagerActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.activity.GroupManagementsActivity"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.activity.GroupSetManagementsActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.GroupSetNewGroupOwnerActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.GroupCopyActivity"
@@ -513,6 +507,8 @@
             android:taskAffinity="net.sourceforge.simcpux"
             android:launchMode="singleTask"
             />
+        <activity android:name=".ui.niko.SettingActivity"
+            android:screenOrientation="portrait"/>
 
         <!--推送配置项-->
         <!--

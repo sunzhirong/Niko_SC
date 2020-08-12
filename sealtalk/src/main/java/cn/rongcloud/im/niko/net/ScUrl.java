@@ -49,7 +49,11 @@ public class ScUrl {
     public static final String BLOCKS_REMOVE = "/api/ScUser/BlocksRemove";
     public static final String BLOCKS_LIST = "/api/ScUser/BlocksList";
 
-
+    //和IMSDK交互完了之前 需要请求后台
+    // 聊天置顶
+    public static final String TOP_A_FRIEND_YES = "/api/ScUser/TopAFriendYes";
+    // 聊天取消置顶
+    public static final String TOP_A_FRIEND_NO = "/api/ScUser/TopAFriendNo";
 
 
     //获取token相关

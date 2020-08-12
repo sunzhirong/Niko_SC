@@ -595,4 +595,30 @@
     <string name="seal_dialog_wait_tips">Please wait...</string>
 
     <string name="seal_login_private_service_error">Login Fail Status :34005</string>
+
+
+    <string name="setting">设置</string>
+    <string name="setting_person_info">编辑个人资料</string>
+    <string name="setting_notification">消息通知</string>
+    <string name="setting_hooby_manage">兴趣圈子管理</string>
+    <string name="setting_contact_friend">手机通讯录好友</string>
+    <string name="setting_modify_pwd">修改密码</string>
+    <string name="setting_company_contact">官方联系</string>
+    <string name="setting_clear_cache">清理缓存</string>
+    <string name="setting_logout">退出登录</string>
+    <string name="edit_person_info">编辑个人资料</string>
+    <string name="notification_setting">消息通知设置</string>
+    <string name="vibrate">震动</string>
+    <string name="sound">声音</string>
+    <string name="show_noti_detail">显示消息通知详情</string>
+    <string name="no_disturb">消息免打扰</string>
+    <string name="copy_email">复制邮箱</string>
+    <string name="company_email">li18207135010@163.com</string>
+    <string name="copy_success">复制成功</string>
+    <string name="submit">确定</string>
+    <string name="setting_pwd">设置密码</string>
+    <string name="success">成功</string>
+    <string name="modify_pwd">修改密码</string>
+    <string name="old_pwd">旧密码</string>
+    <string name="common_clear">清理</string>
 </resources>

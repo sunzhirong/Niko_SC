@@ -111,4 +111,14 @@
     <color name="seal_dialog_clean_notice_cancel">#0076FF</color>
 
     <color name="seal_group_detail_clean_tips">#8B8B8B</color>
+
+
+
+
+    <color name="line">#D9DBDF</color>
+    <color name="color_red_text">#F30048</color>
+    <color name="blackA">#0A0A0B</color>
+    <color name="blackB">#202129</color>
+    <color name="white80">#CCFFFFFF</color>
+    <color name="grayA">#65666C</color>
 </resources>

@@ -28,8 +28,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface UserService {
-    @POST(SealTalkUrl.LOGIN)
-    LiveData<Result<LoginResult>> loginLiveData(@Body RequestBody body);
 
     @GET(SealTalkUrl.GET_TOKEN)
     Call<Result<LoginResult>> getToken();
@@ -60,32 +58,6 @@ public interface UserService {
     @POST(SealTalkUrl.CHANGE_PASSWORD)
     LiveData<Result> changePassword(@Body RequestBody body);
 
-
-//    /**
-//     * 获取黑名单信息
-//     *
-//     * @return
-//     */
-//    @GET(SealTalkUrl.GET_BLACK_LIST)
-//    LiveData<Result<List<FriendBlackInfo>>> getFriendBlackList();
-//
-//    /**
-//     * 添加到黑名单
-//     *
-//     * @param body
-//     * @return
-//     */
-//    @POST(SealTalkUrl.ADD_BLACK_LIST)
-//    LiveData<Result> addToBlackList(@Body RequestBody body);
-//
-//    /**
-//     * 移除黑名单
-//     *
-//     * @param body
-//     * @return
-//     */
-//    @POST(SealTalkUrl.REMOVE_BLACK_LIST)
-//    LiveData<Result> removeFromBlackList(@Body RequestBody body);
 
     /**
      * 获取通讯录中的群组列表

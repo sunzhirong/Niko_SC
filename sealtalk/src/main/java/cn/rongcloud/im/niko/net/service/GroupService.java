@@ -133,5 +133,11 @@ public interface GroupService {
     @Headers(NetConstant.JSON)
     LiveData<Result<Boolean>> renameGroup(@Body RequestBody body);
 
+    @POST(ScUrl.TOP_A_FRIEND_YES)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<Boolean>> topYes(@Body RequestBody body);
 
+    @POST(ScUrl.TOP_A_FRIEND_NO)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<Boolean>> topNo(@Body RequestBody body);
 }

@@ -37,7 +37,6 @@ import io.rong.imlib.model.Conversation;
 public class GroupDetailViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<GroupEntity>> groupInfoLiveData = new SingleSourceLiveData<>();
     private SingleSourceMapLiveData<Resource<List<GroupMember>>, Resource<List<GroupMember>>> groupMemberListLiveData;
-    private SingleSourceLiveData<Resource<GroupNoticeResult>> groupNotice = new SingleSourceLiveData<>();
 
     private String groupId;
     private Conversation.ConversationType conversationType;
@@ -176,6 +175,12 @@ public class GroupDetailViewModel extends AndroidViewModel {
         if (value != null && value.data != null && value.data == isTop) return;
 
         isTopLiveData.setSource(imManager.setConversationToTop(conversationType, groupId, isTop));
+
+        if(isTop) {
+            groupTask.topChatYes(groupId);
+        }else {
+            groupTask.topChatNo(groupId);
+        }
     }
 
     /**
@@ -337,18 +342,6 @@ public class GroupDetailViewModel extends AndroidViewModel {
     }
 
 
-
-
-
-
-    /**
-     * 获取群公告
-     *
-     * @return
-     */
-    public LiveData<Resource<GroupNoticeResult>> getGroupNoticeResult() {
-        return groupNotice;
-    }
 
 
 

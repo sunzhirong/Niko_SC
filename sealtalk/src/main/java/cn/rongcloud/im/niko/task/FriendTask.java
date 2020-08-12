@@ -867,4 +867,28 @@ public class FriendTask {
     }
 
 
+    public LiveData<Resource<Boolean>> topChatYes(String id) {
+        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
+            @NonNull
+            @Override
+            protected LiveData<Result<Boolean>> createCall() {
+                HashMap<String, Object> bodyMap = new HashMap<>();
+                bodyMap.put("Data",Integer.parseInt(id));
+                return friendService.topYes(RetrofitUtil.createJsonRequest(bodyMap));
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<Boolean>> topChatNo(String id) {
+        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
+            @NonNull
+            @Override
+            protected LiveData<Result<Boolean>> createCall() {
+                HashMap<String, Object> bodyMap = new HashMap<>();
+                bodyMap.put("Data",Integer.parseInt(id));
+                return friendService.topNo(RetrofitUtil.createJsonRequest(bodyMap));
+            }
+        }.asLiveData();
+    }
+
 }

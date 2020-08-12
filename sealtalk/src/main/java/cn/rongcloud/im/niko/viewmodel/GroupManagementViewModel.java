@@ -32,13 +32,9 @@ public class GroupManagementViewModel extends AndroidViewModel {
     private MutableLiveData<GroupMember> groupOwner = new MutableLiveData<>();
     private MediatorLiveData<Resource<Void>> removeManagerResult = new MediatorLiveData<>();
     private MediatorLiveData<Resource<Void>> addManagerResult = new MediatorLiveData<>();
-    private MediatorLiveData<Resource<Void>> transferResult = new MediatorLiveData<>();
     private MediatorLiveData<GroupEntity> groupInfo = new MediatorLiveData<>();
     private GroupTask groupTask;
     private SingleSourceMapLiveData<Resource<List<GroupMember>>, List<GroupMember>> groupMembersWithoutGroupOwner;
-    private SingleSourceLiveData<Resource<Void>> muteAllResult = new SingleSourceLiveData<>();
-    private SingleSourceLiveData<Resource<Void>> memberProtectionResult = new SingleSourceLiveData<>();
-    private SingleSourceLiveData<Resource<Void>> setCerifiResult = new SingleSourceLiveData<>();
 
     public GroupManagementViewModel(@NonNull Application application) {
         super(application);
@@ -65,44 +61,6 @@ public class GroupManagementViewModel extends AndroidViewModel {
         });
     }
 
-    /**
-     * 设置入群认证
-     *
-     * @param certiStatus
-     */
-    public void setCerification(int certiStatus) {
-        setCerifiResult.setSource(groupTask.setCertification(groupId, certiStatus));
-    }
-
-    public LiveData<Resource<Void>> getCerifiResult() {
-        return setCerifiResult;
-    }
-
-    /**
-     * 开启禁言
-     *
-     * @param muteAllState
-     */
-    public void setMuteAll(int muteAllState) {
-        muteAllResult.setSource(groupTask.setMuteAll(groupId, muteAllState, ""));
-    }
-
-    public LiveData<Resource<Void>> getMuteAllResult() {
-        return muteAllResult;
-    }
-
-    /**
-     * 设置成员保护
-     *
-     * @param memberProtection
-     */
-    public void setMemberProtection(int memberProtection) {
-        memberProtectionResult.setSource(groupTask.setMemberProtection(groupId, memberProtection));
-    }
-
-    public LiveData<Resource<Void>> getMemberProtectionResult() {
-        return memberProtectionResult;
-    }
 
     /**
      * 获取群信息
@@ -226,16 +184,6 @@ public class GroupManagementViewModel extends AndroidViewModel {
     public LiveData<List<GroupMember>> getGroupMembersWithoutGroupOwner() {
         return groupMembersWithoutGroupOwner;
     }
-
-    /**
-     * 转让群角色结果
-     *
-     * @return
-     */
-    public LiveData<Resource<Void>> getTransferResult() {
-        return transferResult;
-    }
-
     /**
      * 删除管理员
      *
@@ -308,41 +256,6 @@ public class GroupManagementViewModel extends AndroidViewModel {
         });
     }
 
-
-    /**
-     * 转让群角色
-     *
-     * @param groupId
-     * @param userId
-     */
-    public void transferGroupOwner(String groupId, String userId) {
-//        transferResult.setSource(groupTask.transferGroup(groupId, userId));
-        LiveData<Resource<Void>> transferGroup = groupTask.transferGroup(groupId, userId);
-        transferResult.addSource(transferGroup, new Observer<Resource<Void>>() {
-            @Override
-            public void onChanged(Resource<Void> resource) {
-                if (resource.status != Status.LOADING) {
-                    transferResult.removeSource(transferGroup);
-                }
-
-                if (resource.status == Status.SUCCESS) {
-                    LiveData<Resource<List<GroupMember>>> groupMemberInfoList = groupTask.getGroupMemberInfoList(groupId);
-                    transferResult.addSource(groupMemberInfoList, new Observer<Resource<List<GroupMember>>>() {
-                        @Override
-                        public void onChanged(Resource<List<GroupMember>> resourceMemberList) {
-                            if (resourceMemberList.status != Status.LOADING) {
-                                transferResult.removeSource(groupMemberInfoList);
-                                return;
-                            }
-                            transferResult.postValue(resource);
-                        }
-                    });
-                } else {
-                    transferResult.postValue(resource);
-                }
-            }
-        });
-    }
 
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {

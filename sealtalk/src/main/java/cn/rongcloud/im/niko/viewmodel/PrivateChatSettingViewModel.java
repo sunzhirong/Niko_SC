@@ -115,6 +115,13 @@ public class PrivateChatSettingViewModel extends AndroidViewModel {
         if (value != null && value.data != null && value.data == isTop) return;
 
         isTopLiveData.setSource(imManager.setConversationToTop(conversationType, targetId, isTop));
+
+
+        if(isTop) {
+            friendTask.topChatYes(targetId);
+        }else {
+            friendTask.topChatNo(targetId);
+        }
     }
 
 

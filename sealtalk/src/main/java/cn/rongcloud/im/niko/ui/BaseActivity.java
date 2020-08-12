@@ -20,6 +20,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.gyf.immersionbar.ImmersionBar;
+import com.gyf.immersionbar.OnKeyboardListener;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +34,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.common.IntentExtra;
 import cn.rongcloud.im.niko.im.IMManager;
 import cn.rongcloud.im.niko.ui.activity.LoginActivity;
@@ -44,7 +50,8 @@ public class BaseActivity extends AppCompatActivity {
     private LoadingDialog dialog;
     private Handler handler = new Handler();
     private long lastClickTime;
-
+    private Unbinder mBind;
+    protected Context mContext;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -92,6 +99,34 @@ public class BaseActivity extends AppCompatActivity {
 
         // 清除已存在的 Fragment 防止因没有复用导致叠加显示
         clearAllFragmentExistBeforeCreate();
+
+        ImmersionBar
+                .with(this)
+                .fitsSystemWindows(true)
+                .keyboardEnable(true)
+                .statusBarColor(R.color.white)
+                .statusBarDarkFont(true)
+                .setOnKeyboardListener(new OnKeyboardListener() {
+                    @Override
+                    public void onKeyboardChange(boolean isPopup, int keyboardHeight) {
+                        onKeyBoardChange(isPopup);
+                    }
+                })
+                .init();
+        if(getLayoutId()!=0) {
+            setContentView(getLayoutId());
+            //绑定控件
+            mBind = ButterKnife.bind(this);
+            mContext = this;
+        }
+
+    }
+
+    protected void onKeyBoardChange(boolean isPopup) {
+    }
+
+    protected int getLayoutId() {
+        return 0;
     }
 
 
@@ -143,6 +178,10 @@ public class BaseActivity extends AppCompatActivity {
         }
         //移除所有
         handler.removeCallbacksAndMessages(null);
+
+        if (mBind != null) {
+            mBind.unbind();
+        }
     }
 
     /**

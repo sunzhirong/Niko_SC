@@ -14,23 +14,6 @@ public class ProfileUtils {
     public static boolean hasSetPw;
 
     public static HashMap<String, Object> getUpdateInfo(int type, String key, Object value){
-//        {
-//            "Skip": 0,
-//                "Take": 0,
-//                "Data": {
-//            "Head": {
-//                "UID": 0,
-//                        "Name": "string",
-//                        "NameColor": "string",
-//                        "UserIcon": "string",
-//                        "Gender": true
-//            },
-//            "Bio": "string",
-//                    "Location": "string",
-//                    "School": "string",
-//                    "DOB": "2020-07-15T01:47:10.243Z"
-//        }
-//        }
         HashMap<String, Object> map = new HashMap<>();
         map.put("Skip",0);
         map.put("Take",0);

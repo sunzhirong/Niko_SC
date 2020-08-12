@@ -30,6 +30,7 @@ import cn.rongcloud.im.niko.ui.fragment.MainContactsListFragment;
 import cn.rongcloud.im.niko.ui.fragment.MainConversationListFragment;
 import cn.rongcloud.im.niko.ui.fragment.MainDiscoveryFragment;
 import cn.rongcloud.im.niko.ui.fragment.MainMeFragment;
+import cn.rongcloud.im.niko.ui.niko.SettingActivity;
 import cn.rongcloud.im.niko.ui.view.MainBottomTabGroupView;
 import cn.rongcloud.im.niko.ui.view.MainBottomTabItem;
 import cn.rongcloud.im.niko.ui.widget.DragPointView;
@@ -204,6 +205,8 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
                     // 如果是我的页面， 则隐藏红点
                     if (item.id == Tab.ME.getValue()) {
                         ((MainBottomTabItem) tabGroupView.getView(Tab.ME.getValue())).setRedVisibility(View.GONE);
+                        Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                        startActivity(intent);
                     }
                 }
             }

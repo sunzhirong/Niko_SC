@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import cn.rongcloud.im.niko.common.ErrorCode;
+import cn.rongcloud.im.niko.common.LogTag;
 import cn.rongcloud.im.niko.db.DbManager;
 import cn.rongcloud.im.niko.db.dao.GroupDao;
 import cn.rongcloud.im.niko.db.dao.GroupMemberDao;
@@ -50,7 +52,10 @@ import cn.rongcloud.im.niko.utils.NetworkOnlyResource;
 import cn.rongcloud.im.niko.utils.RongGenerate;
 import cn.rongcloud.im.niko.utils.SearchUtils;
 import cn.rongcloud.im.niko.utils.glideutils.GlideImageLoaderUtil;
+import cn.rongcloud.im.niko.utils.log.SLog;
+import io.rong.imkit.RongIM;
 import io.rong.imkit.tools.CharacterParser;
+import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import okhttp3.RequestBody;
 
@@ -290,6 +295,30 @@ public class GroupTask {
     }
 
 
+
+    public LiveData<Resource<Boolean>> topChatYes(String id) {
+        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
+            @NonNull
+            @Override
+            protected LiveData<Result<Boolean>> createCall() {
+                HashMap<String, Object> bodyMap = new HashMap<>();
+                bodyMap.put("Data",Integer.parseInt(id));
+                return groupService.topYes(RetrofitUtil.createJsonRequest(bodyMap));
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<Boolean>> topChatNo(String id) {
+        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
+            @NonNull
+            @Override
+            protected LiveData<Result<Boolean>> createCall() {
+                HashMap<String, Object> bodyMap = new HashMap<>();
+                bodyMap.put("Data",Integer.parseInt(id));
+                return groupService.topNo(RetrofitUtil.createJsonRequest(bodyMap));
+            }
+        }.asLiveData();
+    }
 
     /**
      * 上传并设置群组头像

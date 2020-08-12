@@ -286,6 +286,10 @@ public class SettingItemView extends LinearLayout {
         tvValue.setVisibility(VISIBLE);
     }
 
+    public void setValueColor(int value) {
+        tvValue.setTextColor(value);
+    }
+
     /**
      * 设置 value 颜色
      */

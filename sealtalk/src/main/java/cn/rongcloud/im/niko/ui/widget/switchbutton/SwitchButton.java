@@ -339,9 +339,9 @@ public class SwitchButton extends CompoundButton {
         float textDiffWidth = Math.min(0, (Math.max(mThumbSizeF.x * mBackMeasureRatio, mThumbSizeF.x + mTextWidth) - mThumbRectF.width() - mTextWidth) / 2);
         float textDiffHeight = Math.min(0, (mThumbRectF.height() + mThumbMargin.top + mThumbMargin.bottom - mTextHeight) / 2);
         mBackRectF.set(backLeft + textDiffWidth,
-                       mThumbRectF.top - mThumbMargin.top + textDiffHeight,
-                       backLeft + mThumbMargin.left + Math.max(mThumbSizeF.x * mBackMeasureRatio, mThumbSizeF.x + mTextWidth) + mThumbMargin.right - textDiffWidth,
-                       mThumbRectF.bottom + mThumbMargin.bottom - textDiffHeight);
+                mThumbRectF.top - mThumbMargin.top + textDiffHeight,
+                backLeft + mThumbMargin.left + Math.max(mThumbSizeF.x * mBackMeasureRatio, mThumbSizeF.x + mTextWidth) + mThumbMargin.right - textDiffWidth,
+                mThumbRectF.bottom + mThumbMargin.bottom - textDiffHeight);
 
         mSafeRectF.set(mThumbRectF.left, 0, mBackRectF.right - mThumbMargin.right - mThumbRectF.width(), 0);
 
@@ -440,6 +440,7 @@ public class SwitchButton extends CompoundButton {
             mRectPaint.setColor(Color.parseColor("#0000FF"));
             canvas.drawRect(mPresentThumbRectF, mRectPaint);
             mRectPaint.setColor(Color.parseColor("#00CC00"));
+//            mRectPaint.setColor(Color.parseColor("#68A2FE"));
             canvas.drawRect(getProcess() > 0.5 ? mTextOnRectF : mTextOffRectF, mRectPaint);
         }
     }
@@ -852,7 +853,7 @@ public class SwitchButton extends CompoundButton {
         }
 
         public static final Creator<SavedState> CREATOR
-        = new Creator<SavedState>() {
+                = new Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }

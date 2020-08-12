@@ -96,7 +96,6 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
     private String groupCreatorId;
 
     private final int REQUEST_CODE_PERMISSION = 115;
-    private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
 
 
     @Override

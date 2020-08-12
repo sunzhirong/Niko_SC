@@ -27,14 +27,6 @@ import retrofit2.http.QueryMap;
 public interface FriendService {
 
     /**
-     * 获取所有好友信息
-     *
-     * @return
-     */
-    @GET(SealTalkUrl.GET_FRIEND_ALL)
-    LiveData<Result<List<FriendShipInfo>>> getAllFriendList();
-
-    /**
      * 获取好友信息
      *
      * @param friendId
@@ -59,14 +51,6 @@ public interface FriendService {
     @POST(SealTalkUrl.INGORE_FRIENDS)
     LiveData<Result<Void>> ingoreFriend(@Body RequestBody body);
 
-//    /**
-//     * 设置好友备注名
-//     *
-//     * @param body
-//     * @return
-//     */
-//    @POST(SealTalkUrl.SET_DISPLAY_NAME)
-//    LiveData<Result> setAlias(@Body RequestBody body);
 
     /**
      * 申请添加好友
@@ -98,14 +82,6 @@ public interface FriendService {
     @POST(SealTalkUrl.GET_CONTACTS_INFO)
     LiveData<Result<List<GetContactInfoResult>>> getContactsInfo(@Body RequestBody body);
 
-//    /**
-//     * 设置朋友备注和描述
-//     *
-//     * @param body
-//     * @return
-//     */
-//    @POST(SealTalkUrl.SET_FRIEND_DESCRIPTION)
-//    LiveData<Result<Void>> setFriendDescription(@Body RequestBody body);
 
     @POST(SealTalkUrl.GET_FRIEND_DESCRIPTION)
     LiveData<Result<FriendDescription>> getFriendDescription(@Body RequestBody body);
@@ -139,4 +115,13 @@ public interface FriendService {
     @POST(ScUrl.SET_FRIEND_ALIAS)
     @Headers(NetConstant.JSON)
     LiveData<Result<Boolean>> setAlias(@Body RequestBody body);
+
+
+    @POST(ScUrl.TOP_A_FRIEND_YES)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<Boolean>> topYes(@Body RequestBody body);
+
+    @POST(ScUrl.TOP_A_FRIEND_NO)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<Boolean>> topNo(@Body RequestBody body);
 }
