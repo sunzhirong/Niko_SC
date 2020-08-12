@@ -3,7 +3,7 @@
     android:id="@+id/layout_head"
     android:layout_width="match_parent"
     android:layout_height="@dimen/seal_title_bar_height"
-    android:background="@color/white"
+    android:background="@drawable/border_bottom_line"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
