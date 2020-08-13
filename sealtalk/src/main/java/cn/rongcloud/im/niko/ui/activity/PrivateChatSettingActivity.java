@@ -3,17 +3,25 @@ package cn.rongcloud.im.niko.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.alibaba.fastjson.JSON;
+
+import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.common.IntentExtra;
+import cn.rongcloud.im.niko.common.ThreadManager;
+import cn.rongcloud.im.niko.db.DbManager;
 import cn.rongcloud.im.niko.db.model.FriendDescription;
 import cn.rongcloud.im.niko.db.model.FriendDetailInfo;
 import cn.rongcloud.im.niko.db.model.FriendShipInfo;
+import cn.rongcloud.im.niko.db.model.ScLikeDetail;
 import cn.rongcloud.im.niko.event.DeleteFriendEvent;
 import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Status;
@@ -69,18 +77,37 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
         initViewModel();
         initData();
         EventBus.getDefault().register(this);
+
+        ThreadManager.getInstance().runOnWorkThread(new Runnable() {
+            @Override
+            public void run() {
+                List<ScLikeDetail> allDetails = DbManager.getInstance(mContext).getScLikeDao().getAllDetails();
+                Log.e("db","all details = "+ JSON.toJSONString(allDetails));
+            }
+        });
+
+//        ThreadManager.getInstance().runOnWorkThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                List<ScLikeDetail> allDetails = DbManager.getInstance(mContext).getScLikeDao().getDetailsByIdOneUser("BJSD-UQ9E-4RM5-EV3V","2219");
+//                Log.e("db","getDetailsById1 details = "+ JSON.toJSONString(allDetails));
+//            }
+//        });
+//
+//        ThreadManager.getInstance().runOnWorkThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                List<ScLikeDetail> allDetails = DbManager.getInstance(mContext).getScLikeDao().getDetailsById("BJSD-UQ9E-4RM5-EV3V");
+//                Log.e("db","getDetailsById2 details = "+ JSON.toJSONString(allDetails));
+//            }
+//        });
+
+
+
     }
 
     private void initView() {
         portraitIv = findViewById(R.id.profile_siv_user_header);
-//        portraitIv.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(PrivateChatSettingActivity.this, UserDetailActivity.class);
-//                intent.putExtra(IntentExtra.STR_TARGET_ID, targetId);
-//                startActivity(intent);
-//            }
-//        });
 
         // 用户名
         nameTv = findViewById(R.id.profile_tv_user_name);

@@ -39,7 +39,7 @@ public interface FriendDao {
     List<FriendShipInfo> getFriendInfoListSync(String[] ids);
 
     @Query("SELECT friend.id,alias,portrait_uri,name,region,phone_number,friend_status,message,updateAt,alias_spelling, name_spelling,order_spelling,order_spelling " +
-            "FROM friend INNER JOIN user on friend.id = user.id WHERE friend.id in (:ids)")
+            "FROM friend INNER JOIN user on friend.id = user.id WHERE friend.id in  (:ids)")
     LiveData<List<FriendShipInfo>> getFriendInfoList(String[] ids);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

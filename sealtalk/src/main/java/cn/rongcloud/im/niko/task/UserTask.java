@@ -916,9 +916,12 @@ public class UserTask {
         return tokenService.connectToken(stringRequestBodyMap);
     }
 
+
+    private static String phone = "13622315970";
+//    private static String phone = "13305938755";
     public LiveData<Result> getSms() {
         HashMap<String, Object> paramsMap = new HashMap<>();
-        paramsMap.put("PhoneNumber", "13305938755");
+        paramsMap.put("PhoneNumber", phone);
         paramsMap.put("PhoneCountry", "86");
         RequestBody body = RetrofitUtil.createJsonRequest(paramsMap);
         return userService.getSms(body);
@@ -926,7 +929,7 @@ public class UserTask {
 
     public LiveData<Result> smsVerify() {
         HashMap<String, Object> paramsMap = new HashMap<>();
-        paramsMap.put("PhoneNumber", "13305938755");
+        paramsMap.put("PhoneNumber", phone);
         paramsMap.put("PhoneCountry", "86");
         paramsMap.put("VCode", "9999");
         RequestBody body = RetrofitUtil.createJsonRequest(paramsMap);
@@ -937,7 +940,7 @@ public class UserTask {
         HashMap<String, String> paramsMap = new HashMap<>();
         paramsMap.put("grant_type", "password");
         paramsMap.put("scope", "jjApiScope");
-        paramsMap.put("UserName", "13305938755");
+        paramsMap.put("UserName", phone);
         paramsMap.put("Password", ScInterceptor.getDV() + "9999");
 //        paramsMap.put("Password","20200210" + "9999");
         paramsMap.put("VCode", "9999");

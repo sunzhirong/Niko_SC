@@ -8,6 +8,7 @@ import cn.rongcloud.im.niko.common.LogTag;
 import cn.rongcloud.im.niko.db.dao.FriendDao;
 import cn.rongcloud.im.niko.db.dao.GroupDao;
 import cn.rongcloud.im.niko.db.dao.GroupMemberDao;
+import cn.rongcloud.im.niko.db.dao.ScLikeDao;
 import cn.rongcloud.im.niko.db.dao.UserDao;
 import cn.rongcloud.im.niko.utils.log.SLog;
 import io.rong.imlib.MD5;
@@ -100,5 +101,14 @@ public class DbManager {
             return null;
         }
         return database.getGroupMemberDao();
+    }
+
+
+    public ScLikeDao getScLikeDao() {
+        if (database == null) {
+            SLog.e(LogTag.DB, "Get Dao need openDb first.");
+            return null;
+        }
+        return database.getScLikeDao();
     }
 }

@@ -32,7 +32,7 @@
 <!--            app:RCMaxWidth="223dp" />-->
         <io.rong.imkit.widget.AutoLinkTextView
             android:id="@+id/text"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:autoLink="web|email|phone"
@@ -47,7 +47,7 @@
             android:visibility="gone"
             android:id="@+id/iv_like_left"
             android:layout_below="@+id/text"
-            android:src="@drawable/img_chat_like"
+            android:src="@drawable/seal_islike_bg"
             android:layout_width="16dp"
             android:layout_height="16dp"/>
 
@@ -56,7 +56,7 @@
             android:id="@+id/iv_like_right"
             android:layout_alignEnd="@+id/text"
             android:layout_below="@+id/text"
-            android:src="@drawable/img_chat_like"
+            android:src="@drawable/seal_islike_bg"
             android:layout_width="16dp"
             android:layout_height="16dp"/>
 

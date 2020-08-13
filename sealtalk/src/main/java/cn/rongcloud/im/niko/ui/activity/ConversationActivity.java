@@ -190,11 +190,6 @@ public class ConversationActivity extends TitleBaseActivity {
             @Override
             public void onScreenShotComplete(String data, long dateTaken) {
                 SLog.d(TAG, "onScreenShotComplete===" + data);
-//                rencentScreenCaptureData = null;
-//                rencentScreenCaptureData = new ScreenCaptureData(data, System.currentTimeMillis());
-//                if (!isExtensionExpanded) {
-//                    showRencentPicturePop(extensionCollapsedHeight);
-//                }
                 if (conversationType.equals(Conversation.ConversationType.PRIVATE) || conversationType.equals(Conversation.ConversationType.GROUP)) {
                     int cacheType = userConfigCache.getScreenCaptureStatus();
                     //1为开启，0为关闭
@@ -281,15 +276,6 @@ public class ConversationActivity extends TitleBaseActivity {
             }
         });
 
-//        conversationViewModel.getScreenCaptureStatus(conversationType.getValue(), targetId).observe(this, new Observer<Resource<ScreenCaptureResult>>() {
-//            @Override
-//            public void onChanged(Resource<ScreenCaptureResult> screenCaptureResultResource) {
-//                if (screenCaptureResultResource.status == Status.SUCCESS) {
-//                    // 0 关闭 1 打开
-//                    //refreshScreenCaptureStatus();
-//                }
-//            }
-//        });
 
         // 判读是否为群组聊天
         if (conversationType == Conversation.ConversationType.GROUP) {
@@ -379,12 +365,6 @@ public class ConversationActivity extends TitleBaseActivity {
                         if (!isExtensionHeightInit) {
                             isExtensionHeightInit = true;
                             extensionCollapsedHeight = h;
-//                            if (screenCaptureUtil!=null){
-//                                rencentScreenCaptureData = null;
-//                                rencentScreenCaptureData = new ScreenCaptureData(screenCaptureUtil.getLastPictureItems(ConversationActivity.this).uri
-//                                        , screenCaptureUtil.getLastPictureItems(ConversationActivity.this).addTime*1000);
-//                            }
-//                            showRencentPicturePop(extensionCollapsedHeight);
                         }
                     }
 

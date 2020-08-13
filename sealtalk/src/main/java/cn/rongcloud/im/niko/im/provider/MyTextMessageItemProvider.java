@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,20 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.lang.ref.WeakReference;
+import com.alibaba.fastjson.JSON;
 
+import java.lang.ref.WeakReference;
+import java.util.Date;
+import java.util.List;
+import java.util.Observable;
+
+import androidx.lifecycle.Observer;
 import cn.rongcloud.im.niko.R;
+import cn.rongcloud.im.niko.SealApp;
+import cn.rongcloud.im.niko.common.ThreadManager;
+import cn.rongcloud.im.niko.db.DbManager;
+import cn.rongcloud.im.niko.db.dao.ScLikeDao;
+import cn.rongcloud.im.niko.db.model.ScLikeDetail;
 import cn.rongcloud.im.niko.im.IMManager;
 import cn.rongcloud.im.niko.im.message.ScLikeMessage;
 import cn.rongcloud.im.niko.utils.ToastUtils;
@@ -36,10 +48,14 @@ import io.rong.imlib.IRongCallback;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
+import io.rong.imlib.model.UserInfo;
 import io.rong.message.TextMessage;
 
 @ProviderTag( messageContent = TextMessage.class  )
 public class MyTextMessageItemProvider extends TextMessageItemProvider{
+
+    private boolean isLike;
+
     public View newView(Context context, ViewGroup group) {
         View view = LayoutInflater.from(context).inflate(R.layout.rc_item_destruct_text_message, (ViewGroup)null);
         MyTextMessageItemProvider.ViewHolder holder = new MyTextMessageItemProvider.ViewHolder();
@@ -115,30 +131,76 @@ public class MyTextMessageItemProvider extends TextMessageItemProvider{
         holder.message.setVisibility(View.VISIBLE);
         AutoLinkTextView textView = holder.message;
         this.processTextView(v, position, content, data, textView);
-
-        this.processLike(data, holder);
+        this.processLike(v,data, holder);
     }
 
-    private void processLike(UIMessage data, ViewHolder holder) {
+    private void processLike(View v, UIMessage data, ViewHolder holder) {
         Message message = data.getMessage();
         holder.leftLikeImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ToastUtils.showToast("点赞 我所发送的内容"+data.getUId());
-                sendLikeMsg(message);
+                sendLikeMsg(message,holder);
             }
         });
 
         holder.rightLikeImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ToastUtils.showToast("点赞 对方所发送的内容"+data.getUId());
-                sendLikeMsg(message);
+                sendLikeMsg(message,holder);
             }
         });
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                String uId = data.getUId();
+                Log.e("db","查询Id details = "+ uId);
+                ScLikeDao scLikeDao = DbManager.getInstance(SealApp.getApplication()).getScLikeDao();
+                ScLikeDetail scLikeDetail = scLikeDao.getDetailsByIdOneUser(uId,data.getSenderUserId());
+                Log.e("db","查询到的数据1 details = "+ JSON.toJSONString(scLikeDetail));
+                ThreadManager.getInstance().runOnWorkThread(() -> {
+                    if(scLikeDetail!=null){
+                        isLike = !scLikeDetail.getDescription().equals("0");
+                        holder.leftLikeImg.setSelected(isLike);
+                        holder.rightLikeImg.setSelected(isLike);
+                    }else {
+                        isLike = false;
+                        holder.leftLikeImg.setSelected(isLike);
+                        holder.rightLikeImg.setSelected(isLike);
+                    }
+                });
+
+//                try {
+//                    Thread.sleep(50);
+//
+////                    if (v.getHandler() != null ) {
+////                        v.getHandler().postDelayed(new Runnable() {
+////                            public void run() {
+////                                if(detailsById!=null&&detailsById.size()!=0){
+////                                    ScLikeDetail scLikeDetail = detailsById.get(0);
+////                                    isLike = !scLikeDetail.getDescription().equals("0");
+////                                    holder.leftLikeImg.setSelected(isLike);
+////                                    holder.rightLikeImg.setSelected(isLike);
+////                                }else {
+////                                    isLike = false;
+////                                    holder.leftLikeImg.setSelected(isLike);
+////                                    holder.rightLikeImg.setSelected(isLike);
+////                                }
+////                            }
+////                        }, 300L);//由于会发送一条此版本不能查看消息的提示，会先刷新ui 导致插入数据在刷新之后 所以先延迟刷新
+////
+////                    }
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+            }
+        }).start();
+
+
     }
 
-    private void sendLikeMsg(Message message) {
+    private void sendLikeMsg(Message message,ViewHolder holder) {
         String targetId = message.getTargetId();//接收方ID
         String senderUserId = message.getSenderUserId();//发送方ID
         Conversation.ConversationType conversationType = message.getConversationType();//私聊或者群聊
@@ -157,7 +219,7 @@ public class MyTextMessageItemProvider extends TextMessageItemProvider{
         messageContent.setTargetMessageUUID(uId);
         messageContent.setSenderAvatar(GlideImageLoaderUtil.getScString("_aa_UserIcon.jpg"));
         messageContent.setSenderUserId(senderUserId);
-        messageContent.setTextDescription("1");
+        messageContent.setTextDescription(isLike?"0":"1");
         RongIM.getInstance().sendMessage(likeMsg, "", "", new IRongCallback.ISendMessageCallback() {
             /**
              * 消息发送前回调, 回调时消息已存储数据库
@@ -165,7 +227,18 @@ public class MyTextMessageItemProvider extends TextMessageItemProvider{
              */
             @Override
             public void onAttached(Message message) {
-                ToastUtils.showToast("点赞onAttached成功");
+//                ToastUtils.showToast("点赞onAttached成功");
+//                RongIM.getInstance().deleteMessages(new int[]{message.getMessageId()}, new RongIMClient.ResultCallback<Boolean>() {
+//                    @Override
+//                    public void onSuccess(Boolean aBoolean) {
+//                        ToastUtils.showToast("deleteMessages"+aBoolean);
+//                    }
+//
+//                    @Override
+//                    public void onError(RongIMClient.ErrorCode errorCode) {
+//
+//                    }
+//                });
             }
             /**
              * 消息发送成功。
@@ -174,6 +247,38 @@ public class MyTextMessageItemProvider extends TextMessageItemProvider{
             @Override
             public void onSuccess(Message message) {
                 ToastUtils.showToast("点赞发送成功");
+                isLike = !isLike;
+                holder.leftLikeImg.setSelected(isLike);
+                holder.rightLikeImg.setSelected(isLike);
+
+
+                ThreadManager.getInstance().runOnWorkThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        ScLikeDao scLikeDao = DbManager.getInstance(SealApp.getApplication()).getScLikeDao();
+                        ScLikeDetail scLikeDetail = scLikeDao.getDetailsByIdOneUser(uId,senderUserId);
+                        if(scLikeDetail==null){
+                            scLikeDetail =  new ScLikeDetail();
+                        }
+//                        DbManager instance = DbManager.getInstance(SealApp.getApplication());
+//                        ScLikeDao scLikeDao = instance.getScLikeDao();
+//                        ScLikeDetail scLikeDetail = new ScLikeDetail();
+                        scLikeDetail.setCreatedTime(new Date());
+                        scLikeDetail.setDescription(isLike?"0":"1");
+                        if(conversationType == Conversation.ConversationType.PRIVATE){
+                            scLikeDetail.setUserId(targetId);
+                        }else if(conversationType == Conversation.ConversationType.GROUP){
+                            scLikeDetail.setGroupId(targetId);
+                        }
+                        scLikeDetail.setSenderAvatar(GlideImageLoaderUtil.getScString("_aa_UserIcon.jpg"));
+                        scLikeDetail.setTargetMessageUuid(uId);
+                        scLikeDetail.setMessageUuid(message.getUId());
+                        scLikeDetail.setSenderUserId(senderUserId);
+                        scLikeDao.insert(scLikeDetail);
+                        Log.e("db","插入数据 details = "+ JSON.toJSONString(scLikeDetail));
+                    }
+                });
             }
 
             /**
@@ -186,6 +291,8 @@ public class MyTextMessageItemProvider extends TextMessageItemProvider{
                 ToastUtils.showToast("点赞发送失败");
             }
         });
+
+
     }
 
     private void processTextView(final View v, int position, TextMessage content, final UIMessage data, final AutoLinkTextView pTextView) {
