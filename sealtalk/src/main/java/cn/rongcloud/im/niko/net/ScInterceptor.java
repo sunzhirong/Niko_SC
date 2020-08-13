@@ -41,8 +41,8 @@ public class ScInterceptor implements Interceptor {
     }
 
     public static String getDV() {
-        return "niko";
-//        return "20200210";
+//        return "niko";
+        return "20200210";
     }
 
     private static String getLG() {

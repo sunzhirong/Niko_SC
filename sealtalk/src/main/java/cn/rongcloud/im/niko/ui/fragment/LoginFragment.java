@@ -135,7 +135,6 @@ public class LoginFragment extends BaseFragment {
                     //获取msg需要赋值
                     NetConstant.Authorization = "Bearer "+tokenBean.getAccess_token();
                     loginViewModel.getSms();
-//                    loginViewModel.verifySms();
 
 //                    loginViewModel.getUserToken();
 

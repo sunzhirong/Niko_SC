@@ -106,9 +106,6 @@ public interface GroupDao {
     @Query("SELECT regular_clear_state from `group` WHERE id=:groupId")
     int getRegularClearSync(String groupId);
 
-    @Query("UPDATE `group` SET bulletin=:notice, bulletin_time=:updateTime WHERE id=:groupId")
-    int updateGroupNotice(String groupId, String notice, long updateTime);
-
     @Query("SELECT * from `group_notice`")
     LiveData<List<GroupNoticeInfo>> getGroupNoticeList();
 

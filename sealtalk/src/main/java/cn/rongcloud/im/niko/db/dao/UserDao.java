@@ -36,20 +36,12 @@ public interface UserDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertUserListIgnoreExist(List<UserInfo> userInfoList);
 
-    @Query("UPDATE user SET name=:name,name_spelling=:nameSpelling WHERE id=:id")
-    int updateName(String id, String name, String nameSpelling);
-
     @Query("UPDATE user SET alias=:alias,alias_spelling=:aliasSpelling,order_spelling=:aliasSpelling WHERE id=:id")
     int updateAlias(String id, String alias, String aliasSpelling);
 
-    @Query("UPDATE user SET portrait_uri=:portraitUrl WHERE id=:id")
-    int updatePortrait(String id, String portraitUrl);
 
     @Query("UPDATE user SET friend_status=:friendStatus WHERE id=:id")
     int updateFriendStatus(String id, int friendStatus);
-
-    @Query("UPDATE user SET alias=:alias WHERE id=:id")
-    int updateAlias(String id, String alias);
 
     @Query("UPDATE user SET friend_status=:friendStatus WHERE id in (:idList)")
     int updateFriendsStatus(List<String> idList, int friendStatus);

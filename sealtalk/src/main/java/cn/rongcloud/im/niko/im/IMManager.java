@@ -10,6 +10,7 @@ import android.view.View;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -27,13 +28,16 @@ import cn.rongcloud.im.niko.db.DbManager;
 import cn.rongcloud.im.niko.im.message.GroupApplyMessage;
 import cn.rongcloud.im.niko.im.message.GroupClearMessage;
 import cn.rongcloud.im.niko.im.message.PokeMessage;
+import cn.rongcloud.im.niko.im.message.ScLikeMessage;
 import cn.rongcloud.im.niko.im.message.SealContactNotificationMessage;
 import cn.rongcloud.im.niko.im.message.SealGroupConNtfMessage;
 import cn.rongcloud.im.niko.im.message.SealGroupNotificationMessage;
 import cn.rongcloud.im.niko.im.plugin.PokeExtensionModule;
 import cn.rongcloud.im.niko.im.provider.ContactNotificationMessageProvider;
 import cn.rongcloud.im.niko.im.provider.GroupApplyMessageProvider;
+import cn.rongcloud.im.niko.im.provider.MyTextMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.PokeMessageItemProvider;
+import cn.rongcloud.im.niko.im.provider.ScLikeMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.SealGroupConNtfMessageProvider;
 import cn.rongcloud.im.niko.im.provider.SealGroupNotificationMessageItemProvider;
 import cn.rongcloud.im.niko.model.ChatRoomAction;
@@ -782,6 +786,15 @@ public class IMManager {
 
         // 开启高清语音
         RongIM.getInstance().setVoiceMessageType(RongIM.VoiceMessageType.HighQuality);
+
+
+        //自定义喜欢消息
+        RongIM.registerMessageType(ScLikeMessage.class);
+        RongIM.registerMessageTemplate(new ScLikeMessageItemProvider());
+
+        //自定义文字item
+        RongIM.registerMessageTemplate(new MyTextMessageItemProvider());
+
     }
 
     /**
@@ -1081,6 +1094,55 @@ public class IMManager {
                                 , groupClearMessage.getClearTime(), true);
                     }
                     return true;
+                }
+
+                //自定义喜欢消息
+                else if (messageContent instanceof ScLikeMessage) {
+                    ScLikeMessage scLikeMessage = (ScLikeMessage) messageContent;
+                    // 显示戳一下界面
+                    // 判断当前是否在目标的会话界面中
+                    boolean isInConversation = false;
+                    ConversationRecord lastConversationRecord = IMManager.getInstance().getLastConversationRecord();
+                    if (lastConversationRecord != null && targetId.equals(lastConversationRecord.targetId)) {
+                        isInConversation = true;
+                    }
+                    // 当戳一下的目标不在会话界面且在前台时显示戳一下界面
+                    if (!isInConversation) {
+                        Intent showPokeIntent = new Intent(context, PokeInviteChatActivity.class);
+                        showPokeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        showPokeIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        showPokeIntent.putExtra(IntentExtra.START_FROM_ID, message.getSenderUserId());
+                        showPokeIntent.putExtra(IntentExtra.STR_POKE_MESSAGE, scLikeMessage.getContent());
+                        if (message.getConversationType() == Conversation.ConversationType.GROUP) {
+                            Group groupInfo = RongUserInfoManager.getInstance().getGroupInfo(targetId);
+                            if (groupInfo != null) {
+                                showPokeIntent.putExtra(IntentExtra.STR_GROUP_NAME, groupInfo.getName());
+                            }
+                        }
+                        showPokeIntent.putExtra(IntentExtra.SERIA_CONVERSATION_TYPE, message.getConversationType());
+                        showPokeIntent.putExtra(IntentExtra.STR_TARGET_ID, targetId);
+                        /*
+                         * 判断是否在在前台，如果不在前台则下次进入 app 时进行弹出
+                         * 再判断是否已进入到了主界面，反正拉取离线消息时再未进入主界面前弹出戳一下界面
+                         */
+                        if (SealApp.getApplication().isAppInForeground()
+                                && SealApp.getApplication().isMainActivityCreated()) {
+                            context.startActivity(showPokeIntent);
+                        } else {
+                            // 若之前有未启动的戳一下消息则默认启动第一个戳一下消息
+                            Intent lastIntent = SealApp.getApplication().getLastOnAppForegroundStartIntent();
+                            if (lastIntent == null
+                                    || (lastIntent.getComponent() != null
+                                    && !lastIntent.getComponent().getClassName().equals(PokeInviteChatActivity.class.getName()))) {
+                                SealApp.getApplication().setOnAppForegroundStartIntent(showPokeIntent);
+                            }
+                        }
+                    }
+
+                    //存储到数据库
+                    SLog.d("sclike", JSON.toJSONString(scLikeMessage));
+                    return true;
+
                 }
                 return false;
             }

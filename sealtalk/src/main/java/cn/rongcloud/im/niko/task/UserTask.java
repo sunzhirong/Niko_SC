@@ -918,7 +918,7 @@ public class UserTask {
 
     public LiveData<Result> getSms() {
         HashMap<String, Object> paramsMap = new HashMap<>();
-        paramsMap.put("PhoneNumber", "13622315970");
+        paramsMap.put("PhoneNumber", "13305938755");
         paramsMap.put("PhoneCountry", "86");
         RequestBody body = RetrofitUtil.createJsonRequest(paramsMap);
         return userService.getSms(body);
@@ -926,7 +926,7 @@ public class UserTask {
 
     public LiveData<Result> smsVerify() {
         HashMap<String, Object> paramsMap = new HashMap<>();
-        paramsMap.put("PhoneNumber", "13622315970");
+        paramsMap.put("PhoneNumber", "13305938755");
         paramsMap.put("PhoneCountry", "86");
         paramsMap.put("VCode", "9999");
         RequestBody body = RetrofitUtil.createJsonRequest(paramsMap);
@@ -937,9 +937,9 @@ public class UserTask {
         HashMap<String, String> paramsMap = new HashMap<>();
         paramsMap.put("grant_type", "password");
         paramsMap.put("scope", "jjApiScope");
-        paramsMap.put("UserName", "13622315970");
-//        paramsMap.put("Password", ScInterceptor.getDV() + "9999");
-        paramsMap.put("Password","20200210" + "9999");
+        paramsMap.put("UserName", "13305938755");
+        paramsMap.put("Password", ScInterceptor.getDV() + "9999");
+//        paramsMap.put("Password","20200210" + "9999");
         paramsMap.put("VCode", "9999");
         NetConstant.Authorization = "Basic ampBcHBBcGlDbGllbnQ6Q2lyY2xlMjAyMEBXb3JsZA==";
         Map<String, RequestBody> stringRequestBodyMap = RetrofitUtil.generateRequestBody(paramsMap);
