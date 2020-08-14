@@ -123,4 +123,90 @@
         <item name="android:textSize">15sp</item>
     </style>
 
+    <style name="tv16BlackStyle">
+        <item name="android:textColor">@color/color_black_text</item>
+        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+    <style name="tv14BlackBStyle">
+        <item name="android:textColor">@color/blackB</item>
+        <item name="android:textSize">@dimen/sp_14</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="tv13GrayBStyle">
+        <item name="android:textColor">@color/grayB</item>
+        <item name="android:textSize">@dimen/sp_13</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+    <style name="tv16WhiteStyle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="tv12RedStyle">
+        <item name="android:textSize">@dimen/sp_12</item>
+        <item name="android:textColor">@color/color_red_text</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/dp_10</item>
+        <item name="android:layout_marginLeft">@dimen/dp_12</item>
+    </style>
+
+    <style name="etPwdStyle">
+        <item name="android:maxLength">20</item>
+        <item name="android:textColor">@color/color_black_text</item>
+        <item name="android:inputType">textPassword</item>
+        <item name="android:textColorHint">#8F929A</item>
+        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:background">@drawable/gray_4dp_bg</item>
+        <item name="android:paddingLeft">@dimen/dp_10</item>
+        <item name="android:layout_marginLeft">@dimen/dp_12</item>
+        <item name="android:layout_marginRight">@dimen/dp_12</item>
+        <item name="android:layout_marginTop">@dimen/dp_16</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp_45</item>
+    </style>
+
+    <style name="DatePickerBottomDialog" parent="android:Theme.Light">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+    <style name="DatePickerDialogAnim" mce_bogus="1" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/com_ycuwq_datepicker_dialog_in</item>
+        <item name="android:windowExitAnimation">@anim/com_ycuwq_datepicker_dialog_out</item>
+    </style>
+
+    <style name="searchEtStyle">
+        <item name="android:paddingLeft">@dimen/dp_15</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp_30</item>
+        <item name="android:layout_marginTop">@dimen/dp_5</item>
+        <item name="android:layout_marginBottom">@dimen/dp_5</item>
+        <item name="android:layout_marginLeft">@dimen/dp_12</item>
+        <item name="android:layout_marginRight">@dimen/dp_12</item>
+        <item name="android:drawableLeft">@drawable/img_search</item>
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:textColor">@color/blackA</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">@dimen/seal_search_title_bar_et_text_size</item>
+        <item name="android:imeOptions">actionSearch</item>
+        <item name="android:inputType">textNoSuggestions</item>
+        <item name="android:imeActionLabel"></item>
+        <item name="android:background">@drawable/search_bg</item>
+    </style>
+
+
+    <style name="lineStyle">
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="background">@color/line</item>
+    </style>
 </resources>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <cn.rongcloud.im.niko.ui.widget.TitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/edit_person_info" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_head"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp" />
+
+        <cn.rongcloud.im.niko.ui.view.SettingItemView
+            android:id="@+id/siv_img"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:gravity="center_vertical"
+            app:item_content="@string/head_img"
+            app:item_image_height="50dp"
+            app:item_image_width="50dp"
+            app:item_right_image="@drawable/img_item_setting_enter" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/seal_setting_item_divider"
+        android:layout_marginLeft="@dimen/seal_setting_item_margin"
+        android:background="@color/seal_setting_item_divider" />
+
+    <cn.rongcloud.im.niko.ui.view.SettingItemView
+        android:id="@+id/siv_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:gravity="center_vertical"
+        app:item_content="@string/nickname"
+        app:item_divider="true"
+        app:item_right_image="@drawable/img_item_setting_enter"
+        app:item_value="niko" />
+
+    <cn.rongcloud.im.niko.ui.view.SettingItemView
+        android:id="@+id/siv_gender"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:gravity="center_vertical"
+        app:item_content="@string/gender"
+        app:item_divider="true"
+        app:item_right_image="@drawable/img_item_setting_enter"
+        app:item_value="男" />
+
+    <cn.rongcloud.im.niko.ui.view.SettingItemView
+        android:id="@+id/siv_city"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:gravity="center_vertical"
+        app:item_content="@string/city"
+        app:item_divider="true"
+        app:item_right_image="@drawable/img_item_setting_enter"
+        app:item_value="广东深圳" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_5"
+        android:text="@string/not_required"
+        android:textColor="@color/grayB" />
+
+    <cn.rongcloud.im.niko.ui.view.SettingItemView
+        android:id="@+id/siv_own"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:gravity="center_vertical"
+        app:item_content="@string/personal_profile"
+        app:item_divider="true"
+        app:item_right_image="@drawable/img_item_setting_enter"
+        app:item_value="世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界" />
+
+    <cn.rongcloud.im.niko.ui.view.SettingItemView
+        android:id="@+id/siv_school"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:gravity="center_vertical"
+        app:item_content="@string/school"
+        app:item_divider="true"
+        app:item_right_image="@drawable/img_item_setting_enter"
+        app:item_value="深圳大学" />
+
+    <cn.rongcloud.im.niko.ui.view.SettingItemView
+        android:id="@+id/siv_age"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:gravity="center_vertical"
+        app:item_content="@string/age"
+        app:item_divider="true"
+        app:item_right_image="@drawable/img_item_setting_enter"
+        app:item_value="24岁" />
+
+
+</LinearLayout>

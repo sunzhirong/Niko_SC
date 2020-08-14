@@ -22,10 +22,10 @@
             android:layout_width="@dimen/rc_dimen_size_40"
             android:layout_height="@dimen/rc_dimen_size_40"
             android:scaleType="centerCrop"
-            app:sriv_left_bottom_corner_radius="3dip"
-            app:sriv_left_top_corner_radius="3dip"
-            app:sriv_right_bottom_corner_radius="3dip"
-            app:sriv_right_top_corner_radius="3dip" />
+            app:sriv_left_bottom_corner_radius="@dimen/rc_dimen_size_40"
+            app:sriv_left_top_corner_radius="@dimen/rc_dimen_size_40"
+            app:sriv_right_bottom_corner_radius="@dimen/rc_dimen_size_40"
+            app:sriv_right_top_corner_radius="@dimen/rc_dimen_size_40" />
 
         <TextView
             android:id="@+id/profile_tv_user_name"

@@ -119,8 +119,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             mBind = ButterKnife.bind(this);
             mContext = this;
         }
-
     }
+
 
     protected void onKeyBoardChange(boolean isPopup) {
     }
@@ -479,4 +479,37 @@ public abstract class BaseActivity extends AppCompatActivity {
         lastClickTime = time;
         return false;
     }
+
+    public void readyGo(Class<?> clazz, Bundle bundle) {
+        if (clazz != null) {
+            Intent intent = new Intent(this, clazz);
+            if (null != bundle) {
+                intent.putExtras(bundle);
+            }
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * startActivity
+     */
+    public void readyGo(Class<?> clazz) {
+        readyGo(clazz, null);
+    }
+
+    public void readyGoForResult(Class<?> clazz, int reqCode) {
+        readyGoForResult(clazz, null, reqCode);
+    }
+
+    public void readyGoForResult(Class<?> clazz, Bundle bundle, int reqCode) {
+        if (clazz != null) {
+            Intent intent = new Intent(this, clazz);
+            if (null != bundle) {
+                intent.putExtras(bundle);
+            }
+            startActivityForResult(intent, reqCode);
+        }
+    }
+
+
 }

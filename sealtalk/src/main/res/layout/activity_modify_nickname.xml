@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <cn.rongcloud.im.niko.ui.widget.TitleBar
+
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:show_right_tv="true"
+        app:title="@string/modify_nickname" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_nickname"
+        style="@style/etPwdStyle"
+        android:inputType="text"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_length"
+            android:layout_marginTop="@dimen/dp_12"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="@dimen/dp_12"
+            android:text="10"
+            android:textColor="#65666C"
+            style="@style/tv12RedStyle"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:visibility="gone"
+            android:id="@+id/tv_tips"
+            android:layout_marginTop="@dimen/dp_12"
+            android:textColor="#8F929A"
+            android:text="ID在三俩是唯一的"
+            style="@style/tv12RedStyle"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:visibility="gone"
+            android:id="@+id/tv_error"
+            android:layout_marginTop="@dimen/dp_12"
+            android:text="很遗憾！该昵称已经被占用"
+            style="@style/tv12RedStyle"/>
+    </RelativeLayout>
+
+
+</LinearLayout>

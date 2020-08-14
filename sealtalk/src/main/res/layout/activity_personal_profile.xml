@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <cn.rongcloud.im.niko.ui.widget.TitleBar
+
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:show_right_tv="true"
+        app:title="@string/personal_profile" />
+    
+    
+    <RelativeLayout
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_15"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_85"
+        android:background="@drawable/gray_8dp_bg">
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_alignParentBottom="true"
+            android:id="@+id/tv_length"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="@dimen/dp_10"
+            android:text="30"
+            android:textColor="#65666C"
+            style="@style/tv12RedStyle"/>
+
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_content"
+            android:textColorHint="@color/grayB"
+            android:textSize="@dimen/sp_14"
+            android:maxLength="30"
+            android:layout_margin="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:textColor="@color/blackB"
+            />
+    </RelativeLayout>
+    
+
+
+
+
+
+</LinearLayout>

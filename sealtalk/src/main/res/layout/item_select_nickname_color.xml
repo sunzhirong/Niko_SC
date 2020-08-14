@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dp_12"
+    android:paddingRight="@dimen/dp_12"
+    android:paddingTop="@dimen/dp_15"
+    android:paddingBottom="@dimen/dp_5">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="@dimen/dp_48"
+            android:layout_height="@dimen/dp_48"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:text="郭莹莹"
+            android:id="@+id/tv_name"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_toRightOf="@+id/iv_avatar"
+            android:textStyle="bold"
+            android:textSize="@dimen/sp_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/img_vip_member"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+    <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cv_container"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:cardCornerRadius="@dimen/dp_10"
+        app:cardElevation="0dp">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_99"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/rl_left"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                
+                <LinearLayout
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/img_nickname_center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_marginLeft="@dimen/dp_6"
+                        android:layout_gravity="center_vertical"
+                        android:text="群青"
+                        android:id="@+id/tv_color"
+                        style="@style/tv16WhiteStyle"
+                        android:textSize="@dimen/sp_14"/>
+                    
+                </LinearLayout>
+                
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_right"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:scaleType="fitXY"
+                    android:id="@+id/iv_right"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:src="@drawable/nickname_selector"
+                    android:layout_margin="@dimen/dp_8"
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/iv_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

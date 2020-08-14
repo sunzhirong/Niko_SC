@@ -121,5 +121,6 @@
     <color name="white80">#CCFFFFFF</color>
     <color name="grayA">#65666C</color>
     <color name="grayB">#8F929A</color>
-
+    <color name="com_ycuwq_datepicker_selectedTextColor">@color/color_black_text</color>
+    <color name="com_ycuwq_datepicker_divider">#cccccc</color>
 </resources>

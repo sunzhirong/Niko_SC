@@ -14,7 +14,6 @@
     </declare-styleable>
 
 
-
     <!--设置-->
     <declare-styleable name="SettingItemView">
         <attr name="item_image" format="reference" />
@@ -24,53 +23,53 @@
         <attr name="item_content_text_size" format="dimension" />
         <attr name="item_content_text_color" format="color" />
         <attr name="item_value" format="string" />
-        <attr name="item_value_text_size" format="dimension"/>
-        <attr name="item_value_text_color" format="color"/>
+        <attr name="item_value_text_size" format="dimension" />
+        <attr name="item_value_text_color" format="color" />
         <attr name="item_divider" format="boolean" />
         <attr name="item_tag_image_height" format="dimension" />
         <attr name="item_tag_image_width" format="dimension" />
-        <attr name="item_tag_image" format="reference"/>
-        <attr name="item_switch" format="boolean"/>
-        <attr name="item_background" format="reference"/>
-        <attr name="item_null_background" format="boolean"/>
-        <attr name="item_show_selected" format="boolean"/>
-        <attr name="item_selected_image" format="reference"/>
-        <attr name="item_right_image" format="reference"/>
-        <attr name="item_value_gravity" format="reference"/>
+        <attr name="item_tag_image" format="reference" />
+        <attr name="item_switch" format="boolean" />
+        <attr name="item_background" format="reference" />
+        <attr name="item_null_background" format="boolean" />
+        <attr name="item_show_selected" format="boolean" />
+        <attr name="item_selected_image" format="reference" />
+        <attr name="item_right_image" format="reference" />
+        <attr name="item_value_gravity" format="reference" />
 
 
     </declare-styleable>
 
     <declare-styleable name="SwitchButton">
-        <attr name="kswThumbDrawable" format="reference"/>
-        <attr name="kswThumbColor" format="color|reference"/>
-        <attr name="kswThumbMargin" format="dimension|reference"/>
-        <attr name="kswThumbMarginTop" format="dimension|reference"/>
-        <attr name="kswThumbMarginBottom" format="dimension|reference"/>
-        <attr name="kswThumbMarginLeft" format="dimension|reference"/>
-        <attr name="kswThumbMarginRight" format="dimension|reference"/>
-        <attr name="kswThumbWidth" format="dimension|reference"/>
-        <attr name="kswThumbHeight" format="dimension|reference"/>
-        <attr name="kswThumbRadius" format="dimension|reference"/>
-        <attr name="kswBackRadius" format="dimension|reference"/>
-        <attr name="kswBackDrawable" format="reference"/>
-        <attr name="kswBackColor" format="color|reference"/>
-        <attr name="kswFadeBack" format="boolean"/>
-        <attr name="kswBackMeasureRatio" format="float"/>
-        <attr name="kswAnimationDuration" format="integer"/>
-        <attr name="kswTintColor" format="color|reference"/>
-        <attr name="kswTextOn" format="string"/>
-        <attr name="kswTextOff" format="string"/>
-        <attr name="kswTextMarginH" format="dimension"/>
+        <attr name="kswThumbDrawable" format="reference" />
+        <attr name="kswThumbColor" format="color|reference" />
+        <attr name="kswThumbMargin" format="dimension|reference" />
+        <attr name="kswThumbMarginTop" format="dimension|reference" />
+        <attr name="kswThumbMarginBottom" format="dimension|reference" />
+        <attr name="kswThumbMarginLeft" format="dimension|reference" />
+        <attr name="kswThumbMarginRight" format="dimension|reference" />
+        <attr name="kswThumbWidth" format="dimension|reference" />
+        <attr name="kswThumbHeight" format="dimension|reference" />
+        <attr name="kswThumbRadius" format="dimension|reference" />
+        <attr name="kswBackRadius" format="dimension|reference" />
+        <attr name="kswBackDrawable" format="reference" />
+        <attr name="kswBackColor" format="color|reference" />
+        <attr name="kswFadeBack" format="boolean" />
+        <attr name="kswBackMeasureRatio" format="float" />
+        <attr name="kswAnimationDuration" format="integer" />
+        <attr name="kswTintColor" format="color|reference" />
+        <attr name="kswTextOn" format="string" />
+        <attr name="kswTextOff" format="string" />
+        <attr name="kswTextMarginH" format="dimension" />
     </declare-styleable>
     <declare-styleable name="UserInfoItemView">
-        <attr name="item_userinfo_portrait" format="reference"/>
-        <attr name="item_userinfo_portrait_height" format="dimension"/>
-        <attr name="item_userinfo_portrait_width" format="dimension"/>
-        <attr name="item_userinfo_name" format="string"/>
-        <attr name="item_right_show" format="boolean"/>
-        <attr name="item_userinfo_divider" format="boolean"/>
-        <attr name="item_userifo_null_background" format="boolean"/>
+        <attr name="item_userinfo_portrait" format="reference" />
+        <attr name="item_userinfo_portrait_height" format="dimension" />
+        <attr name="item_userinfo_portrait_width" format="dimension" />
+        <attr name="item_userinfo_name" format="string" />
+        <attr name="item_right_show" format="boolean" />
+        <attr name="item_userinfo_divider" format="boolean" />
+        <attr name="item_userifo_null_background" format="boolean" />
 
     </declare-styleable>
 
@@ -88,17 +87,93 @@
     </declare-styleable>
 
     <declare-styleable name="SwipeMenuLayout">
-        <attr name="swipeEnable" format="boolean"/>
-        <attr name="ios" format="boolean"/>
-        <attr name="leftSwipe" format="boolean"/>
+        <attr name="swipeEnable" format="boolean" />
+        <attr name="ios" format="boolean" />
+        <attr name="leftSwipe" format="boolean" />
     </declare-styleable>
 
 
     <declare-styleable name="TitleBar">
-        <attr name="title" format="string"/>
-        <attr name="right_title" format="string"/>
-        <attr name="show_right_tv" format="boolean"/>
-        <attr name="show_line" format="boolean"/>
-        <attr name="show_right_iv" format="boolean"/>
+        <attr name="title" format="string" />
+        <attr name="right_title" format="string" />
+        <attr name="show_right_tv" format="boolean" />
+        <attr name="show_line" format="boolean" />
+        <attr name="show_right_iv" format="boolean" />
+    </declare-styleable>
+    <!--datepicker-->
+
+    <attr name="halfVisibleItemCount" format="integer" />
+    <attr name="itemTextSize" format="dimension" />
+    <attr name="itemMaximumWidthText" format="string" />
+    <attr name="itemTextColor" format="color" />
+    <attr name="textGradual" format="boolean" />
+    <attr name="selectedTextColor" format="color" />
+    <attr name="selectedTextSize" format="dimension" />
+    <attr name="currentItemPosition" format="integer" />
+    <attr name="itemWidthSpace" format="dimension" />
+    <attr name="itemHeightSpace" format="dimension" />
+    <attr name="zoomInSelectedItem" format="boolean" />
+    <attr name="wheelCyclic" format="boolean" />
+    <attr name="wheelCurtain" format="boolean" />
+    <attr name="wheelCurtainColor" format="color" />
+    <attr name="wheelCurtainBorder" format="boolean" />
+    <attr name="wheelCurtainBorderColor" format="color" />
+    <attr name="indicatorText" format="string" />
+    <attr name="indicatorTextSize" format="dimension" />
+    <attr name="indicatorTextColor" format="color" />
+
+    <declare-styleable name="WheelPicker">
+        <attr name="halfVisibleItemCount" />
+        <attr name="itemTextSize" />
+        <attr name="itemMaximumWidthText" />
+        <attr name="itemTextColor" />
+        <attr name="textGradual" />
+        <attr name="selectedTextColor" />
+        <attr name="selectedTextSize" />
+        <attr name="currentItemPosition" />
+        <attr name="itemWidthSpace" />
+        <attr name="itemHeightSpace" />
+        <attr name="zoomInSelectedItem" />
+        <attr name="wheelCyclic" />
+        <attr name="wheelCurtain" />
+        <attr name="wheelCurtainColor" />
+        <attr name="wheelCurtainBorder" />
+        <attr name="wheelCurtainBorderColor" />
+        <attr name="indicatorText" />
+        <attr name="indicatorTextSize" />
+        <attr name="indicatorTextColor" />
+    </declare-styleable>
+
+    <declare-styleable name="YearPicker">
+        <attr name="startYear" format="integer" />
+        <attr name="endYear" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="MonthPicker">
+
+    </declare-styleable>
+
+    <declare-styleable name="DatePicker">
+        <attr name="halfVisibleItemCount" />
+        <attr name="itemTextSize" />
+        <attr name="itemTextColor" />
+        <attr name="textGradual" />
+        <attr name="selectedTextColor" />
+        <attr name="selectedTextSize" />
+        <attr name="itemWidthSpace" />
+        <attr name="itemHeightSpace" />
+        <attr name="zoomInSelectedItem" />
+        <attr name="wheelCyclic" />
+        <attr name="wheelCurtain" />
+        <attr name="wheelCurtainColor" />
+        <attr name="wheelCurtainBorder" />
+        <attr name="wheelCurtainBorderColor" />
+    </declare-styleable>
+
+    <!--设置-->
+    <declare-styleable name="VipItemView">
+        <attr name="vip_left_src" format="reference" />
+        <attr name="vip_content" format="string" />
+        <attr name="vip_select" format="boolean" />
     </declare-styleable>
 </resources>

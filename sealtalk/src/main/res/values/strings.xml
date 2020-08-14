@@ -623,4 +623,27 @@
     <string name="old_pwd">旧密码</string>
     <string name="common_clear">清理</string>
     <string name="default_text">---</string>
+
+
+    <string name="dialog_logout_title">退出登录</string>
+    <string name="dialog_logout_content">退出登录历史数据并不会被删除，下次登录并不会受到影响。</string>
+
+    <string name="seal_set_account_dialog_clear_cache_title">确定清理三俩的缓存？</string>
+
+    <string name="select_city">选择城市</string>
+    <string name="nickname">昵称</string>
+    <string name="head_img">头像</string>
+    <string name="gender">性别</string>
+    <string name="city">城市</string>
+    <string name="not_required">以下非必选项</string>
+    <string name="personal_profile">个人简介</string>
+    <string name="school">学校</string>
+    <string name="age">年龄</string>
+    <string name="modify_nickname">修改昵称</string>
+    <string name="setting_your_nickname">设置你的昵称</string>
+    <string name="setting_your_school">填写你的学校</string>
+    <string name="setting_your_email">填写你的邮箱</string>
+    <string name="man">男</string>
+    <string name="women">女</string>
+    <string name="delete">删除</string>
 </resources>

@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <cn.rongcloud.im.niko.ui.widget.TitleBar
+            android:id="@+id/title_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:show_line="false" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_avatar"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48" />
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_4"
+                    android:layout_toRightOf="@+id/iv_avatar"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_name"
+                        style="@style/tv16BlackStyle"
+                        android:text="郭莹莹"
+                        android:textStyle="bold" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/tv16BlackStyle"
+                        android:text="升级VIP有以下两种方式"
+                        android:textSize="@dimen/sp_11" />
+
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_is_vip"
+                    android:layout_width="@dimen/dp_25"
+                    android:layout_height="@dimen/dp_12"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/dp_4"
+                    android:background="@drawable/img_vip_non_member" />
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:background="@drawable/vip_bg"
+                android:orientation="vertical"
+                android:padding="@dimen/dp_10">
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/tv16WhiteStyle"
+                    android:text="VIP特权" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="@dimen/dp_24"
+                        android:layout_height="@dimen/dp_24"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/img_vip_top_1" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_8"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            style="@style/tv16WhiteStyle"
+                            android:text="1.可关注兴趣翻倍" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            style="@style/tv16WhiteStyle"
+                            android:layout_marginTop="@dimen/dp_4"
+                            android:text="可关注的兴趣由4个变成8个"
+                            android:textSize="@dimen/sp_12" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="@dimen/dp_24"
+                        android:layout_height="@dimen/dp_24"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/img_vip_top_2" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_8"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            style="@style/tv16WhiteStyle"
+                            android:text="2.设置自己专属的昵称颜色" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            style="@style/tv16WhiteStyle"
+                            android:layout_marginTop="@dimen/dp_4"
+                            android:text="7种颜色提供给你订制"
+                            android:textSize="@dimen/sp_12" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_use"
+                        android:layout_width="@dimen/dp_74"
+                        android:layout_height="@dimen/dp_27"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/white_13dp_bg"
+                        android:gravity="center"
+                        android:text="去使用"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_14"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="@dimen/dp_3"
+                    android:layout_height="@dimen/dp_3"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:background="@drawable/white_40_dot" />
+
+                <View
+                    android:layout_width="@dimen/dp_3"
+                    android:layout_height="@dimen/dp_3"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:background="@drawable/white_60_dot" />
+
+                <View
+                    android:layout_width="@dimen/dp_3"
+                    android:layout_height="@dimen/dp_3"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:background="@drawable/white_dot" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:text="即将开启更多特权"
+                    android:textColor="@color/white80"
+                    android:textSize="@dimen/sp_14" />
+
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/tv16BlackStyle"
+                android:layout_marginTop="@dimen/dp_20"
+                android:text="升级VIP的方式"
+                android:textColor="#68A2FE" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5"
+                android:text="完成其中一种方式自动延长一个月"
+                android:textColor="@color/grayA"
+                android:textSize="@dimen/sp_11" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/tv16BlackStyle"
+                android:layout_marginLeft="@dimen/dp_3"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="方式一" />
+
+
+            <cn.rongcloud.im.niko.ui.widget.VipItemView
+                android:id="@+id/vip_1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:layout_marginTop="@dimen/dp_5"
+                app:vip_content="1.每个月点赞3次，回复评论3次。"
+                app:vip_left_src="@drawable/img_vip_bottom_1" />
+
+            <cn.rongcloud.im.niko.ui.widget.VipItemView
+                android:id="@+id/vip_2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:layout_marginTop="@dimen/dp_5"
+                app:vip_content="2.每个月发布两条兴趣动态。"
+                app:vip_left_src="@drawable/img_vip_bottom_2" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/tv16BlackStyle"
+                android:layout_marginLeft="@dimen/dp_3"
+                android:layout_marginTop="@dimen/dp_15"
+                android:text="方式二" />
+
+            <cn.rongcloud.im.niko.ui.widget.VipItemView
+                android:id="@+id/vip_3"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:layout_marginTop="@dimen/dp_5"
+                app:vip_content="1.分享APP给两个新用户并登录成功。"
+                app:vip_left_src="@drawable/img_vip_bottom_3" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_code"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="@drawable/vip_bottom_left"
+                    android:gravity="center"
+                    android:text="邀请码："
+                    android:textColor="@color/blackA"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_copy"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/vip_bottom_right"
+                    android:gravity="center"
+                    android:text="复制分享"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</ScrollView>
