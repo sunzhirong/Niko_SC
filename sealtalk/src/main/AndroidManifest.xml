@@ -553,7 +553,8 @@
         <activity
             android:name=".ui.activity.VipActivity"
             android:screenOrientation="portrait" />
-
+        <activity android:name=".ui.activity.MyLikedActivity" />
+        <activity android:name=".ui.niko.SelectMemberActivity" />
 
 
         <!--推送配置项-->

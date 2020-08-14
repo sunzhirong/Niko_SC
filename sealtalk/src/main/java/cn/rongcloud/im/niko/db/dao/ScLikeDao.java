@@ -14,7 +14,7 @@ public interface ScLikeDao {
     void insert(ScLikeDetail scLikeDetail);
 
 //    @Query("SELECT * FROM (SELECT * FROM sc_like_detail WHERE target_message_uuid = :id ORDER BY created_time DESC  LIMIT 100000 ) t  GROUP BY sender_user_id")
-    @Query("SELECT * FROM sc_like_detail WHERE target_message_uuid = :id  GROUP BY sender_user_id ORDER BY created_time DESC LIMIT 100000")
+    @Query("SELECT * FROM sc_like_detail WHERE target_message_uuid = :id  GROUP BY sender_user_id ORDER BY created_time DESC LIMIT 10000000000")
     List<ScLikeDetail> getDetailsById(String id);
 
 

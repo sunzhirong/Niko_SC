@@ -121,7 +121,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-
+    private void initView() {
+    }
     protected void onKeyBoardChange(boolean isPopup) {
     }
 

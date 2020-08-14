@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:id="@+id/rlContainer"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:textColor="@color/blackB"
+            android:text="取消"
+            android:layout_centerVertical="true"
+            android:textSize="14sp"
+            style="@style/tv16BlackStyle"/>
+
+        <TextView
+            android:layout_centerInParent="true"
+            style="@style/tv16BlackStyle"
+            android:textStyle="bold"
+            android:text="选择好友"/>
+
+
+
+        <TextView
+            android:textStyle="bold"
+            android:id="@+id/tv_complete"
+            android:textColor="@color/blackB"
+            android:layout_alignParentEnd="true"
+            android:text="创建"
+            android:layout_centerVertical="true"
+            android:textSize="12sp"
+            style="@style/tv16BlackStyle"/>
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/et_search"
+        android:hint="找不到搜索试试"
+        style="@style/searchEtStyle"/>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:paddingTop="10dp"
+        android:id="@+id/rv_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

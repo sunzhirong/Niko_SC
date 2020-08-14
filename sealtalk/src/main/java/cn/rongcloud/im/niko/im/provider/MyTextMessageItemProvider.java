@@ -200,6 +200,36 @@ public class MyTextMessageItemProvider extends TextMessageItemProvider {
                             iterator.remove();//使用迭代器的删除方法删除
                         }
                     }
+
+                    //处理头像
+                    if (data.getConversationType() == Conversation.ConversationType.GROUP){
+                        holder.rightFramlayout.removeAllViews();
+                        holder.leftFramlayout.removeAllViews();
+                        int count = detailList.size();
+                        int size = 3;
+                        if(count<3){
+                            size = count;
+                        }
+
+                        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, v.getContext().getResources()
+                                .getDisplayMetrics());
+
+                        int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, v.getContext().getResources()
+                                .getDisplayMetrics());
+                        for (int i = 0; i < size; i++) {
+                            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, width);
+                            ImageView imageView = new ImageView(v.getContext());
+//                        imageView.setBackgroundColor(Color.parseColor(colors[i]));
+                            GlideImageLoaderUtil.loadCircleImage(SealApp.getApplication(),imageView,detailList.get(i).getSenderAvatar());
+                            layoutParams.leftMargin = (size - 1 - i) * margin;
+                            if (data.getMessageDirection() == Message.MessageDirection.SEND) {
+                                holder.rightFramlayout.addView(imageView, layoutParams);
+                            } else {
+                                holder.leftFramlayout.addView(imageView, layoutParams);
+                            }
+                        }
+                    }
+
                     if (detailList.size() != 0) {
                         for (ScLikeDetail detail : detailList) {
                             if (IMManager.getInstance().getCurrentId().equals(detail.getSenderUserId())) {
@@ -227,34 +257,9 @@ public class MyTextMessageItemProvider extends TextMessageItemProvider {
                     }
 
 
-                    //处理头像
-                    if (data.getConversationType() != Conversation.ConversationType.GROUP){
-                        return;
-                    }
 
-                    int count = detailList.size();
-                    int size = 3;
-                    if(count<3){
-                        size = count;
-                    }
 
-                    int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, v.getContext().getResources()
-                            .getDisplayMetrics());
 
-                    int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, v.getContext().getResources()
-                            .getDisplayMetrics());
-                    for (int i = 0; i < size; i++) {
-                        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, width);
-                        ImageView imageView = new ImageView(v.getContext());
-//                        imageView.setBackgroundColor(Color.parseColor(colors[i]));
-                        GlideImageLoaderUtil.loadImage(SealApp.getApplication(),imageView,detailList.get(i).getSenderAvatar());
-                        layoutParams.leftMargin = (size - 1 - i) * margin;
-                        if (data.getMessageDirection() == Message.MessageDirection.SEND) {
-                            holder.rightFramlayout.addView(imageView, layoutParams);
-                        } else {
-                            holder.leftFramlayout.addView(imageView, layoutParams);
-                        }
-                    }
                 });
             }
         }).start();

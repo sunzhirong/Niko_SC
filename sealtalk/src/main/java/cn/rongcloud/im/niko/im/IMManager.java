@@ -37,6 +37,7 @@ import cn.rongcloud.im.niko.im.message.SealContactNotificationMessage;
 import cn.rongcloud.im.niko.im.message.SealGroupConNtfMessage;
 import cn.rongcloud.im.niko.im.message.SealGroupNotificationMessage;
 import cn.rongcloud.im.niko.im.plugin.PokeExtensionModule;
+import cn.rongcloud.im.niko.im.plugin.ScLikeExtensionModule;
 import cn.rongcloud.im.niko.im.provider.ContactNotificationMessageProvider;
 import cn.rongcloud.im.niko.im.provider.GroupApplyMessageProvider;
 import cn.rongcloud.im.niko.im.provider.MyTextMessageItemProvider;
@@ -686,6 +687,15 @@ public class IMManager {
     }
 
     /**
+     * 获取当前用户 id
+     *
+     * @return
+     */
+    public UserInfo getCurrentUser() {
+        return RongUserInfoManager.getInstance().getUserInfo(RongIM.getInstance().getCurrentUserId());
+    }
+
+    /**
      * 群发消息
      *
      * @param targetId
@@ -826,6 +836,9 @@ public class IMManager {
                 RongExtensionManager.getInstance().unregisterExtensionModule(defaultModule);
             }
         }
+        //我的赞模块
+        RongExtensionManager.getInstance().registerExtensionModule(new ScLikeExtensionModule());
+
 
         RongExtensionManager.getInstance().registerExtensionModule(new SealExtensionModule(context));
 

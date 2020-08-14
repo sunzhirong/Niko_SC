@@ -891,4 +891,17 @@ public class FriendTask {
         }.asLiveData();
     }
 
+
+
+
+
+
+    public LiveData<Result<List<FriendBean>>> getFriendList(int skip, int take){
+        HashMap<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put("Skip", skip);
+        paramsMap.put("Take", take);
+        paramsMap.put("Data", 0);
+        RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+        return friendService.getAllFriendList(requestBody);
+    }
 }

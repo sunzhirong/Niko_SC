@@ -30,6 +30,7 @@ import cn.rongcloud.im.niko.ui.fragment.MainContactsListFragment;
 import cn.rongcloud.im.niko.ui.fragment.MainConversationListFragment;
 import cn.rongcloud.im.niko.ui.fragment.MainDiscoveryFragment;
 import cn.rongcloud.im.niko.ui.fragment.MainMeFragment;
+import cn.rongcloud.im.niko.ui.niko.SelectMemberActivity;
 import cn.rongcloud.im.niko.ui.niko.SettingActivity;
 import cn.rongcloud.im.niko.ui.view.MainBottomTabGroupView;
 import cn.rongcloud.im.niko.ui.view.MainBottomTabItem;
@@ -389,8 +390,9 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
      */
     @Override
     public void onCreateGroupClick() {
-        Intent intent = new Intent(this, SelectCreateGroupActivity.class);
-        startActivityForResult(intent, REQUEST_START_GROUP);
+//        Intent intent = new Intent(this, SelectCreateGroupActivity.class);
+//        startActivityForResult(intent, REQUEST_START_GROUP);
+        readyGo(SelectMemberActivity.class);
     }
 
     /**

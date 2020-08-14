@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:paddingLeft="12dp"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_select"
+        android:background="@drawable/friend_selector"
+        android:layout_marginRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <io.rong.imkit.widget.AsyncImageView
+        android:layout_gravity="center_vertical"
+        android:id="@+id/rc_left"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        app:RCDefDrawable="@drawable/rc_ic_def_msg_portrait"
+        app:RCShape="circle" />
+
+    <TextView
+        android:layout_marginLeft="10dp"
+        android:id="@+id/tv_name"
+        style="@style/tv14BlackBStyle"/>
+
+
+</LinearLayout>
