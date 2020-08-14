@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import androidx.lifecycle.LiveData;
@@ -14,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cn.rongcloud.im.niko.BuildConfig;
@@ -25,6 +27,8 @@ import cn.rongcloud.im.niko.common.NetConstant;
 import cn.rongcloud.im.niko.common.ResultCallback;
 import cn.rongcloud.im.niko.common.ThreadManager;
 import cn.rongcloud.im.niko.db.DbManager;
+import cn.rongcloud.im.niko.db.dao.ScLikeDao;
+import cn.rongcloud.im.niko.db.model.ScLikeDetail;
 import cn.rongcloud.im.niko.im.message.GroupApplyMessage;
 import cn.rongcloud.im.niko.im.message.GroupClearMessage;
 import cn.rongcloud.im.niko.im.message.PokeMessage;
@@ -37,6 +41,7 @@ import cn.rongcloud.im.niko.im.provider.ContactNotificationMessageProvider;
 import cn.rongcloud.im.niko.im.provider.GroupApplyMessageProvider;
 import cn.rongcloud.im.niko.im.provider.MyTextMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.PokeMessageItemProvider;
+import cn.rongcloud.im.niko.im.provider.ScLikeMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.SealGroupConNtfMessageProvider;
 import cn.rongcloud.im.niko.im.provider.SealGroupNotificationMessageItemProvider;
 import cn.rongcloud.im.niko.model.ChatRoomAction;
@@ -59,6 +64,7 @@ import cn.rongcloud.im.niko.ui.activity.NewFriendListActivity;
 import cn.rongcloud.im.niko.ui.activity.PokeInviteChatActivity;
 import cn.rongcloud.im.niko.ui.activity.SealPicturePagerActivity;
 import cn.rongcloud.im.niko.ui.activity.UserDetailActivity;
+import cn.rongcloud.im.niko.utils.glideutils.GlideImageLoaderUtil;
 import cn.rongcloud.im.niko.utils.log.SLog;
 import io.rong.contactcard.ContactCardExtensionModule;
 import io.rong.contactcard.IContactCardInfoProvider;
@@ -789,7 +795,7 @@ public class IMManager {
 
         //自定义喜欢消息
         RongIM.registerMessageType(ScLikeMessage.class);
-//        RongIM.registerMessageTemplate(new ScLikeMessageItemProvider());
+        RongIM.registerMessageTemplate(new ScLikeMessageItemProvider());
 
         //自定义文字item
         RongIM.registerMessageTemplate(new MyTextMessageItemProvider());
@@ -1098,51 +1104,49 @@ public class IMManager {
                 //自定义喜欢消息
                 else if (messageContent instanceof ScLikeMessage) {
                     ScLikeMessage scLikeMessage = (ScLikeMessage) messageContent;
-                    // 显示戳一下界面
-                    // 判断当前是否在目标的会话界面中
-//                    boolean isInConversation = false;
-//                    ConversationRecord lastConversationRecord = IMManager.getInstance().getLastConversationRecord();
-//                    if (lastConversationRecord != null && targetId.equals(lastConversationRecord.targetId)) {
-//                        isInConversation = true;
-//                    }
-//                    // 当戳一下的目标不在会话界面且在前台时显示戳一下界面
-//                    if (!isInConversation) {
-//                        Intent showPokeIntent = new Intent(context, PokeInviteChatActivity.class);
-//                        showPokeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                        showPokeIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                        showPokeIntent.putExtra(IntentExtra.START_FROM_ID, message.getSenderUserId());
-//                        showPokeIntent.putExtra(IntentExtra.STR_POKE_MESSAGE, scLikeMessage.getContent());
-//                        if (message.getConversationType() == Conversation.ConversationType.GROUP) {
-//                            Group groupInfo = RongUserInfoManager.getInstance().getGroupInfo(targetId);
-//                            if (groupInfo != null) {
-//                                showPokeIntent.putExtra(IntentExtra.STR_GROUP_NAME, groupInfo.getName());
-//                            }
-//                        }
-//                        showPokeIntent.putExtra(IntentExtra.SERIA_CONVERSATION_TYPE, message.getConversationType());
-//                        showPokeIntent.putExtra(IntentExtra.STR_TARGET_ID, targetId);
-//                        /*
-//                         * 判断是否在在前台，如果不在前台则下次进入 app 时进行弹出
-//                         * 再判断是否已进入到了主界面，反正拉取离线消息时再未进入主界面前弹出戳一下界面
-//                         */
-//                        if (SealApp.getApplication().isAppInForeground()
-//                                && SealApp.getApplication().isMainActivityCreated()) {
-//                            context.startActivity(showPokeIntent);
-//                        } else {
-//                            // 若之前有未启动的戳一下消息则默认启动第一个戳一下消息
-//                            Intent lastIntent = SealApp.getApplication().getLastOnAppForegroundStartIntent();
-//                            if (lastIntent == null
-//                                    || (lastIntent.getComponent() != null
-//                                    && !lastIntent.getComponent().getClassName().equals(PokeInviteChatActivity.class.getName()))) {
-//                                SealApp.getApplication().setOnAppForegroundStartIntent(showPokeIntent);
-//                            }
-//                        }
-//                    }
+                    ScLikeDao scLikeDao = DbManager.getInstance(SealApp.getApplication()).getScLikeDao();
+                    ScLikeDetail scLikeDetail = new ScLikeDetail();
+                    scLikeDetail.setCreatedTime(new Date());
+                    scLikeDetail.setDescription(scLikeMessage.getTextDescription());
+                    scLikeDetail.setUserId(scLikeMessage.getUserId());
+                    scLikeDetail.setGroupId(scLikeMessage.getGroupId());
+                    scLikeDetail.setSenderAvatar(scLikeMessage.getSenderAvatar());
+                    scLikeDetail.setTargetMessageUuid(scLikeMessage.getTargetMessageUUID());
+                    scLikeDetail.setMessageUuid(message.getUId());
+                    scLikeDetail.setSenderUserId(scLikeMessage.getSenderUserId());
+                    scLikeDao.insert(scLikeDetail);
+                    Log.e("db initOnReceiveMessage","插入数据 details = "+ JSON.toJSONString(scLikeDetail));
 
+                    int[] msgs = {message.getMessageId()};
+                    RongIM.getInstance().deleteMessages(msgs, new RongIMClient.ResultCallback<Boolean>() {
+                        @Override
+                        public void onSuccess(Boolean aBoolean) {
+                            Log.e("sclike1", "删除" + aBoolean);
+
+                        }
+
+                        @Override
+                        public void onError(RongIMClient.ErrorCode errorCode) {
+                            Log.e("sclike1", "删除 onError "+errorCode.getMessage());
+
+                        }
+                    });
+                    RongIM.getInstance().deleteRemoteMessages(message.getConversationType(), message.getTargetId(), new Message[]{message}, new RongIMClient.OperationCallback() {
+                        @Override
+                        public void onSuccess() {
+                            Log.e("sclike2", "删除 onSuccess");
+                        }
+
+                        @Override
+                        public void onError(RongIMClient.ErrorCode errorCode) {
+                            Log.e("sclike2", "删除 onError" + errorCode.getMessage() );
+                        }
+                    });
                     //存储到数据库
-                    SLog.d("sclike", JSON.toJSONString(scLikeMessage));
                     return true;
-
                 }
+
+
                 return false;
             }
         });

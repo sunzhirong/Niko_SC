@@ -176,4 +176,9 @@
         <attr name="vip_content" format="string" />
         <attr name="vip_select" format="boolean" />
     </declare-styleable>
+
+
+    <declare-styleable name="MyAutoLinkTextView">
+        <attr format="dimension" name="MyRCMaxWidth"/>
+    </declare-styleable>
 </resources>

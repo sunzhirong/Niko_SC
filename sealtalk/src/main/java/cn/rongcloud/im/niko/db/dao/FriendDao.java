@@ -166,4 +166,10 @@ public interface FriendDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertFriendDescription(FriendDescription friendDescription);
+
+
+
+
+
+
 }

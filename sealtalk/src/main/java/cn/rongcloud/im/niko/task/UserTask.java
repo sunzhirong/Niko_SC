@@ -917,8 +917,9 @@ public class UserTask {
     }
 
 
-    private static String phone = "13622315970";
+//    private static String phone = "13622315970";
 //    private static String phone = "13305938755";
+    public static String phone = "13622315963";
     public LiveData<Result> getSms() {
         HashMap<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("PhoneNumber", phone);
