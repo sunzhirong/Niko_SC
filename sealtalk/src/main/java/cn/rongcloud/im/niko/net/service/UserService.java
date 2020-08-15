@@ -15,6 +15,7 @@ import cn.rongcloud.im.niko.model.RegisterResult;
 import cn.rongcloud.im.niko.model.Result;
 import cn.rongcloud.im.niko.model.UploadTokenResult;
 import cn.rongcloud.im.niko.model.VerifyResult;
+import cn.rongcloud.im.niko.model.niko.MyLikeBean;
 import cn.rongcloud.im.niko.model.niko.ProfileHeadInfo;
 import cn.rongcloud.im.niko.model.niko.ProfileInfo;
 import cn.rongcloud.im.niko.net.ScUrl;
@@ -132,5 +133,14 @@ public interface UserService {
     @POST(ScUrl.BLOCKS_REMOVE)
     @Headers(NetConstant.JSON)
     LiveData<Result<Boolean>> removeFromBlackList(@Body RequestBody body);
+
+    /**
+     * 获取我的点赞列表
+     * @param body
+     * @return
+     */
+    @POST(ScUrl.LIKE_LIST)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<List<MyLikeBean>>> getMyLiekList(@Body RequestBody body);
 
 }

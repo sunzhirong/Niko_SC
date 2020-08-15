@@ -48,6 +48,14 @@ public class ScLikePlugin implements IPluginModule {
         ToastUtils.showToast("点击了点赞，跳转我的点赞");
 
         Intent intent = new Intent(fragment.getContext(), MyLikedActivity.class);
+        intent.putExtra("targetId",targetId);
+        if(conversationType == Conversation.ConversationType.PRIVATE){
+            intent.putExtra("isPrivate",true);
+        }else {
+            intent.putExtra("isPrivate",false);
+        }
+
+
         if(fragment.getActivity()!=null) {
             fragment.getActivity().startActivity(intent);
         }

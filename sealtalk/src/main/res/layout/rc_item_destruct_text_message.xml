@@ -20,7 +20,6 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-<!--        <io.rong.imkit.widget.AutoLinkTextView-->
         <cn.rongcloud.im.niko.ui.widget.MyAutoLinkTextView
             android:id="@+id/text"
             android:textSize="15sp"
@@ -64,7 +63,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="23"
                 android:textSize="11sp" />
             <FrameLayout
                 android:id="@+id/fl_left"
@@ -97,7 +95,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="23"
                 android:textSize="11sp" />
 
         </LinearLayout>

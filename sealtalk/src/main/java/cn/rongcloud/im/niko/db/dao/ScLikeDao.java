@@ -7,6 +7,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import cn.rongcloud.im.niko.db.model.ScLikeDetail;
+import cn.rongcloud.im.niko.db.model.ScMyLike;
 
 @Dao
 public interface ScLikeDao {
@@ -23,4 +24,15 @@ public interface ScLikeDao {
 
     @Query("SELECT * FROM sc_like_detail")
     List<ScLikeDetail> getAllDetails();
+
+
+    @Query("SELECT * FROM sc_my_like WHERE message_uuid = :id LIMIT 1")
+    ScMyLike getMyLike(String id);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertMyLike(ScMyLike scLikeDetail);
+
+    @Query("DELETE FROM sc_my_like WHERE message_uuid=:message_uuid")
+    void deleteMyLike(String message_uuid);
+
 }

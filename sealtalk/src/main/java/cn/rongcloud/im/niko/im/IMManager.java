@@ -40,6 +40,7 @@ import cn.rongcloud.im.niko.im.plugin.PokeExtensionModule;
 import cn.rongcloud.im.niko.im.plugin.ScLikeExtensionModule;
 import cn.rongcloud.im.niko.im.provider.ContactNotificationMessageProvider;
 import cn.rongcloud.im.niko.im.provider.GroupApplyMessageProvider;
+import cn.rongcloud.im.niko.im.provider.MyRichContentMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.MyTextMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.PokeMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.ScLikeMessageItemProvider;
@@ -101,6 +102,7 @@ import io.rong.imlib.model.UserInfo;
 import io.rong.message.ContactNotificationMessage;
 import io.rong.message.GroupNotificationMessage;
 import io.rong.message.ImageMessage;
+import io.rong.message.RichContentMessage;
 import io.rong.message.TextMessage;
 import io.rong.recognizer.RecognizeExtensionModule;
 
@@ -809,6 +811,8 @@ public class IMManager {
 
         //自定义文字item
         RongIM.registerMessageTemplate(new MyTextMessageItemProvider());
+        //自定义图文item
+        RongIM.registerMessageTemplate(new MyRichContentMessageItemProvider());
 
     }
 
@@ -1155,7 +1159,11 @@ public class IMManager {
                             Log.e("sclike2", "删除 onError" + errorCode.getMessage() );
                         }
                     });
-                    //存储到数据库
+                    return true;
+                }
+
+                //自定义喜欢消息
+                else if (messageContent instanceof RichContentMessage){
                     return true;
                 }
 

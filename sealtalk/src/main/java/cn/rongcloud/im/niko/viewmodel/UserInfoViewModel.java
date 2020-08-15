@@ -3,6 +3,8 @@ package cn.rongcloud.im.niko.viewmodel;
 import android.app.Application;
 import android.net.Uri;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -13,6 +15,7 @@ import cn.rongcloud.im.niko.db.model.UserInfo;
 import cn.rongcloud.im.niko.im.IMManager;
 import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Result;
+import cn.rongcloud.im.niko.model.niko.MyLikeBean;
 import cn.rongcloud.im.niko.task.UserTask;
 import cn.rongcloud.im.niko.utils.SingleSourceLiveData;
 import cn.rongcloud.im.niko.utils.log.SLog;
@@ -27,6 +30,9 @@ public class UserInfoViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<Result>> changePasswordResult = new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Result>> setStAccountResult = new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Result>> setGenderResult = new SingleSourceLiveData<>();
+
+    private SingleSourceLiveData<Result<List<MyLikeBean>>> myLiekListResult =  new SingleSourceLiveData<>();
+
 
     public UserInfoViewModel(@NonNull Application application) {
         super(application);
@@ -181,4 +187,12 @@ public class UserInfoViewModel extends AndroidViewModel {
         }
     }
 
+
+    public void myLiekList(int skip,int take){
+        myLiekListResult.setSource(userTask.myLiekList(skip,take));
+    }
+
+    public SingleSourceLiveData<Result<List<MyLikeBean>>> getMyLiekListResult() {
+        return myLiekListResult;
+    }
 }

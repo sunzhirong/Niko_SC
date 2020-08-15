@@ -19,11 +19,12 @@ import cn.rongcloud.im.niko.db.model.GroupMemberInfoEntity;
 import cn.rongcloud.im.niko.db.model.GroupNoticeInfo;
 import cn.rongcloud.im.niko.db.model.PhoneContactInfoEntity;
 import cn.rongcloud.im.niko.db.model.ScLikeDetail;
+import cn.rongcloud.im.niko.db.model.ScMyLike;
 import cn.rongcloud.im.niko.db.model.UserInfo;
 
 @Database(entities = {UserInfo.class, FriendInfo.class, GroupEntity.class, GroupMemberInfoEntity.class,
         BlackListEntity.class, GroupNoticeInfo.class, GroupExitedMemberInfo.class, FriendDescription.class,
-        GroupMemberInfoDes.class,PhoneContactInfoEntity.class, ScLikeDetail.class}, version = 4, exportSchema = false)
+        GroupMemberInfoDes.class,PhoneContactInfoEntity.class, ScLikeDetail.class, ScMyLike.class}, version = 4, exportSchema = false)
 @TypeConverters(cn.rongcloud.im.niko.db.TypeConverters.class)
 public abstract class SealTalkDatabase extends RoomDatabase {
     public abstract UserDao getUserDao();
