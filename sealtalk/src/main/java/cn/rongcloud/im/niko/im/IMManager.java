@@ -1122,6 +1122,7 @@ public class IMManager {
                 else if (messageContent instanceof ScLikeMessage) {
                     ScLikeMessage scLikeMessage = (ScLikeMessage) messageContent;
                     ScLikeDao scLikeDao = DbManager.getInstance(SealApp.getApplication()).getScLikeDao();
+                    if(scLikeDao==null){return true;}
                     ScLikeDetail scLikeDetail = new ScLikeDetail();
                     scLikeDetail.setCreatedTime(new Date());
                     scLikeDetail.setDescription(scLikeMessage.getTextDescription());

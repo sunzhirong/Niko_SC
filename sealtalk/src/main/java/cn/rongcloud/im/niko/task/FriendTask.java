@@ -41,6 +41,7 @@ import cn.rongcloud.im.niko.model.niko.FriendBean;
 import cn.rongcloud.im.niko.net.HttpClientManager;
 import cn.rongcloud.im.niko.net.RetrofitUtil;
 import cn.rongcloud.im.niko.net.service.FriendService;
+import cn.rongcloud.im.niko.sp.ProfileUtils;
 import cn.rongcloud.im.niko.utils.CharacterParser;
 import cn.rongcloud.im.niko.utils.NetworkBoundResource;
 import cn.rongcloud.im.niko.utils.NetworkOnlyResource;
@@ -87,6 +88,7 @@ public class FriendTask {
                     detailInfo.setNickname(friendBean.getName());
                     detailInfo.setPortraitUri(GlideImageLoaderUtil.getScString(friendBean.getUserIcon()));
                     friendShipInfo.setUser(detailInfo);
+                    friendShipInfo.setNameColor(friendBean.getNameColor());
                     list.add(friendShipInfo);
                 }
                 //将freindbean转成

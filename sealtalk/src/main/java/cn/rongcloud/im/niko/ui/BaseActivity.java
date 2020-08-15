@@ -117,12 +117,12 @@ public abstract class BaseActivity extends AppCompatActivity {
             setContentView(getLayoutId());
             //绑定控件
             mBind = ButterKnife.bind(this);
-            mContext = this;
         }
+        mContext = this;
+
     }
 
-    private void initView() {
-    }
+
     protected void onKeyBoardChange(boolean isPopup) {
     }
 

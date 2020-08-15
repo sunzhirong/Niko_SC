@@ -4,42 +4,42 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.viewpager.widget.ViewPager;
+import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.common.IntentExtra;
 import cn.rongcloud.im.niko.db.model.FriendShipInfo;
-import cn.rongcloud.im.niko.model.Resource;
-import cn.rongcloud.im.niko.model.Status;
-import cn.rongcloud.im.niko.model.VersionInfo;
+import cn.rongcloud.im.niko.event.ShowMoreEvent;
 import cn.rongcloud.im.niko.ui.BaseActivity;
 import cn.rongcloud.im.niko.ui.dialog.MorePopWindow;
+import cn.rongcloud.im.niko.ui.fragment.ChatFragment;
 import cn.rongcloud.im.niko.ui.fragment.MainContactsListFragment;
 import cn.rongcloud.im.niko.ui.fragment.MainConversationListFragment;
-import cn.rongcloud.im.niko.ui.fragment.MainDiscoveryFragment;
 import cn.rongcloud.im.niko.ui.fragment.MainMeFragment;
 import cn.rongcloud.im.niko.ui.niko.SelectMemberActivity;
-import cn.rongcloud.im.niko.ui.niko.SettingActivity;
 import cn.rongcloud.im.niko.ui.view.MainBottomTabGroupView;
 import cn.rongcloud.im.niko.ui.view.MainBottomTabItem;
+import cn.rongcloud.im.niko.ui.widget.ChatTipsPop;
 import cn.rongcloud.im.niko.ui.widget.DragPointView;
 import cn.rongcloud.im.niko.ui.widget.TabGroupView;
 import cn.rongcloud.im.niko.ui.widget.TabItem;
-import cn.rongcloud.im.niko.viewmodel.AppViewModel;
-import cn.rongcloud.im.niko.viewmodel.MainViewModel;
 import cn.rongcloud.im.niko.utils.log.SLog;
+import cn.rongcloud.im.niko.viewmodel.MainViewModel;
+import io.rong.eventbus.EventBus;
 import io.rong.imkit.RongIM;
 
 public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWindowItemClickListener {
@@ -47,12 +47,11 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
     private static final int REQUEST_START_CHAT = 0;
     private static final int REQUEST_START_GROUP = 1;
     private static final String TAG = "MainActivity";
-
-    private ViewPager vpFragmentContainer;
+    private FrameLayout mFlOrderLayout;
+    private Fragment mSelectFragment;
+    private boolean showPop;
+    private ChatTipsPop mPop;
     private MainBottomTabGroupView tabGroupView;
-    private ImageView ivSearch;
-    private ImageView ivMore;
-    private AppViewModel appViewModel;
     public MainViewModel mainViewModel;
 
     /**
@@ -112,6 +111,7 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
     private List<Fragment> fragments = new ArrayList<>();
 
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,7 +146,12 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
     /**
      * 初始化布局
      */
-    private void initView() {
+    protected void initView() {
+        EventBus.getDefault().register(this);
+        mFlOrderLayout = findViewById(R.id.fl_order_layout);
+        if (mFlOrderLayout.getForeground() != null) {
+            mFlOrderLayout.getForeground().setAlpha(0);
+        }
         int tabIndex = getIntent().getIntExtra(PARAMS_TAB_INDEX, Tab.CHAT.getValue());
 
         // title
@@ -168,15 +173,17 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
 
         // 底部按钮
         tabGroupView = findViewById(R.id.tg_bottom_tabs);
-        vpFragmentContainer = findViewById(R.id.vp_main_container);
 
         // 初始化底部 tabs
         initTabs();
         // 初始化 fragment 的 viewpager
-        initFragmentViewPager();
+        initFragments();
 
         // 设置当前的选项为聊天界面
         tabGroupView.setSelected(tabIndex);
+
+        initViewModel();
+        clearBadgeStatu();
     }
 
     /**
@@ -199,17 +206,18 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
             @Override
             public void onSelected(View view, TabItem item) {
                 // 当点击 tab 的后， 也要切换到正确的 fragment 页面
-                int currentItem = vpFragmentContainer.getCurrentItem();
-                if (currentItem != item.id) {
-                    // 切换布局
-                    vpFragmentContainer.setCurrentItem(item.id);
-                    // 如果是我的页面， 则隐藏红点
-                    if (item.id == Tab.ME.getValue()) {
-                        ((MainBottomTabItem) tabGroupView.getView(Tab.ME.getValue())).setRedVisibility(View.GONE);
-                        Intent intent = new Intent(MainActivity.this, SettingActivity.class);
-                        startActivity(intent);
-                    }
-                }
+//                int currentItem = vpFragmentContainer.getCurrentItem();
+//                if (currentItem != item.id) {
+//                    // 切换布局
+//                    vpFragmentContainer.setCurrentItem(item.id);
+//                    // 如果是我的页面， 则隐藏红点
+//                    if (item.id == Tab.ME.getValue()) {
+//                        ((MainBottomTabItem) tabGroupView.getView(Tab.ME.getValue())).setRedVisibility(View.GONE);
+//                        Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+//                        startActivity(intent);
+//                    }
+//                }
+                changeFragment(fragments.get(item.id));
             }
         });
 
@@ -241,45 +249,35 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
     /**
      * 初始化 initFragmentViewPager
      */
-    private void initFragmentViewPager() {
+    private void initFragments() {
         fragments.add(new MainConversationListFragment());
         fragments.add(new MainContactsListFragment());
-        fragments.add(new MainDiscoveryFragment());
+        fragments.add(new ChatFragment());
         fragments.add(new MainMeFragment());
 
-        // ViewPager 的 Adpater
-        FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-            @Override
-            public Fragment getItem(int position) {
-                return fragments.get(position);
-            }
+        for (Fragment fragment : fragments) {
+            addFragment(fragment);
+        }
+        mSelectFragment = fragments.get(0);
+        changeFragment(fragments.get(0));
 
-            @Override
-            public int getCount() {
-                return fragments.size();
-            }
-        };
+    }
 
-        vpFragmentContainer.setAdapter(fragmentPagerAdapter);
-        vpFragmentContainer.setOffscreenPageLimit(fragments.size());
-        // 设置页面切换监听
-        vpFragmentContainer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    private void addFragment(Fragment fragment) {
+        FragmentManager supportFragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.fl_container, fragment);
+        fragmentTransaction.hide(fragment);
+        fragmentTransaction.commit();
+    }
 
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                // 当页面切换完成之后， 同时也要把 tab 设置到正确的位置
-                tabGroupView.setSelected(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+    private void changeFragment(Fragment lastFragment) {
+        FragmentManager supportFragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
+        fragmentTransaction.hide(mSelectFragment);
+        fragmentTransaction.show(lastFragment);
+        fragmentTransaction.commit();
+        mSelectFragment = lastFragment;
     }
 
 
@@ -288,17 +286,6 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
      */
     private void initViewModel() {
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        appViewModel = ViewModelProviders.of(this).get(AppViewModel.class);
-        appViewModel.getHasNewVersion().observe(this, new Observer<Resource<VersionInfo.AndroidVersion>>() {
-            @Override
-            public void onChanged(Resource<VersionInfo.AndroidVersion> resource) {
-                if (resource.status == Status.SUCCESS && resource.data != null) {
-                    if (tabGroupView.getSelectedItemId() != Tab.ME.getValue()) {
-                        ((MainBottomTabItem) tabGroupView.getView(Tab.ME.getValue())).setRedVisibility(View.VISIBLE);
-                    }
-                }
-            }
-        });
 
         // 未读消息
         mainViewModel.getUnReadNum().observe(this, new Observer<Integer>() {
@@ -413,4 +400,44 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
         startActivity(intent);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+    public void onEventMainThread(ShowMoreEvent event) {
+        if(event.show) {
+            mFlOrderLayout.getForeground().setAlpha(153);
+        }else {
+            mFlOrderLayout.getForeground().setAlpha(0);
+        }
+    }
+
+    private void showTipsPop() {
+        mPop = new ChatTipsPop(this);
+        View tabsView = tabGroupView.getView(Tab.FIND.getValue()).findViewById(R.id.iv_tab_img);
+        mPop.showUp(tabsView);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(!showPop){
+            showTipsPop();
+            showPop = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(isDestroyed()){return;}
+                    if(mPop!=null&&mPop.isShowing()){
+                        mPop.dismiss();
+                        if(tabGroupView!=null) {
+                            ((MainBottomTabItem) tabGroupView.getView(Tab.FIND.getValue())).setNum("11");
+                            ((MainBottomTabItem) tabGroupView.getView(Tab.FIND.getValue())).setNumVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            }, 3000);
+        }
+    }
 }

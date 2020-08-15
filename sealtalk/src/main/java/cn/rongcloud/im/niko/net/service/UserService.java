@@ -15,6 +15,9 @@ import cn.rongcloud.im.niko.model.RegisterResult;
 import cn.rongcloud.im.niko.model.Result;
 import cn.rongcloud.im.niko.model.UploadTokenResult;
 import cn.rongcloud.im.niko.model.VerifyResult;
+import cn.rongcloud.im.niko.model.niko.CommentBean;
+import cn.rongcloud.im.niko.model.niko.FollowRequestInfo;
+import cn.rongcloud.im.niko.model.niko.FriendBean;
 import cn.rongcloud.im.niko.model.niko.MyLikeBean;
 import cn.rongcloud.im.niko.model.niko.ProfileHeadInfo;
 import cn.rongcloud.im.niko.model.niko.ProfileInfo;
@@ -142,5 +145,30 @@ public interface UserService {
     @POST(ScUrl.LIKE_LIST)
     @Headers(NetConstant.JSON)
     LiveData<Result<List<MyLikeBean>>> getMyLiekList(@Body RequestBody body);
+
+    @POST(ScUrl.COMMENTS_LIST)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<List<CommentBean>>> getCommentList(@Body RequestBody body);
+
+    @POST(ScUrl.CMT_ADD)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<Integer>> cmtAdd(@Body RequestBody body);
+
+    @POST(ScUrl.FOLLOWERS_LIST)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<List<FriendBean>>> getFollowerList(@Body RequestBody body);
+
+    @POST(ScUrl.FOLLOWERS_REQUEST_LIST)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<List<FollowRequestInfo>>> getFollowerRequestList(@Body RequestBody body);
+
+
+    @POST(ScUrl.FOLLOWINGS_ADD)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<Boolean>> addFollowings(@Body RequestBody body);
+
+    @POST(ScUrl.FOLLOWINGS_REMOVE)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<Boolean>> removeFollowings(@Body RequestBody body);
 
 }

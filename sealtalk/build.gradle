@@ -58,6 +58,11 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
     // 基础依赖包，必须要依赖 状态栏
     implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
+    //指示器
+    implementation 'com.lzp:FlycoTabLayoutZ:1.1.2'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
+    implementation 'com.hyman:flowlayout-lib:1.1.2'
+    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
 
 
     implementation 'com.huawei.hms:push:4.0.2.300'

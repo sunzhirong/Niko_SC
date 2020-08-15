@@ -38,7 +38,7 @@ public abstract class BaseItemView extends RelativeLayout {
 
 
 
-    private void initView() {
+    protected void initView() {
     }
 
     public abstract int getLayoutResId();
