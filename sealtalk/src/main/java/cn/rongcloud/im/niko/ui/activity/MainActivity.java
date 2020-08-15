@@ -31,6 +31,7 @@ import cn.rongcloud.im.niko.ui.fragment.MainContactsListFragment;
 import cn.rongcloud.im.niko.ui.fragment.MainConversationListFragment;
 import cn.rongcloud.im.niko.ui.fragment.MainMeFragment;
 import cn.rongcloud.im.niko.ui.niko.SelectMemberActivity;
+import cn.rongcloud.im.niko.ui.niko.SettingActivity;
 import cn.rongcloud.im.niko.ui.view.MainBottomTabGroupView;
 import cn.rongcloud.im.niko.ui.view.MainBottomTabItem;
 import cn.rongcloud.im.niko.ui.widget.ChatTipsPop;
@@ -99,17 +100,16 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
      * tabs 的图片资源
      */
     private int[] tabImageRes = new int[]{
-            R.drawable.seal_tab_chat_selector,
-            R.drawable.seal_tab_contact_list_selector,
-            R.drawable.seal_tab_find_selector,
-            R.drawable.seal_tab_me_selector
+            R.drawable.seal_ic_my,
+            R.drawable.seal_ic_two,
+            R.drawable.seal_ic_chat,
+            R.drawable.seal_ic_me
     };
 
     /**
      * 各个 Fragment 界面
      */
     private List<Fragment> fragments = new ArrayList<>();
-
 
 
     @Override
@@ -218,6 +218,10 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
 //                    }
 //                }
                 changeFragment(fragments.get(item.id));
+                if (item.id == Tab.ME.getValue()) {
+                    Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -291,7 +295,7 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
         mainViewModel.getUnReadNum().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer count) {
-                MainBottomTabItem chatTab = (MainBottomTabItem) tabGroupView.getView(Tab.CHAT.getValue());
+                MainBottomTabItem chatTab = (MainBottomTabItem) tabGroupView.getView(Tab.FIND.getValue());
                 if (count == 0) {
                     chatTab.setNumVisibility(View.GONE);
                 } else if (count > 0 && count < 100) {
@@ -405,10 +409,11 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
     public void onEventMainThread(ShowMoreEvent event) {
-        if(event.show) {
+        if (event.show) {
             mFlOrderLayout.getForeground().setAlpha(153);
-        }else {
+        } else {
             mFlOrderLayout.getForeground().setAlpha(0);
         }
     }
@@ -422,17 +427,19 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if(!showPop){
+        if (!showPop) {
             showTipsPop();
             showPop = true;
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if(isDestroyed()){return;}
-                    if(mPop!=null&&mPop.isShowing()){
+                    if (isDestroyed()) {
+                        return;
+                    }
+                    if (mPop != null && mPop.isShowing()) {
                         mPop.dismiss();
-                        if(tabGroupView!=null) {
-                            ((MainBottomTabItem) tabGroupView.getView(Tab.FIND.getValue())).setNum("11");
+                        if (tabGroupView != null) {
+//                            ((MainBottomTabItem) tabGroupView.getView(Tab.FIND.getValue())).setNum("11");
                             ((MainBottomTabItem) tabGroupView.getView(Tab.FIND.getValue())).setNumVisibility(View.VISIBLE);
                         }
                     }

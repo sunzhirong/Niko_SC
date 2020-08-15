@@ -39,8 +39,8 @@
             android:paddingTop="@dimen/common_dialog_text_margin_top"
             android:paddingRight="@dimen/common_dialog_text_margin_right"
             android:paddingBottom="@dimen/common_dialog_text_margin_bottom"
-            android:textColor="@color/common_dialog_base_text"
-            android:textSize="@dimen/common_dialog_text_size"
+            android:textColor="#65666C"
+            android:textSize="12sp"
             tools:text="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" />
 
     </RelativeLayout>

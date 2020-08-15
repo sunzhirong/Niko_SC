@@ -72,13 +72,7 @@
     <string name="common_network_unavailable">当前网络不可用</string>
     <string name="common_network_check">请检查网络设置</string>
 
-    <!--Main-->
-    <string-array name="tab_names">
-        <item>会话</item>
-        <item>通讯录</item>
-        <item>发现</item>
-        <item>我</item>
-    </string-array>
+
 
     <string name="common_network_error_and_retry_after">网络问题请稍后重试</string>
 
@@ -646,4 +640,11 @@
     <string name="man">男</string>
     <string name="women">女</string>
     <string name="delete">删除</string>
+
+    <string-array name="tab_names">
+        <item>我的</item>
+        <item>三俩</item>
+        <item>联系</item>
+        <item>个人</item>
+    </string-array>
 </resources>

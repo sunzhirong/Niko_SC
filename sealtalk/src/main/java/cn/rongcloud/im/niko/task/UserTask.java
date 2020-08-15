@@ -170,6 +170,7 @@ public class UserTask {
                 userInfo.setAliasSpelling(SearchUtils.fullSearchableString(rsData.getHead().getAlias()));
                 userInfo.setName(rsData.getHead().getName());
                 userInfo.setPortraitUri(GlideImageLoaderUtil.getScString(rsData.getHead().getUserIcon()));
+                userInfo.setNameColor(rsData.getHead().getNameColor());
                 SLog.e(LogTag.DB, "NetworkBoundResource saveCallResult Impl:" + JSON.toJSONString(userInfo));
 
                 UserDao userDao = dbManager.getUserDao();
