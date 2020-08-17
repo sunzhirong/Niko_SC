@@ -110,7 +110,7 @@ public class ConversationActivity extends TitleBaseActivity {
             finish();
             return;
         }
-
+        getTitleBar().getTvRight().setVisibility(View.GONE);
         targetId = intent.getData().getQueryParameter("targetId");
         conversationType = Conversation.ConversationType.valueOf(intent.getData()
                 .getLastPathSegment().toUpperCase(Locale.US));
