@@ -2,28 +2,55 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <include layout="@layout/main_layout_title" />
+    <include layout="@layout/main_layout_title"
+        android:visibility="gone"/>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/vp_main_container"
+    <FrameLayout
+        android:id="@+id/fl_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/common_divider"
-        />
-    <cn.rongcloud.im.niko.ui.view.MainBottomTabGroupView
-        android:id="@+id/tg_bottom_tabs"
+    <FrameLayout
+        android:id="@+id/fl_order_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/color_main_tab"
-        ></cn.rongcloud.im.niko.ui.view.MainBottomTabGroupView>
+        android:foreground="@drawable/dim"
+        tools:foreground="">
+
+        <cn.rongcloud.im.niko.ui.view.MainBottomTabGroupView
+            android:id="@+id/tg_bottom_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/common_divider" />
+    </FrameLayout>
+<!--    <androidx.viewpager.widget.ViewPager-->
+<!--        android:id="@+id/vp_main_container"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1" />-->
+
+
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:background="@color/common_divider"-->
+<!--        />-->
+<!--    <cn.rongcloud.im.niko.ui.view.MainBottomTabGroupView-->
+<!--        android:id="@+id/tg_bottom_tabs"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="bottom"-->
+<!--        android:background="@color/color_main_tab"-->
+<!--        ></cn.rongcloud.im.niko.ui.view.MainBottomTabGroupView>-->
 
 </LinearLayout>

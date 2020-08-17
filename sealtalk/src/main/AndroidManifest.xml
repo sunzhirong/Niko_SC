@@ -269,9 +269,6 @@
             android:name=".ui.activity.CreateGroupActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.EditAliasActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.activity.PrivacyActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -553,7 +550,14 @@
         <activity
             android:name=".ui.activity.VipActivity"
             android:screenOrientation="portrait" />
-
+        <activity android:name=".ui.activity.MyLikedActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.niko.SelectMemberActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.ContactsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.FriendsRequestListActivity"
+            android:screenOrientation="portrait"/>
 
 
         <!--推送配置项-->

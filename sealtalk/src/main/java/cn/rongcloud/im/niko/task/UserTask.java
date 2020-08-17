@@ -45,12 +45,17 @@ import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.model.UserCacheInfo;
 import cn.rongcloud.im.niko.model.UserSimpleInfo;
 import cn.rongcloud.im.niko.model.VerifyResult;
+import cn.rongcloud.im.niko.model.niko.CommentBean;
+import cn.rongcloud.im.niko.model.niko.FollowRequestInfo;
+import cn.rongcloud.im.niko.model.niko.FriendBean;
+import cn.rongcloud.im.niko.model.niko.MyLikeBean;
 import cn.rongcloud.im.niko.model.niko.ProfileHeadInfo;
 import cn.rongcloud.im.niko.model.niko.ProfileInfo;
 import cn.rongcloud.im.niko.model.niko.TokenBean;
 import cn.rongcloud.im.niko.net.HttpClientManager;
 import cn.rongcloud.im.niko.net.RetrofitUtil;
 import cn.rongcloud.im.niko.net.ScInterceptor;
+import cn.rongcloud.im.niko.net.request.CommentAtReq;
 import cn.rongcloud.im.niko.net.service.TokenService;
 import cn.rongcloud.im.niko.net.service.UserService;
 import cn.rongcloud.im.niko.net.token.TokenHttpClientManager;
@@ -165,6 +170,7 @@ public class UserTask {
                 userInfo.setAliasSpelling(SearchUtils.fullSearchableString(rsData.getHead().getAlias()));
                 userInfo.setName(rsData.getHead().getName());
                 userInfo.setPortraitUri(GlideImageLoaderUtil.getScString(rsData.getHead().getUserIcon()));
+                userInfo.setNameColor(rsData.getHead().getNameColor());
                 SLog.e(LogTag.DB, "NetworkBoundResource saveCallResult Impl:" + JSON.toJSONString(userInfo));
 
                 UserDao userDao = dbManager.getUserDao();
@@ -917,8 +923,9 @@ public class UserTask {
     }
 
 
-    private static String phone = "13622315970";
+//    private static String phone = "13622315970";
 //    private static String phone = "13305938755";
+    public static String phone = "13622315963";
     public LiveData<Result> getSms() {
         HashMap<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("PhoneNumber", phone);
@@ -958,5 +965,63 @@ public class UserTask {
                 return userService.getIMToken();
             }
         }.asLiveData();
+    }
+
+
+    public LiveData<Result<List<MyLikeBean>>> myLiekList(int skip, int take){
+        HashMap<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put("Skip", skip);
+        paramsMap.put("Take", take);
+        paramsMap.put("Data", 0);
+        RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+        return userService.getMyLiekList(requestBody);
+    }
+
+    public LiveData<Result<List<CommentBean>>> getCommentList(int skip, int take){
+        HashMap<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put("Skip", skip);
+        paramsMap.put("Take", take);
+        paramsMap.put("Data", 0);
+        RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+        return userService.getCommentList(requestBody);
+    }
+
+    public LiveData<Result<Integer>> cmtAdd(CommentAtReq data){
+        HashMap<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put("Data", data);
+        RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+        return userService.cmtAdd(requestBody);
+    }
+
+    public LiveData<Result<List<FriendBean>>> getFollowerList(int skip, int take){
+        HashMap<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put("Skip", skip);
+        paramsMap.put("Take", take);
+        paramsMap.put("Data", 0);
+        RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+        return userService.getFollowerList(requestBody);
+    }
+
+    public LiveData<Result<List<FollowRequestInfo>>> getFollowerRequestList(int skip, int take){
+        HashMap<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put("Skip", skip);
+        paramsMap.put("Take", take);
+        paramsMap.put("Data", 0);
+        RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+        return userService.getFollowerRequestList(requestBody);
+    }
+
+    public LiveData<Result<Boolean>> addFollowings(int uid){
+        HashMap<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put("Data", uid);
+        RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+        return userService.addFollowings(requestBody);
+    }
+
+    public LiveData<Result<Boolean>> removeFollowings(int uid){
+        HashMap<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put("Data", uid);
+        RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+        return userService.removeFollowings(requestBody);
     }
 }

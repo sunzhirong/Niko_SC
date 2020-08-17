@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:background="@color/white"
+    android:id="@+id/ll_container"
+    android:layout_marginBottom="15dp"
+    android:orientation="horizontal">
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/iv_left"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                 />
+
+            <TextView
+                android:layout_marginLeft="7dp"
+                android:text="Paul Rodriguez"
+                android:id="@+id/tv_name"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grayA"/>
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:text="5-28"
+                android:id="@+id/tv_date"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grayA"/>
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_marginTop="5dp"
+            android:text="好久没试过遇见眼前一亮想去追的人 想当年15岁 遇到一个人 我就想一好久没试过遇见眼前一亮想去追的人 想当年15岁 遇到一个人 我就想一"
+            android:ellipsize="end"
+            android:maxLines="2"
+            style="@style/tv14BlackBStyle"/>
+        
+
+
+        
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_marginTop="9dp"
+            android:drawablePadding="7dp"
+            android:text="旅行拍摄"
+            android:drawableLeft="@drawable/img_my_liked_iv"
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grayA"/>
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_marginLeft="12dp"
+        android:layout_width="97dp"
+        android:layout_height="97dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="0dp">
+        <ImageView
+            android:scaleType="fitXY"
+            android:id="@+id/iv_right"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/iv_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="6dp"
+            android:src="@drawable/my_liked_selector_bg" />
+
+    </androidx.cardview.widget.CardView>
+
+
+</LinearLayout>

@@ -3,6 +3,8 @@ package cn.rongcloud.im.niko.viewmodel;
 import android.app.Application;
 import android.net.Uri;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -13,6 +15,11 @@ import cn.rongcloud.im.niko.db.model.UserInfo;
 import cn.rongcloud.im.niko.im.IMManager;
 import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Result;
+import cn.rongcloud.im.niko.model.niko.CommentBean;
+import cn.rongcloud.im.niko.model.niko.FollowRequestInfo;
+import cn.rongcloud.im.niko.model.niko.FriendBean;
+import cn.rongcloud.im.niko.model.niko.MyLikeBean;
+import cn.rongcloud.im.niko.net.request.CommentAtReq;
 import cn.rongcloud.im.niko.task.UserTask;
 import cn.rongcloud.im.niko.utils.SingleSourceLiveData;
 import cn.rongcloud.im.niko.utils.log.SLog;
@@ -27,6 +34,17 @@ public class UserInfoViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<Result>> changePasswordResult = new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Result>> setStAccountResult = new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Result>> setGenderResult = new SingleSourceLiveData<>();
+
+    //niko
+    private SingleSourceLiveData<Result<List<MyLikeBean>>> myLiekListResult =  new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Result<List<CommentBean>>> commentResult =  new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Result<Integer>> cmtAddResult =  new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Result<List<FriendBean>>> followerListResult =  new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Result<List<FollowRequestInfo>>> getFollowerRequestListResult =  new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Result<Boolean>> removeFollowingsResult =  new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Result<Boolean>> addFollowingsResult =  new SingleSourceLiveData<>();
+
+
 
     public UserInfoViewModel(@NonNull Application application) {
         super(application);
@@ -181,4 +199,60 @@ public class UserInfoViewModel extends AndroidViewModel {
         }
     }
 
+
+    public void myLiekList(int skip,int take){
+        myLiekListResult.setSource(userTask.myLiekList(skip,take));
+    }
+
+    public SingleSourceLiveData<Result<List<MyLikeBean>>> getMyLiekListResult() {
+        return myLiekListResult;
+    }
+
+    public void getCommentList(int skip,int take){
+        commentResult.setSource(userTask.getCommentList(skip,take));
+    }
+
+    public SingleSourceLiveData<Result<List<CommentBean>>> getCommentListResult() {
+        return commentResult;
+    }
+
+    public void cmtAdd(CommentAtReq data){
+        cmtAddResult.setSource(userTask.cmtAdd(data));
+    }
+
+    public SingleSourceLiveData<Result<Integer>> getCmtAddResult() {
+        return cmtAddResult;
+    }
+
+    public void getFollowerList(int skip,int take){
+        followerListResult.setSource(userTask.getFollowerList(skip,take));
+    }
+
+    public SingleSourceLiveData<Result<List<FriendBean>>> getFollowerListResult() {
+        return followerListResult;
+    }
+
+    public void getFollowerRequestList(int skip,int take){
+        getFollowerRequestListResult.setSource(userTask.getFollowerRequestList(skip,take));
+    }
+
+    public SingleSourceLiveData<Result<List<FollowRequestInfo>>> getFollowerRequestListResult() {
+        return getFollowerRequestListResult;
+    }
+
+    public void removeFollowings(int uid){
+        removeFollowingsResult.setSource(userTask.removeFollowings(uid));
+    }
+
+    public SingleSourceLiveData<Result<Boolean>> getRemoveFollowingsResult() {
+        return removeFollowingsResult;
+    }
+
+    public void addFollowings(int uid){
+        addFollowingsResult.setSource(userTask.addFollowings(uid));
+    }
+
+    public SingleSourceLiveData<Result<Boolean>> getAddFollowingsResult() {
+        return addFollowingsResult;
+    }
 }

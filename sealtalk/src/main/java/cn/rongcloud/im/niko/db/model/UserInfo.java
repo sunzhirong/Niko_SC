@@ -40,6 +40,16 @@ public class UserInfo {
     private String stAccount;
     @ColumnInfo(name = "gender")
     private String gender;
+    @ColumnInfo(name = "name_color")
+    private String nameColor;
+
+    public String getNameColor() {
+        return nameColor;
+    }
+
+    public void setNameColor(String nameColor) {
+        this.nameColor = nameColor;
+    }
 
     public String getGender() {
         return gender;

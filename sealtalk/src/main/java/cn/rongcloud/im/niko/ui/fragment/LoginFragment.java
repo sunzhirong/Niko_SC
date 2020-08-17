@@ -29,6 +29,7 @@ import cn.rongcloud.im.niko.model.niko.ProfileInfo;
 import cn.rongcloud.im.niko.model.niko.TokenBean;
 import cn.rongcloud.im.niko.sp.ProfileUtils;
 import cn.rongcloud.im.niko.sp.SPUtils;
+import cn.rongcloud.im.niko.task.UserTask;
 import cn.rongcloud.im.niko.ui.activity.MainActivity;
 import cn.rongcloud.im.niko.ui.activity.SelectCountryActivity;
 import cn.rongcloud.im.niko.ui.widget.ClearWriteEditText;
@@ -53,6 +54,7 @@ public class LoginFragment extends BaseFragment {
     @Override
     protected void onInitView(Bundle savedInstanceState, Intent intent) {
         phoneNumberEdit = findView(R.id.cet_login_phone);
+        phoneNumberEdit.setText(UserTask.phone);
         passwordEdit = findView(R.id.cet_login_password);
         countryNameTv = findView(R.id.tv_country_name);
         countryCodeTv = findView(R.id.tv_country_code);
@@ -214,10 +216,11 @@ public class LoginFragment extends BaseFragment {
         switch (id) {
             case R.id.btn_login:
 //                login("", "", "");
+                UserTask.phone = phoneNumberEdit.getText().toString().trim();
                 loginViewModel.getToken();
                 break;
             case R.id.ll_country_select:
-                loginViewModel.getToken();
+//                loginViewModel.getToken();
                 break;
             default:
                 break;

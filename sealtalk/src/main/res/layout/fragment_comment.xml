@@ -1,0 +1,74 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/et_search"
+        style="@style/searchEtStyle" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+
+            android:layout_below="@+id/et_search"
+            android:id="@+id/refreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.scwang.smartrefresh.layout.header.ClassicsHeader
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:paddingLeft="@dimen/dp_12"
+                android:paddingRight="@dimen/dp_12"
+                android:id="@+id/rv_comment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </FrameLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/ll_input"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:layout_gravity="center_vertical"
+            android:imeOptions="actionSend"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:paddingBottom="7dp"
+            android:id="@+id/et_input"
+            android:textColor="@android:color/black"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:hint="输入新消息"
+            android:textColorHint="#8F929A"
+            android:background="@drawable/rc_edit_text_bg"
+            android:paddingTop="7dp"
+            android:maxLines="4"
+            android:textSize="16sp"/>
+
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</LinearLayout>

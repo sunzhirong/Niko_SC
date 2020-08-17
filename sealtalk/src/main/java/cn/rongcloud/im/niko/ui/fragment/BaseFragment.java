@@ -1,17 +1,21 @@
 package cn.rongcloud.im.niko.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import cn.rongcloud.im.niko.ui.dialog.LoadingDialog;
 import cn.rongcloud.im.niko.utils.ToastUtils;
 
@@ -19,6 +23,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     private LoadingDialog dialog;
     private Handler handler = new Handler();
+    private Unbinder unBinder;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,7 +39,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         }
 
         View view = inflater.inflate(layoutResId, container, false);
-        onCreateView();
+        unBinder = ButterKnife.bind(this, view);
+        onCreateView(view);
         return view;
     }
 
@@ -222,11 +228,42 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         super.onDestroy();
         //移除所有
         handler.removeCallbacksAndMessages(null);
+        if(unBinder!=null){
+            unBinder.unbind();
+        }
     }
 
 
-    public void onCreateView() {
+    public void onCreateView(View view) {
 
+    }
+
+    public void readyGo(Class<?> clazz, Bundle bundle) {
+        if (clazz != null) {
+            Intent intent = new Intent(getContext(), clazz);
+            if (null != bundle) {
+                intent.putExtras(bundle);
+            }
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * startActivity
+     */
+    public void readyGo(Class<?> clazz) {
+        readyGo(clazz, null);
+    }
+
+    /**
+     * 隐藏键盘
+     */
+    protected   void hideKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) v.getContext( ).getSystemService( Context.INPUT_METHOD_SERVICE );
+        if ( imm.isActive( ) ) {
+            imm.hideSoftInputFromWindow( v.getApplicationWindowToken( ) , 0 );
+
+        }
     }
 
 }

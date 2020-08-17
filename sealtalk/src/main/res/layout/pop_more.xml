@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/seal_ic_popup_bg"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:layout_marginTop="10dp"
+        android:background="@null"
+        android:id="@+id/btn_create"
+        android:src="@drawable/img_create_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

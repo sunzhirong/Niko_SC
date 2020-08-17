@@ -18,7 +18,8 @@ import io.rong.imlib.model.MessageContent;
 /**
  * 点赞消息
  */
-@MessageTag(value = "ST:LikeMsg", flag = MessageTag.ISPERSISTED | MessageTag.ISCOUNTED)
+//@MessageTag(value = "ST:LikeMsg", flag = MessageTag.NONE | MessageTag.ISCOUNTED)
+@MessageTag(value = "ST:LikeMsg")
 public class ScLikeMessage extends MessageContent {
 
 //    CREATE TABLE t_message_like_detail (
@@ -45,6 +46,16 @@ public class ScLikeMessage extends MessageContent {
 //            "senderAvatar": "_aa_UserIcon.jpg",
 //            "textDescription": "1"
 //    }
+
+
+
+
+
+
+
+
+
+
 
     private String content;
     private String extra;

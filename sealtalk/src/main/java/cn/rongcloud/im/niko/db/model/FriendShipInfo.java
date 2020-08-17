@@ -30,6 +30,17 @@ public class FriendShipInfo implements Parcelable {
     @ColumnInfo(name= "nickname_spelling")
     private String groupDisplayNameSpelling;
 
+    @ColumnInfo(name= "nickname_color")
+    private String nameColor;
+
+    public String getNameColor() {
+        return nameColor;
+    }
+
+    public void setNameColor(String nameColor) {
+        this.nameColor = nameColor;
+    }
+
     public String getDisplayName() {
         return displayName;
     }

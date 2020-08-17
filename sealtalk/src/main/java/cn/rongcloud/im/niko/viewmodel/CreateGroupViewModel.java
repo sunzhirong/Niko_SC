@@ -13,22 +13,35 @@ import java.util.List;
 import cn.rongcloud.im.niko.common.ErrorCode;
 import cn.rongcloud.im.niko.model.GroupResult;
 import cn.rongcloud.im.niko.model.Resource;
+import cn.rongcloud.im.niko.model.Result;
 import cn.rongcloud.im.niko.model.Status;
+import cn.rongcloud.im.niko.model.niko.FriendBean;
 import cn.rongcloud.im.niko.net.request.GroupDataReq;
+import cn.rongcloud.im.niko.task.FriendTask;
 import cn.rongcloud.im.niko.task.GroupTask;
+import cn.rongcloud.im.niko.utils.SingleSourceLiveData;
 
 /**
  * 创建群组视图模型
  */
 public class CreateGroupViewModel extends AndroidViewModel {
     private MediatorLiveData<Resource<Integer>> createGroupResult = new MediatorLiveData<>();
+    private SingleSourceLiveData<Result<List<FriendBean>>> friendListResult =  new SingleSourceLiveData<>();
 
     private GroupTask groupTask;
+    private FriendTask friendTask;
 
     public CreateGroupViewModel(@NonNull Application application) {
         super(application);
-
+        friendTask = new FriendTask(application);
         groupTask = new GroupTask(application);
+    }
+    public void getFriendList(int skip,int take){
+        friendListResult.setSource(friendTask.getFriendList(skip,take));
+    }
+
+    public SingleSourceLiveData<Result<List<FriendBean>>> getFriendListResult() {
+        return friendListResult;
     }
 
     public void createGroup(GroupDataReq data) {

@@ -89,7 +89,7 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
 //        ThreadManager.getInstance().runOnWorkThread(new Runnable() {
 //            @Override
 //            public void run() {
-//                List<ScLikeDetail> allDetails = DbManager.getInstance(mContext).getScLikeDao().getDetailsByIdOneUser("BJSD-UQ9E-4RM5-EV3V","2219");
+//                List<ScLikeDetail> allDetails = DbManager.getInstance(mContext).getScLikeDao().getDetailsById("BJT0-LLUQ-1KK5-EV38");
 //                Log.e("db","getDetailsById1 details = "+ JSON.toJSONString(allDetails));
 //            }
 //        });

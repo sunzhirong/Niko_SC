@@ -26,20 +26,21 @@ public class MainConversationListFragment extends ConversationListFragment {
     private ConversationListAdapterEx conversationListAdapterEx;
     private GroupNoticeInfoViewModel groupNoticeInfoViewModel;
     private MainActivity mainActivity;
+    private int position = 0;
 
-    Conversation.ConversationType[] mConversationsTypes = new Conversation.ConversationType[]{Conversation.ConversationType.PRIVATE,
-            Conversation.ConversationType.GROUP,
-            Conversation.ConversationType.PUBLIC_SERVICE,
-            Conversation.ConversationType.APP_PUBLIC_SERVICE,
-            Conversation.ConversationType.SYSTEM,
-            Conversation.ConversationType.DISCUSSION
-    };
+
+    public static MainConversationListFragment getInstance(int position) {
+        MainConversationListFragment sf = new MainConversationListFragment();
+        sf.position = position;
+        return sf;
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setUri();
         initViewModel();
+        view.setTag(position);
     }
 
     @Override

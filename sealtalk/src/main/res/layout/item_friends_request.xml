@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp"
+    android:paddingRight="12dp"
+    android:paddingLeft="12dp">
+
+
+    <ImageView
+        android:id="@+id/iv_left"
+        android:layout_width="48dp"
+        android:layout_height="48dp" />
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:textSize="15sp"
+                android:id="@+id/name"
+                style="@style/tv16BlackStyle"/>
+            <TextView
+                android:textSize="15sp"
+                android:text="关注了你"
+                android:textColor="@color/grayA"
+                style="@style/tv16BlackStyle"/>
+
+        </LinearLayout>
+
+
+        <TextView
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:id="@+id/msg"
+            style="@style/tv13GrayBStyle"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_follow"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:drawableLeft="@drawable/img_follow"
+        android:text="关注"
+        android:drawablePadding="4dp"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        android:background="@drawable/friends_follow_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
