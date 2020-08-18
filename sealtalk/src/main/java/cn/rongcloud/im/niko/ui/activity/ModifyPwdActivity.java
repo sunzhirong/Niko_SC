@@ -9,11 +9,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import cn.rongcloud.im.niko.R;
+import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.ui.BaseActivity;
 import cn.rongcloud.im.niko.ui.widget.TitleBar;
 import cn.rongcloud.im.niko.viewmodel.LoginViewModel;
+import cn.rongcloud.im.niko.viewmodel.UserInfoViewModel;
 
 public class ModifyPwdActivity extends BaseActivity {
     @BindView(R.id.title_bar)
@@ -30,7 +33,8 @@ public class ModifyPwdActivity extends BaseActivity {
     TextView mTvTips;
     private TextView mTvSubmit;
     private boolean oldPass, newPass, confirmPass;
-    private LoginViewModel mLoginViewModel;
+    private UserInfoViewModel mUserInfoViewModel;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,7 +53,7 @@ public class ModifyPwdActivity extends BaseActivity {
         mTvSubmit = mTitleBar.getTitleBarTvRight();
         mTvSubmit.setOnClickListener(v -> {
             if (mEtConfirmPwd.getText().toString().trim().equals(mEtPwd.getText().toString().trim())) {
-//                mLoginViewModel.changePw(mEtOldPwd.getText().toString().trim(),mEtConfirmPwd.getText().toString().trim());
+                mUserInfoViewModel.changePw(mEtOldPwd.getText().toString().trim(),mEtConfirmPwd.getText().toString().trim());
             } else {
                 mTvTips.setVisibility(View.VISIBLE);
             }
@@ -59,27 +63,27 @@ public class ModifyPwdActivity extends BaseActivity {
     }
 
     private void initViewModel() {
-//        mLoginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
-//        mLoginViewModel.getChangePwResult().observe(this,resource -> {
-//            if (resource.status == Status.SUCCESS) {
-//                dismissLoadingDialog(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        finish();
-//                    }
-//                });
-//
-//            } else if (resource.status == Status.LOADING) {
-//                    showLoadingDialog("");
-//            } else {
-//                    dismissLoadingDialog(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            showToast(resource.message);
-//                        }
-//                    });
-//            }
-//        });
+        mUserInfoViewModel = ViewModelProviders.of(this).get(UserInfoViewModel.class);
+        mUserInfoViewModel.getChangePwResult().observe(this,resource -> {
+            if (resource.status == Status.SUCCESS) {
+                dismissLoadingDialog(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                });
+
+            } else if (resource.status == Status.LOADING) {
+                    showLoadingDialog("");
+            } else {
+                    dismissLoadingDialog(new Runnable() {
+                        @Override
+                        public void run() {
+                            showToast(resource.message);
+                        }
+                    });
+            }
+        });
     }
 
     private void initEt() {

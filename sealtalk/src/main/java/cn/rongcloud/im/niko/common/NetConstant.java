@@ -19,4 +19,6 @@ public class NetConstant {
 
     public final static int SKIP = 0;
     public final static int TAKE = 1000;
+
+    public final static String PWD_REGEX = "";
 }

@@ -60,6 +60,8 @@ import cn.rongcloud.im.niko.net.upload.UploadHttpClientManager;
 import cn.rongcloud.im.niko.sp.CountryCache;
 import cn.rongcloud.im.niko.sp.ProfileUtils;
 import cn.rongcloud.im.niko.sp.UserCache;
+import cn.rongcloud.im.niko.ui.adapter.models.VIPCheckBean;
+import cn.rongcloud.im.niko.ui.adapter.models.VIPConfigBean;
 import cn.rongcloud.im.niko.utils.CharacterParser;
 import cn.rongcloud.im.niko.utils.FileUtils;
 import cn.rongcloud.im.niko.utils.NetworkBoundResource;
@@ -255,102 +257,6 @@ public class UserTask {
             }
 
         }.asLiveData();
-//        return new NetworkBoundResource<UserInfo, Result<UserInfo>>() {
-//            @Override
-//            protected void saveCallResult(@NonNull Result<UserInfo> item) {
-//                UserInfo userInfo = item.getRsData();
-//                SLog.e(LogTag.DB, "NetworkBoundResource saveCallResult Impl:" + JSON.toJSONString(userInfo));
-//
-//                UserDao userDao = dbManager.getUserDao();
-//                if (userDao != null) {
-//                    String nameSpelling = SearchUtils.fullSearchableString(userInfo.getName());
-//
-//                    userInfo.setNameSpelling(nameSpelling);
-//                    String portraitUri = userInfo.getPortraitUri();
-//
-//                    // 当没有头像时生成默认头像
-//                    if (TextUtils.isEmpty(portraitUri)) {
-//                        portraitUri = RongGenerate.generateDefaultAvatar(context, userInfo.getId(), userInfo.getName());
-//                        userInfo.setPortraitUri(portraitUri);
-//                    }
-//
-//                    String stAccount = userInfo.getStAccount();
-//                    if (!TextUtils.isEmpty(stAccount)) {
-//                        userDao.updateSAccount(userInfo.getId(), stAccount);
-//                    }
-//                    String gender = userInfo.getGender();
-//                    if (!TextUtils.isEmpty(gender)) {
-//                        userDao.updateGender(userInfo.getId(), gender);
-//                    }
-//                    // 更新现有用户信息若没有则创建新的用户信息，防止覆盖其他已有字段
-//                    int resultCount = userDao.updateNameAndPortrait(userInfo.getId(), userInfo.getName(), nameSpelling, portraitUri);
-//                    if (resultCount == 0) {
-//                        // 当前用户的话， 判断是否有电话号码， 没有则从缓存中取出
-//                        if (userInfo.getId().equals(imManager.getCurrentId())) {
-//                            UserCacheInfo cacheInfo = userCache.getUserCache();
-//                            if (cacheInfo != null && cacheInfo.getId().equals(userInfo.getId())) {
-//                                userInfo.setPhoneNumber(cacheInfo.getPhoneNumber());
-//                            }
-//                        }
-//
-//                        userDao.insertUser(userInfo);
-//                    }
-//                }
-//
-//                // 更新 IMKit 显示缓存
-//                String alias = "";
-//                if (userDao != null) {
-//                    alias = userDao.getUserByIdSync(userInfo.getId()).getAlias();
-//                }
-//                //有备注名的时，使用备注名
-//                String name = TextUtils.isEmpty(alias) ? userInfo.getName() : alias;
-//                IMManager.getInstance().updateUserInfoCache(userInfo.getId(), name, Uri.parse(userInfo.getPortraitUri()));
-//            }
-//
-//            @NonNull
-//            @Override
-//            protected LiveData<UserInfo> loadFromDb() {
-//
-//                UserDao userDao = dbManager.getUserDao();
-//                if (userDao != null) {
-//                    return userDao.getUserById(userId);
-//                } else {
-//                    return new MediatorLiveData<>();
-//                }
-//            }
-//
-//
-//            @NonNull
-//            @Override
-//            protected LiveData<Result<UserInfo>> createCall() {
-//
-//                return new NetworkOnlyLiveData<Result<UserInfo>, Result<ProfileInfo>>() {
-//                    @NonNull
-//                    @Override
-//                    protected LiveData<Result<ProfileInfo>> createCall() {
-//                        HashMap<String, Object> paramsMap = new HashMap<>();
-//                        paramsMap.put("Data", userId);
-//                        RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
-//                        return userService.getUserInfo(requestBody);
-//                    }
-//                    @Override
-//                    protected Result<UserInfo> transformRequestType(Result<ProfileInfo> info){
-//                        ProfileInfo rsData = info.getRsData();
-//                        UserInfo userInfo = new UserInfo();
-//                        Result<UserInfo> userInfoResult = new Result<UserInfo>();
-//                        if(userInfoResult.RsData==null){return  null;}
-//                        userInfoResult.RsCode = info.RsCode;
-//                        userInfo.setId(String.valueOf(rsData.getHead().getUID()));
-//                        userInfo.setAlias(rsData.getHead().getAlias());
-//                        userInfo.setAliasSpelling(SearchUtils.fullSearchableString(rsData.getHead().getAlias()));
-//                        userInfo.setName(rsData.getHead().getName());
-//                        userInfo.setPortraitUri(GlideImageLoaderUtil.getScString(rsData.getHead().getUserIcon()));
-//                        userInfoResult.setRsData(userInfo);
-//                        return userInfoResult;
-//                    }
-//                }.asLiveData();
-//            }
-//        }.asLiveData();
     }
 
     /**
@@ -938,10 +844,7 @@ public class UserTask {
     }
 
 
-//    private static String phone = "13622315970";
-//    private static String phone = "13305938755";
-    public static String phone = "13622315963";
-    public LiveData<Result> getSms() {
+    public LiveData<Result> getSms(String phone) {
         HashMap<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("PhoneNumber", phone);
         paramsMap.put("PhoneCountry", "86");
@@ -949,7 +852,7 @@ public class UserTask {
         return userService.getSms(body);
     }
 
-    public LiveData<Result> smsVerify() {
+    public LiveData<Result> smsVerify(String phone) {
         HashMap<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("PhoneNumber", phone);
         paramsMap.put("PhoneCountry", "86");
@@ -958,7 +861,7 @@ public class UserTask {
         return userService.verifyCodeNiko(body);
     }
 
-    public LiveData<TokenBean> getUserToken() {
+    public LiveData<TokenBean> getUserToken(String phone) {
         HashMap<String, String> paramsMap = new HashMap<>();
         paramsMap.put("grant_type", "password");
         paramsMap.put("scope", "jjApiScope");
@@ -1081,6 +984,9 @@ public class UserTask {
                         case "Gender":
                             userDao.updateGender(userId, (boolean)value);
                             break;
+                        case "NameColor":
+                            userDao.updateNameColor(userId, (String)value);
+                            break;
                     }
 
                 }
@@ -1121,6 +1027,52 @@ public class UserTask {
                     userDao.updateAvatar(userId, item);
                 }
 
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Result<VIPCheckBean>> checkVip(){
+        return userService.vipCheck();
+    }
+
+    public LiveData<Result<List<VIPConfigBean>>> vipInfo(){
+        return userService.vipInfo();
+    }
+
+    public LiveData<Result<Boolean>> hasSetPassword(){
+        return userService.hasSetPassword();
+    }
+
+    public LiveData<Resource<Boolean>> changePw(String oldPw,String newPw){
+
+        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
+
+            @NonNull
+            @Override
+            protected LiveData<Result<Boolean>> createCall() {
+                HashMap<String, Object> paramsMap = new HashMap<>();
+                paramsMap.put("OldPassword", oldPw);
+                paramsMap.put("NewPassword", newPw);
+                RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+                return tokenService.changePwByOldPw(requestBody);
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<Boolean>> setPw(String newPw){
+
+        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
+
+            @NonNull
+            @Override
+            protected LiveData<Result<Boolean>> createCall() {
+                HashMap<String, Object> paramsMap = new HashMap<>();
+                paramsMap.put("PhoneNumber", userCache.getUserCache().getPhoneNumber());
+                paramsMap.put("PhoneCountry", "86");
+                paramsMap.put("VCode", "9999");
+                paramsMap.put("Password", newPw);
+                RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+                return tokenService.changePwByCode(requestBody);
             }
         }.asLiveData();
     }

@@ -54,7 +54,7 @@ public class LoginFragment extends BaseFragment {
     @Override
     protected void onInitView(Bundle savedInstanceState, Intent intent) {
         phoneNumberEdit = findView(R.id.cet_login_phone);
-        phoneNumberEdit.setText(UserTask.phone);
+//        phoneNumberEdit.setText(UserTask.phone);
         passwordEdit = findView(R.id.cet_login_password);
         countryNameTv = findView(R.id.tv_country_name);
         countryCodeTv = findView(R.id.tv_country_code);
@@ -136,7 +136,7 @@ public class LoginFragment extends BaseFragment {
                     showToast("成功");
                     //获取msg需要赋值
                     NetConstant.Authorization = "Bearer "+tokenBean.getAccess_token();
-                    loginViewModel.getSms();
+                    loginViewModel.getSms(phoneNumberEdit.getText().toString().trim());
 
 //                    loginViewModel.getUserToken();
 
@@ -152,7 +152,7 @@ public class LoginFragment extends BaseFragment {
             public void onChanged(Result result) {
                 if (result!=null&&result.RsCode == 3) {
                     showToast("成功");
-                    loginViewModel.verifySms();
+                    loginViewModel.verifySms(phoneNumberEdit.getText().toString().trim());
                 } else {
                     showToast("失败");
                 }
@@ -164,7 +164,7 @@ public class LoginFragment extends BaseFragment {
             public void onChanged(Result result) {
                 if (result.RsCode == 3) {
                     showToast("成功");
-                    loginViewModel.getUserToken();
+                    loginViewModel.getUserToken(phoneNumberEdit.getText().toString().trim());
                 } else {
                     showToast("失败");
                 }
@@ -182,7 +182,7 @@ public class LoginFragment extends BaseFragment {
                     ProfileUtils.sProfileInfo = new ProfileInfo();
                     ProfileUtils.sProfileInfo.setId(tokenBean.getUID());
 
-                    loginViewModel.login("","","");
+                    loginViewModel.login("",phoneNumberEdit.getText().toString().trim(),"");
                 } else {
                     showToast("失败");
 
@@ -216,7 +216,7 @@ public class LoginFragment extends BaseFragment {
         switch (id) {
             case R.id.btn_login:
 //                login("", "", "");
-                UserTask.phone = phoneNumberEdit.getText().toString().trim();
+//                UserTask.phone = phoneNumberEdit.getText().toString().trim();
                 loginViewModel.getToken();
                 break;
             case R.id.ll_country_select:

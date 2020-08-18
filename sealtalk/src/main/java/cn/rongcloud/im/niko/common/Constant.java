@@ -16,10 +16,7 @@ public class Constant {
      */
     public final static int GROUP_NAME_EMOJI_MIN_LENGTH = 4;
 
-    /**
-     * 群组公告最大字数限制
-     */
-    public final static int GROUP_NOTICE_MAX_LENGTH = 100;
+
 
     /**
      * 戳一下消息最长文字限制

@@ -90,20 +90,20 @@ public class LoginViewModel extends AndroidViewModel {
         return getSmsResult;
     }
 
-    public void getSms() {
-        getSmsResult.setSource(userTask.getSms());
+    public void getSms(String phone) {
+        getSmsResult.setSource(userTask.getSms(phone));
     }
 
-    public void verifySms() {
-        verifyResult.setSource(userTask.smsVerify());
+    public void verifySms(String phone) {
+        verifyResult.setSource(userTask.smsVerify(phone));
     }
 
     public SingleSourceLiveData<Result> getVerifyResult() {
         return verifyResult;
     }
 
-    public void getUserToken() {
-        getUserTokenResult.setSource(userTask.getUserToken());
+    public void getUserToken(String phone) {
+        getUserTokenResult.setSource(userTask.getUserToken(phone));
     }
 
     public SingleSourceLiveData<TokenBean> getGetUserTokenResult() {

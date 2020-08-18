@@ -70,7 +70,8 @@ public interface UserDao {
     @Query("UPDATE user SET dob=:dob WHERE id=:id")
     int updateDOB(String id, String dob);
 
-
+    @Query("UPDATE user SET name_color=:nameColor WHERE id=:id")
+    int updateNameColor(String id, String nameColor);
 
 
 }

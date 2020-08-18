@@ -12,15 +12,22 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.rongcloud.im.niko.R;
+import cn.rongcloud.im.niko.db.model.UserInfo;
+import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.niko.ProfileInfo;
 import cn.rongcloud.im.niko.sp.ProfileUtils;
 import cn.rongcloud.im.niko.ui.BaseActivity;
+import cn.rongcloud.im.niko.ui.adapter.models.VIPCheckBean;
 import cn.rongcloud.im.niko.ui.widget.VipItemView;
+import cn.rongcloud.im.niko.utils.BirthdayToAgeUtil;
 import cn.rongcloud.im.niko.utils.ToastUtils;
 import cn.rongcloud.im.niko.utils.glideutils.GlideImageLoaderUtil;
+import cn.rongcloud.im.niko.viewmodel.UserInfoViewModel;
 
 public class VipActivity extends BaseActivity {
 
@@ -42,8 +49,8 @@ public class VipActivity extends BaseActivity {
     TextView mTvCode;
     @BindView(R.id.tv_copy)
     TextView mTvCopy;
-    //        private VipViewModel mVipViewModel;
     private String mInviteCode;
+    private UserInfoViewModel mUserInfoViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,42 +64,46 @@ public class VipActivity extends BaseActivity {
     }
 
     private void initView() {
-        ProfileInfo profileInfo = ProfileUtils.sProfileInfo;
-        if (profileInfo != null && profileInfo.getHead() != null) {
-            mTvName.setTextColor(Color.parseColor("#" + profileInfo.getHead().getNameColor()));
-            mTvName.setText(profileInfo.getHead().getName());
-            GlideImageLoaderUtil.loadCircleImage(mContext, mIvAvatar, profileInfo.getHead().getUserIcon());
-        }
-
-//        GlideImageLoaderUtil.loadCircleImage(mContext,mIvAvatar, "_uu_2020-08-03_2196-9cdf5684-a13f-4014-b33e-54b0959d2b1d.jpeg");
-//        initViewModel();
+        initViewModel();
     }
 
-//    private void initViewModel() {
-//        mVipViewModel = ViewModelProviders.of(this).get(VipViewModel.class);
-//
-//        mVipViewModel.getVipCheckResult().observe(this,result->{
-//            if (result.RsCode == 3) {
-//                VIPCheckBean rsData = result.RsData;
-//                mInviteCode = rsData.getInviteCode();
-//                mTvCode.setText("邀请码："+rsData.getInviteCode());
-//
-//                if(!rsData.isStep1Way1()||!rsData.isStep1Way2()||!rsData.isStep2()){
-//                    //不是vip
-//                    mIvIsVip.setBackgroundDrawable(getResources().getDrawable(R.drawable.img_vip_non_member));
-//                    mTvUse.setVisibility(View.GONE);
-//                }else {
-//                    mIvIsVip.setBackgroundDrawable(getResources().getDrawable(R.drawable.img_vip_member));
-//                    mTvUse.setVisibility(View.VISIBLE);
-//                    mVip1.setSelected(rsData.isStep1Way1());
-//                    mVip2.setSelected(rsData.isStep1Way2());
-//                    mVip3.setSelected(rsData.isStep2());
-//                }
-//            }
-//        });
-//
-//        mVipViewModel.vipCheck();
-//    }
+    private void initViewModel() {
+        mUserInfoViewModel = ViewModelProviders.of(this).get(UserInfoViewModel.class);
+        mUserInfoViewModel.getUserInfo().observe(this, new Observer<Resource<UserInfo>>() {
+            @Override
+            public void onChanged(Resource<UserInfo> resource) {
+                if (resource.data != null) {
+                    UserInfo info = resource.data;
+                    mTvName.setTextColor(ProfileUtils.getNameColor(info.getNameColor()));
+                    mTvName.setText(info.getName());
+                    GlideImageLoaderUtil.loadCircleImage(mContext, mIvAvatar, info.getPortraitUri());
+                }
+
+            }
+        });
+
+        mUserInfoViewModel.getVipCheckResult().observe(this,result->{
+            if (result.RsCode == 3) {
+                VIPCheckBean rsData = result.RsData;
+                mInviteCode = rsData.getInviteCode();
+                mTvCode.setText("邀请码："+rsData.getInviteCode());
+
+                if(!rsData.isStep1Way1()||!rsData.isStep1Way2()||!rsData.isStep2()){
+                    //不是vip
+                    mIvIsVip.setBackgroundDrawable(getResources().getDrawable(R.drawable.img_vip_non_member));
+                    mTvUse.setVisibility(View.GONE);
+                }else {
+                    mIvIsVip.setBackgroundDrawable(getResources().getDrawable(R.drawable.img_vip_member));
+                    mTvUse.setVisibility(View.VISIBLE);
+                    mVip1.setSelected(rsData.isStep1Way1());
+                    mVip2.setSelected(rsData.isStep1Way2());
+                    mVip3.setSelected(rsData.isStep2());
+                }
+            }
+        });
+
+        mUserInfoViewModel.vipCheck();
+    }
 
 
     @OnClick({R.id.tv_use, R.id.tv_copy})

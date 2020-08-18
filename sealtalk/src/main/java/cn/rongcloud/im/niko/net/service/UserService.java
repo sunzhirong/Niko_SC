@@ -24,6 +24,8 @@ import cn.rongcloud.im.niko.model.niko.ProfileHeadInfo;
 import cn.rongcloud.im.niko.model.niko.ProfileInfo;
 import cn.rongcloud.im.niko.net.ScUrl;
 import cn.rongcloud.im.niko.net.SealTalkUrl;
+import cn.rongcloud.im.niko.ui.adapter.models.VIPCheckBean;
+import cn.rongcloud.im.niko.ui.adapter.models.VIPConfigBean;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -179,5 +181,19 @@ public interface UserService {
     @POST(ScUrl.PROFILE_UPDATE)
     @Headers(NetConstant.JSON)
     LiveData<Result<Void>> updateProfileInfo(@Body RequestBody body);
+
+    @POST(ScUrl.VIP_CHECK)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<VIPCheckBean>> vipCheck();
+
+
+    @POST(ScUrl.VIP_INFO)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<List<VIPConfigBean>>> vipInfo();
+
+
+    @POST(ScUrl.HAS_SET_PASSWORD)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<Boolean>> hasSetPassword();
 
 }

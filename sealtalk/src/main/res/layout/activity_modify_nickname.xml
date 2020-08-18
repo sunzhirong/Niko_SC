@@ -17,6 +17,7 @@
         android:id="@+id/et_nickname"
         style="@style/etPwdStyle"
         android:inputType="text"
+        android:maxLength="10"
         />
 
     <RelativeLayout

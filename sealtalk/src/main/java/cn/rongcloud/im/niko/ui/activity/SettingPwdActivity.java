@@ -9,11 +9,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import cn.rongcloud.im.niko.R;
+import cn.rongcloud.im.niko.model.Status;
+import cn.rongcloud.im.niko.sp.ProfileUtils;
 import cn.rongcloud.im.niko.ui.BaseActivity;
 import cn.rongcloud.im.niko.ui.widget.TitleBar;
 import cn.rongcloud.im.niko.viewmodel.LoginViewModel;
+import cn.rongcloud.im.niko.viewmodel.UserInfoViewModel;
 
 public class SettingPwdActivity extends BaseActivity {
     @BindView(R.id.title_bar)
@@ -27,7 +31,7 @@ public class SettingPwdActivity extends BaseActivity {
     private TextView mTvSubmit;
     private boolean pwdPass;
     private boolean pwdConfirm;
-    private LoginViewModel mLoginViewModel;
+    private UserInfoViewModel mUserInfoViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,7 +53,7 @@ public class SettingPwdActivity extends BaseActivity {
                 String pwd = mEtPwd.getText().toString();
                 String confirm = mEtConfirm.getText().toString();
                 if (pwd.equals(confirm)) {
-//                    mLoginViewModel.setPw(mEtConfirm.getText().toString());
+                    mUserInfoViewModel.setPw(mEtConfirm.getText().toString());
                 } else {
                     mTvTips.setVisibility(View.VISIBLE);
                 }
@@ -93,27 +97,27 @@ public class SettingPwdActivity extends BaseActivity {
     }
 
     private void initViewModel() {
-//        mLoginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
-//        mLoginViewModel.getSetPwResult().observe(this,resource -> {
-//            if (resource.status == Status.SUCCESS) {
-//                dismissLoadingDialog(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        ProfileUtils.hasSetPw  = true;
-//                        finish();
-//                    }
-//                });
-//
-//            } else if (resource.status == Status.LOADING) {
-//                showLoadingDialog("");
-//            } else {
-//                dismissLoadingDialog(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        showToast(resource.message);
-//                    }
-//                });
-//            }
-//        });
+        mUserInfoViewModel = ViewModelProviders.of(this).get(UserInfoViewModel.class);
+        mUserInfoViewModel.getSetPwResult().observe(this,resource -> {
+            if (resource.status == Status.SUCCESS) {
+                dismissLoadingDialog(new Runnable() {
+                    @Override
+                    public void run() {
+                        ProfileUtils.hasSetPw  = true;
+                        finish();
+                    }
+                });
+
+            } else if (resource.status == Status.LOADING) {
+                showLoadingDialog("");
+            } else {
+                dismissLoadingDialog(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast(resource.message);
+                    }
+                });
+            }
+        });
     }
 }

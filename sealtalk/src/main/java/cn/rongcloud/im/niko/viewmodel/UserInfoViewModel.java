@@ -22,6 +22,8 @@ import cn.rongcloud.im.niko.model.niko.FriendBean;
 import cn.rongcloud.im.niko.model.niko.MyLikeBean;
 import cn.rongcloud.im.niko.net.request.CommentAtReq;
 import cn.rongcloud.im.niko.task.UserTask;
+import cn.rongcloud.im.niko.ui.adapter.models.VIPCheckBean;
+import cn.rongcloud.im.niko.ui.adapter.models.VIPConfigBean;
 import cn.rongcloud.im.niko.utils.SingleSourceLiveData;
 import cn.rongcloud.im.niko.utils.log.SLog;
 
@@ -47,7 +49,11 @@ public class UserInfoViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Result<List<FollowBean>>> followResult =  new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Void>> updateProfileResult =  new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<String>> uploadResult =  new SingleSourceLiveData<>();
-
+    private SingleSourceLiveData<Result<VIPCheckBean>> vipCheckResult =  new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Result<List<VIPConfigBean>>> vipConfigResult =  new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Result<Boolean>> hasSetPasswordResult =  new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Resource<Boolean>> changePwResult = new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Resource<Boolean>> setPwResult = new SingleSourceLiveData<>();
 
 
 
@@ -283,5 +289,48 @@ public class UserInfoViewModel extends AndroidViewModel {
 
     public SingleSourceLiveData<Resource<String>> getUploadResult(){
         return uploadResult;
+    }
+
+    public SingleSourceLiveData<Result<VIPCheckBean>> getVipCheckResult() {
+        return vipCheckResult;
+    }
+
+    public void vipCheck(){
+        vipCheckResult.setSource(userTask.checkVip());
+    }
+
+
+
+    public SingleSourceLiveData<Result<List<VIPConfigBean>>> getVipConfigResult() {
+        return vipConfigResult;
+    }
+
+    public void vipConfigInfo(){
+        vipConfigResult.setSource(userTask.vipInfo());
+    }
+
+
+    public SingleSourceLiveData<Result<Boolean>> getHasSetPasswordResult() {
+        return hasSetPasswordResult;
+    }
+
+    public void hasSetPassword() {
+        hasSetPasswordResult.setSource(userTask.hasSetPassword());
+    }
+
+    public void changePw(String oldPw,String newPw){
+        changePwResult.setSource(userTask.changePw(oldPw,newPw));
+    }
+
+    public SingleSourceLiveData<Resource<Boolean>> getChangePwResult() {
+        return changePwResult;
+    }
+
+    public void setPw(String newPw){
+        setPwResult.setSource(userTask.setPw(newPw));
+    }
+
+    public SingleSourceLiveData<Resource<Boolean>> getSetPwResult() {
+        return setPwResult;
     }
 }

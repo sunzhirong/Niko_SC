@@ -3,10 +3,13 @@ package cn.rongcloud.im.niko.ui.niko;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.sp.ProfileUtils;
+import cn.rongcloud.im.niko.sp.SPUtils;
 import cn.rongcloud.im.niko.ui.BaseActivity;
 import cn.rongcloud.im.niko.ui.activity.ContactCompanyActivity;
 import cn.rongcloud.im.niko.ui.activity.ModifyPwdActivity;
@@ -40,12 +43,22 @@ public class SettingActivity extends BaseActivity {
     private CommonDialog mLogoutDialog;
     private CommonDialog mClearCacheDialog;
     private UserInfoViewModel mUserInfoViewModel;
-    
+
 
     protected int getLayoutId() {
         return R.layout.activity_setting;
     }
-
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mUserInfoViewModel = ViewModelProviders.of(this).get(UserInfoViewModel.class);
+        mUserInfoViewModel.getHasSetPasswordResult().observe(this,result->{
+            if(result.RsCode==3){
+                SPUtils.setHasPassword(mContext,result.getRsData());
+            }
+        });
+        mUserInfoViewModel.hasSetPassword();
+    }
 
     @OnClick({R.id.siv_info, R.id.siv_notification, R.id.siv_hobby, R.id.siv_contact, R.id.siv_modify_pwd,
             R.id.siv_company, R.id.siv_clear, R.id.siv_logout})
@@ -58,13 +71,12 @@ public class SettingActivity extends BaseActivity {
                 readyGo(SettingNotificationActivity.class);
                 break;
             case R.id.siv_hobby:
-
                 break;
             case R.id.siv_contact:
                 readyGo(VipActivity.class);
                 break;
             case R.id.siv_modify_pwd:
-                if (!ProfileUtils.hasSetPw) {
+                if (!SPUtils.getHasPassword(mContext)) {
                     readyGo(SettingPwdActivity.class);
                 } else {
                     readyGo(ModifyPwdActivity.class);
@@ -102,7 +114,6 @@ public class SettingActivity extends BaseActivity {
                     .setDialogButtonClickListener(new CommonDialog.OnDialogButtonClickListener() {
                         @Override
                         public void onPositiveClick(View v, Bundle bundle) {
-//                            mLoginViewModel.login("", "13305938755", "qq123456");
                             mUserInfoViewModel.logout();
                         }
 

@@ -11,6 +11,7 @@ public class SPUtils {
     private static final String USER_TOKEN="user_token";
     private static final String IM_TOKEN="im_token";
     private static final String IM_USER_ID="im_user_id";
+    private static final String HAS_SET_PASSWORD="has_set_password";
 
 
 
@@ -65,6 +66,16 @@ public class SPUtils {
     }
 
 
+    public static void setHasPassword(Context context, boolean value) {
+        SharedPreferences sp = getPreference(context);
+        sp.edit().putBoolean(HAS_SET_PASSWORD, value).commit();
+    }
+
+
+    public static boolean getHasPassword(Context context) {
+        SharedPreferences sp = getPreference(context);
+        return sp.getBoolean(HAS_SET_PASSWORD, false);
+    }
 
 
 }
