@@ -46,6 +46,7 @@ import cn.rongcloud.im.niko.model.UserCacheInfo;
 import cn.rongcloud.im.niko.model.UserSimpleInfo;
 import cn.rongcloud.im.niko.model.VerifyResult;
 import cn.rongcloud.im.niko.model.niko.CommentBean;
+import cn.rongcloud.im.niko.model.niko.FollowBean;
 import cn.rongcloud.im.niko.model.niko.FollowRequestInfo;
 import cn.rongcloud.im.niko.model.niko.FriendBean;
 import cn.rongcloud.im.niko.model.niko.MyLikeBean;
@@ -1023,5 +1024,13 @@ public class UserTask {
         paramsMap.put("Data", uid);
         RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
         return userService.removeFollowings(requestBody);
+    }
+    public LiveData<Result<List<FollowBean>>> getFollowList(int skip, int take){
+        HashMap<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put("Skip", skip);
+        paramsMap.put("Take", take);
+        paramsMap.put("Data", 0);
+        RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
+        return userService.getFollowList(requestBody);
     }
 }

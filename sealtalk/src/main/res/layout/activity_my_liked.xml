@@ -16,5 +16,25 @@
         android:paddingTop="15dp"
         android:id="@+id/rv_my_liked"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:background="@drawable/img_empty_bg"
+            android:layout_width="146dp"
+            android:layout_height="146dp"/>
+
+        <TextView
+            android:layout_marginTop="30dp"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#65666C"
+            android:text="暂无点赞内容"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 </LinearLayout>

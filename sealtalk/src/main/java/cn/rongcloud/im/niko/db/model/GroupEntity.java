@@ -88,6 +88,10 @@ public class GroupEntity implements Parcelable {
     @ColumnInfo(name = "member_protection")
     private int memberProtection;
 
+
+
+
+
     public int getMemberProtection() {
         return memberProtection;
     }

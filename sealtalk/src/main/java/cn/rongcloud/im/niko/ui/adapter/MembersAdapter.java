@@ -25,6 +25,7 @@ import io.rong.imkit.widget.AsyncImageView;
 
 public class MembersAdapter extends BaseAdapter implements SectionIndexer {
 
+
     public interface OnDeleteClickListener{
         void onDelete(int position);
     }

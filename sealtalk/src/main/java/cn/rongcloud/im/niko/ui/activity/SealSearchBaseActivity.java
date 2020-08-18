@@ -22,6 +22,7 @@ public class SealSearchBaseActivity extends TitleBaseActivity implements TextWat
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getTitleBar().getEtSearch().requestFocus();
         getTitleBar().setType(SEARCH);
         getTitleBar().addSeachTextChangedListener(this);
         setContentView(R.layout.activity_select_content);

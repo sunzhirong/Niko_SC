@@ -43,15 +43,8 @@ import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.UserInfo;
 
 public class ContactsActivity extends BaseActivity implements MembersAdapter.OnDeleteClickListener {
-//    @Override
-//    protected void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_contacts_new);
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.add(R.id.fl_container,new MyContactsListFragment()).commit();
-//    }
 
-        @BindView(R.id.tv_count)
+    @BindView(R.id.tv_count)
     TextView mTvCount;
     private UserInfoViewModel mUserInfoViewModel;
 
@@ -63,6 +56,9 @@ public class ContactsActivity extends BaseActivity implements MembersAdapter.OnD
         return R.layout.activity_contacts;
     }
 
+    protected boolean keyboardEnable(){
+        return false;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

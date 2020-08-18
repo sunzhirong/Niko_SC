@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:id="@+id/rlContainer"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:textColor="@color/blackB"
+            android:text="取消"
+            android:layout_centerVertical="true"
+            android:textSize="14sp"
+            style="@style/tv16BlackStyle"/>
+
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/tv16BlackStyle"
+                android:textStyle="bold"
+                android:text="选择你要"/>
+
+            <TextView
+                android:textColor="#1F76FF"
+                style="@style/tv16BlackStyle"
+                android:textStyle="bold"
+                android:text="\@"/>
+
+            <TextView
+                style="@style/tv16BlackStyle"
+                android:textStyle="bold"
+                android:text="的人"/>
+
+        </LinearLayout>
+
+
+        <TextView
+            android:textStyle="bold"
+            android:id="@+id/tv_complete"
+            android:textColor="@color/blackB"
+            android:layout_alignParentEnd="true"
+            android:text="完成"
+            android:layout_centerVertical="true"
+            android:textSize="12sp"
+            style="@style/tv16BlackStyle"/>
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/et_search"
+        android:hint="找不到搜索试试"
+        style="@style/searchEtStyle"/>
+    
+    
+    <com.zhy.view.flowlayout.TagFlowLayout
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:id="@+id/fl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="10dp"
+        style="@style/lineStyle"
+        android:background="#EBEBEB"/>
+
+    <TextView
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="12dp"
+        android:text="关注的人"
+       style="@style/tv14BlackBStyle"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_follow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

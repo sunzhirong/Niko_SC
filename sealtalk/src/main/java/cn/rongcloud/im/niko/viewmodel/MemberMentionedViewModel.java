@@ -65,6 +65,7 @@ public class MemberMentionedViewModel extends AndroidViewModel {
                         member.setName(info.getName());
                         member.setGroupNickName(info.getGroupNickName());
                         member.setPortraitUri(info.getPortraitUri());
+                        member.setNameColor(info.getNameColor());
                         String sortString = "#";
                         //汉字转换成拼音
                         String displayName = TextUtils.isEmpty(info.getGroupNickName())?

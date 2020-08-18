@@ -21,7 +21,7 @@ import cn.rongcloud.im.niko.ui.widget.SideBar;
 import cn.rongcloud.im.niko.viewmodel.MemberMentionedViewModel;
 import io.rong.imlib.model.Conversation;
 
-
+//@ xuan ze  lianxiren
 public class MemberMentionedExActivity extends TitleBaseActivity {
 
     private MemberMentionedAdapter adapter;
@@ -31,10 +31,13 @@ public class MemberMentionedExActivity extends TitleBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ex_mention_members);
-
         // 舒适布局
         initView();
         initViewModel();
+    }
+
+    protected boolean keyboardEnable(){
+        return false;
     }
 
     // 初始化布局

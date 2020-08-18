@@ -559,6 +559,7 @@ public class GroupTask {
                     user.setId(String.valueOf(info.getUID()));
                     user.setPortraitUri(GlideImageLoaderUtil.getScString(info.getUserIcon()));
                     user.setName(TextUtils.isEmpty(info.getAlias()) ? info.getName() : info.getAlias());
+                    user.setNameColor(info.getNameColor());
                     // 默认优先显示群备注名。当没有群备注时，则看此用户为当前用户的好友，如果是好友则显示备注名称。其次再试显示用户名
                     String displayName = TextUtils.isEmpty(info.getAlias()) ? info.getName() : info.getAlias();
                     String nameInKitCache = displayName;
@@ -566,14 +567,12 @@ public class GroupTask {
                     if (TextUtils.isEmpty(nameInKitCache)) {
                         nameInKitCache = user.getName();
                     }
-
+                    groupEntity.setNameColor(info.getNameColor());
                     groupEntity.setNickName(displayName);
                     groupEntity.setNickNameSpelling(SearchUtils.fullSearchableString(displayName));
                     groupEntity.setUserId(user.getId());
                     groupEntity.setRole(info.getUID() == rsData.getCreatorUID()?GroupMember.Role.GROUP_OWNER.getValue():GroupMember.Role.MEMBER.getValue());
-//                    groupEntity.setCreateTime(info.getCreatedTime());
-//                    groupEntity.setUpdateTime(info.getUpdatedTime());
-//                    groupEntity.setJoinTime(info.getTimestamp());
+                    groupEntity.setNameColor(info.getNameColor());
                     groupEntityList.add(groupEntity);
 
                     // 更新 IMKit 缓存群组成员数据

@@ -6,8 +6,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
+import com.alibaba.fastjson.JSON;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +27,8 @@ import butterknife.ButterKnife;
 import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.common.IntentExtra;
 import cn.rongcloud.im.niko.db.model.FriendShipInfo;
+import cn.rongcloud.im.niko.event.CommentHeightEvent;
+import cn.rongcloud.im.niko.event.ItemCommentEvent;
 import cn.rongcloud.im.niko.event.ShowMoreEvent;
 import cn.rongcloud.im.niko.ui.BaseActivity;
 import cn.rongcloud.im.niko.ui.dialog.MorePopWindow;
@@ -54,6 +60,9 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
     private ChatTipsPop mPop;
     private MainBottomTabGroupView tabGroupView;
     public MainViewModel mainViewModel;
+
+    private View mask;
+    private int mMaskMarginHeight;
 
     /**
      * tab 项枚举
@@ -111,6 +120,36 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
      */
     private List<Fragment> fragments = new ArrayList<>();
 
+    protected List<View> touchViews = new ArrayList<>();
+
+//    protected List<View> getExcludeTouchHideInputViews(){
+//        Fragment fragment = fragments.get(2);
+//        if(fragment instanceof ChatFragment) {
+//            ChatFragment mChatFragment = (ChatFragment) fragment;
+//            if (mChatFragment.getCommentFragment() != null) {
+//                if (mChatFragment.getCommentFragment().getLlInput() != null && mChatFragment.getCommentFragment().getLlInput().getVisibility() == View.VISIBLE) {
+//                    if (touchViews.size() == 0) {
+//                        touchViews.add(mChatFragment.getCommentFragment().getLlInput());
+//                    }
+//                    return touchViews;
+//                }
+//            }
+//        }
+//        return null;
+//    }
+//    protected void hideInput() {
+//        Log.e("soft","hideinput");
+//        touchViews.clear();
+////        Fragment fragment = fragments.get(2);
+////        if(fragment instanceof ChatFragment) {
+////            ChatFragment mChatFragment = (ChatFragment) fragment;
+////            if(mChatFragment.getCommentFragment()!=null){
+////                if(mChatFragment.getCommentFragment().getLlInput()!=null&&mChatFragment.getCommentFragment().getLlInput().getVisibility()==View.VISIBLE){
+////                    mChatFragment.getCommentFragment().getLlInput().setVisibility(View.GONE);
+////                }
+////            }
+////        }
+//    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -147,6 +186,7 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
      * 初始化布局
      */
     protected void initView() {
+
         EventBus.getDefault().register(this);
         mFlOrderLayout = findViewById(R.id.fl_order_layout);
         if (mFlOrderLayout.getForeground() != null) {
@@ -184,6 +224,24 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
 
         initViewModel();
         clearBadgeStatu();
+
+        mask = findViewById(R.id.mask);
+        mask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mask.setVisibility(View.GONE);
+                Fragment fragment = fragments.get(2);
+                if(fragment instanceof ChatFragment) {
+                    ChatFragment mChatFragment = (ChatFragment) fragment;
+                    if(mChatFragment.getCommentFragment()!=null){
+                        if(mChatFragment.getCommentFragment().getLlInput()!=null&&mChatFragment.getCommentFragment().getLlInput().getVisibility()==View.VISIBLE){
+                            mChatFragment.getCommentFragment().getLlInput().setVisibility(View.GONE);
+                            mChatFragment.getCommentFragment().hideInput();
+                        }
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -447,4 +505,27 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
             }, 3000);
         }
     }
+
+    protected void onKeyBoardChange(boolean isPopup){
+        tabGroupView.setVisibility(isPopup?View.GONE:View.VISIBLE);
+    }
+
+    public void onEventMainThread(ItemCommentEvent event) {
+        mask.setVisibility(View.VISIBLE);
+    }
+
+    public void onEventMainThread(CommentHeightEvent event) {
+        if(event.height==-1){
+            //表示发布评论成功
+            mask.setVisibility(View.GONE);
+        }
+        if(mask.getVisibility()==View.GONE){return;}
+        if(mMaskMarginHeight == event.height){return;}
+        mMaskMarginHeight = event.height;
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+        layoutParams.bottomMargin = mMaskMarginHeight;
+        mask.setLayoutParams(layoutParams);
+    }
+
 }

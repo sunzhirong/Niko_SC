@@ -114,7 +114,13 @@ public class MyLikedActivity extends BaseActivity {
         mUserInfoViewModel = ViewModelProviders.of(this).get(UserInfoViewModel.class);
         mUserInfoViewModel.getMyLiekListResult().observe(this, result -> {
             if(result.RsCode== NetConstant.REQUEST_SUCCESS_CODE){
+                if(result.getRsData().size()==0){
+                    mRvMyLiked.setVisibility(View.GONE);
+                    return;
+                }
                 mMyLikedRvAdapter.setDatas(result.getRsData());
+            }else {
+                mRvMyLiked.setVisibility(View.GONE);
             }
         });
         mUserInfoViewModel.myLiekList(NetConstant.SKIP, NetConstant.TAKE);

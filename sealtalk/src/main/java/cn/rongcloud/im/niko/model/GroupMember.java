@@ -45,6 +45,17 @@ public class GroupMember {
     @ColumnInfo(name = "join_time")
     private long joinTime;
 
+    @ColumnInfo(name = "name_color")
+    private String nameColor;
+
+    public String getNameColor() {
+        return nameColor;
+    }
+
+    public void setNameColor(String nameColor) {
+        this.nameColor = nameColor;
+    }
+
 
     public String getGroupId() {
         return groupId;

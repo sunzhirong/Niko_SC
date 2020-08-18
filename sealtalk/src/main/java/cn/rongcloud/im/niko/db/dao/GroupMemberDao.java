@@ -17,7 +17,7 @@ public interface GroupMemberDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertGroupMemberList(List<GroupMemberInfoEntity> groupMemberInfoEntities);
 
-    @Query("SELECT group_member.user_id, group_member.group_id, group_member.nickname, group_member.role, group_member.join_time, nickname_spelling,user.name, user.name_spelling, user.portrait_uri" +
+    @Query("SELECT group_member.name_color,group_member.user_id, group_member.group_id, group_member.nickname, group_member.role, group_member.join_time, nickname_spelling,user.name, user.name_spelling, user.portrait_uri" +
             " FROM group_member " +
             "INNER JOIN user ON group_member.user_id = user.id " +
             "where group_id=:groupId " +

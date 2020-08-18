@@ -16,6 +16,7 @@ import cn.rongcloud.im.niko.im.IMManager;
 import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Result;
 import cn.rongcloud.im.niko.model.niko.CommentBean;
+import cn.rongcloud.im.niko.model.niko.FollowBean;
 import cn.rongcloud.im.niko.model.niko.FollowRequestInfo;
 import cn.rongcloud.im.niko.model.niko.FriendBean;
 import cn.rongcloud.im.niko.model.niko.MyLikeBean;
@@ -43,6 +44,7 @@ public class UserInfoViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Result<List<FollowRequestInfo>>> getFollowerRequestListResult =  new SingleSourceLiveData<>();
     private SingleSourceLiveData<Result<Boolean>> removeFollowingsResult =  new SingleSourceLiveData<>();
     private SingleSourceLiveData<Result<Boolean>> addFollowingsResult =  new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Result<List<FollowBean>>> followResult =  new SingleSourceLiveData<>();
 
 
 
@@ -254,5 +256,13 @@ public class UserInfoViewModel extends AndroidViewModel {
 
     public SingleSourceLiveData<Result<Boolean>> getAddFollowingsResult() {
         return addFollowingsResult;
+    }
+
+    public void getFollowList(int skip,int take){
+        followResult.setSource(userTask.getFollowList(skip,take));
+    }
+
+    public SingleSourceLiveData<Result<List<FollowBean>>> getFollowListResult() {
+        return followResult;
     }
 }

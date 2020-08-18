@@ -61,7 +61,8 @@ public class SealPicturePagerActivity extends PicturePagerActivity {
         SLog.d(LogTag.COMMON, "SealPicturePagerActivity scan QR Code is " + qrCodeResult);
 
         String[] items;
-        if (TextUtils.isEmpty(qrCodeResult)) {
+//        if (TextUtils.isEmpty(qrCodeResult)) {
+        if (true) {
             items = new String[]{getString(io.rong.imkit.R.string.rc_save_picture)};
         } else {
             items = new String[]{getString(io.rong.imkit.R.string.rc_save_picture), getString(R.string.zxing_distinguish_picture)};

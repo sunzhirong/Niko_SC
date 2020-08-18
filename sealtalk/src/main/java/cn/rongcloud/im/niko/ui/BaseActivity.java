@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
@@ -41,6 +42,7 @@ import cn.rongcloud.im.niko.common.IntentExtra;
 import cn.rongcloud.im.niko.im.IMManager;
 import cn.rongcloud.im.niko.ui.activity.LoginActivity;
 import cn.rongcloud.im.niko.ui.dialog.LoadingDialog;
+import cn.rongcloud.im.niko.utils.DisplayUtils;
 import cn.rongcloud.im.niko.utils.ToastUtils;
 import cn.rongcloud.im.niko.utils.log.SLog;
 import io.rong.imkit.RongConfigurationManager;
@@ -103,7 +105,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         ImmersionBar
                 .with(this)
                 .fitsSystemWindows(true)
-                .keyboardEnable(true)
+                .keyboardEnable(keyboardEnable())//是否顶起布局
                 .statusBarColor(R.color.white)
                 .statusBarDarkFont(true)
                 .setOnKeyboardListener(new OnKeyboardListener() {
@@ -120,6 +122,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         mContext = this;
 
+    }
+
+    protected boolean keyboardEnable(){
+        return true;
     }
 
 
@@ -511,6 +517,20 @@ public abstract class BaseActivity extends AppCompatActivity {
             startActivityForResult(intent, reqCode);
         }
     }
+    //点击除此之外view 关闭软键盘
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getExcludeTouchHideInputViews() != null&&getExcludeTouchHideInputViews().size()!=0) {
+            DisplayUtils.hideInputWhenTouchOtherView(this, ev, getExcludeTouchHideInputViews());
+            hideInput();
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 
+    protected void hideInput() {
+    }
 
+    protected List<View> getExcludeTouchHideInputViews() {
+        return null;
+    }
 }

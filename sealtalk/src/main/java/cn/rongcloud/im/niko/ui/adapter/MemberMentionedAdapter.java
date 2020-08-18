@@ -14,6 +14,8 @@ import java.util.List;
 
 import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.model.GroupMember;
+import cn.rongcloud.im.niko.sp.ProfileUtils;
+import cn.rongcloud.im.niko.utils.glideutils.GlideImageLoaderUtil;
 import io.rong.imkit.widget.AsyncImageView;
 
 public class MemberMentionedAdapter extends BaseAdapter  implements SectionIndexer {
@@ -52,10 +54,10 @@ public class MemberMentionedAdapter extends BaseAdapter  implements SectionIndex
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(parent.getContext()).inflate(io.rong.imkit.R.layout.rc_mention_list_item, null);
-            viewHolder.name = (TextView) convertView.findViewById(io.rong.imkit.R.id.rc_user_name);
-            viewHolder.portrait = (AsyncImageView) convertView.findViewById(io.rong.imkit.R.id.rc_user_portrait);
-            viewHolder.letter = (TextView) convertView.findViewById(io.rong.imkit.R.id.letter);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.rc_mention_list_item, null);
+            viewHolder.name = (TextView) convertView.findViewById(R.id.rc_user_name);
+            viewHolder.portrait = (AsyncImageView) convertView.findViewById(R.id.rc_user_portrait);
+            viewHolder.letter = (TextView) convertView.findViewById(R.id.letter);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -67,8 +69,10 @@ public class MemberMentionedAdapter extends BaseAdapter  implements SectionIndex
                 name = member.getName();
             }
             viewHolder.name.setText(name);
+            viewHolder.name.setTextColor(ProfileUtils.getNameColor(member.getNameColor()));
             if (!TextUtils.isEmpty(member.getPortraitUri())) {
-                viewHolder.portrait.setAvatar(Uri.parse(member.getPortraitUri()));
+//                viewHolder.portrait.setAvatar(Uri.parse(member.getPortraitUri()));
+                GlideImageLoaderUtil.loadCircleImage(convertView.getContext(),viewHolder.portrait,member.getPortraitUri());
             } else {
                 if (member.getUserId().equals("-1")) {
                     viewHolder.portrait.setImageResource(R.drawable.seal_ic_mention_at);
@@ -87,7 +91,10 @@ public class MemberMentionedAdapter extends BaseAdapter  implements SectionIndex
         } else {
             viewHolder.letter.setVisibility(View.GONE);
         }
+        if (member!=null&&member.getUserId().equals("-1")) {
+            viewHolder.letter.setVisibility(View.GONE);
 
+        }
         return convertView;
     }
 

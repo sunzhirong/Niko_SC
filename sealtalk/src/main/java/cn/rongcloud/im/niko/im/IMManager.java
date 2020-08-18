@@ -482,18 +482,18 @@ public class IMManager {
         RongIM.setConversationClickListener(new RongIM.ConversationClickListener() {
             @Override
             public boolean onUserPortraitClick(Context context, Conversation.ConversationType conversationType, UserInfo userInfo, String s) {
-                if (conversationType != Conversation.ConversationType.CUSTOMER_SERVICE) {
-                    Intent intent = new Intent(context, UserDetailActivity.class);
-                    intent.putExtra(IntentExtra.STR_TARGET_ID, userInfo.getUserId());
-                    if (conversationType == Conversation.ConversationType.GROUP) {
-                        Group groupInfo = RongUserInfoManager.getInstance().getGroupInfo(s);
-                        if (groupInfo != null) {
-                            intent.putExtra(IntentExtra.GROUP_ID, groupInfo.getId());
-                            intent.putExtra(IntentExtra.STR_GROUP_NAME, groupInfo.getName());
-                        }
-                    }
-                    context.startActivity(intent);
-                }
+//                if (conversationType != Conversation.ConversationType.CUSTOMER_SERVICE) {
+//                    Intent intent = new Intent(context, UserDetailActivity.class);
+//                    intent.putExtra(IntentExtra.STR_TARGET_ID, userInfo.getUserId());
+//                    if (conversationType == Conversation.ConversationType.GROUP) {
+//                        Group groupInfo = RongUserInfoManager.getInstance().getGroupInfo(s);
+//                        if (groupInfo != null) {
+//                            intent.putExtra(IntentExtra.GROUP_ID, groupInfo.getId());
+//                            intent.putExtra(IntentExtra.STR_GROUP_NAME, groupInfo.getName());
+//                        }
+//                    }
+//                    context.startActivity(intent);
+//                }
                 return true;
             }
 
@@ -846,16 +846,16 @@ public class IMManager {
 
         RongExtensionManager.getInstance().registerExtensionModule(new SealExtensionModule(context));
 
-        // 语音输入
-        RongExtensionManager.getInstance().registerExtensionModule(new RecognizeExtensionModule());
+//         语音输入
+//        RongExtensionManager.getInstance().registerExtensionModule(new RecognizeExtensionModule());
 
-        // 个人名片
-        RongExtensionManager.getInstance().registerExtensionModule(createContactCardExtensionModule());
+//        // 个人名片
+//        RongExtensionManager.getInstance().registerExtensionModule(createContactCardExtensionModule());
 
         // 小视频 为了调整位置将此注册放入 SealExtensionModule 中进行，无此需求可直接在此注册
 //        RongExtensionManager.getInstance().registerExtensionModule(new SightExtensionModule());
         // 戳一下
-        RongExtensionManager.getInstance().registerExtensionModule(new PokeExtensionModule());
+//        RongExtensionManager.getInstance().registerExtensionModule(new PokeExtensionModule());
     }
 
     /**

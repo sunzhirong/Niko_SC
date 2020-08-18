@@ -2,6 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     android:layout_height="match_parent">
     <EditText
         android:id="@+id/et_search"
@@ -38,37 +39,54 @@
 
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/ll_input"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <EditText
+            android:drawableRight="@drawable/img_at"
             android:layout_gravity="center_vertical"
-            android:imeOptions="actionSend"
-            android:layout_marginLeft="12dp"
+            android:imeOptions="actionDone"
             android:layout_marginRight="12dp"
-            android:paddingBottom="7dp"
             android:id="@+id/et_input"
             android:textColor="@android:color/black"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:hint="输入新消息"
             android:textColorHint="#8F929A"
-            android:background="@drawable/rc_edit_text_bg"
-            android:paddingTop="7dp"
+            android:background="@drawable/commen_et_bg"
             android:maxLines="4"
             android:textSize="16sp"/>
 
-        <Button
-            android:id="@+id/btn_submit"
+        <FrameLayout
+            android:id="@+id/rc_send_toggle"
+            android:layout_width="44dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:background="@drawable/rc_send_toggle_selector">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/rc_ext_send"
+                android:textColor="#ffffff"
+                android:textSize="14sp"/>
+        </FrameLayout>
+
     </LinearLayout>
 
 </LinearLayout>

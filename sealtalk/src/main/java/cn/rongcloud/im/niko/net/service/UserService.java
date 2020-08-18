@@ -16,6 +16,7 @@ import cn.rongcloud.im.niko.model.Result;
 import cn.rongcloud.im.niko.model.UploadTokenResult;
 import cn.rongcloud.im.niko.model.VerifyResult;
 import cn.rongcloud.im.niko.model.niko.CommentBean;
+import cn.rongcloud.im.niko.model.niko.FollowBean;
 import cn.rongcloud.im.niko.model.niko.FollowRequestInfo;
 import cn.rongcloud.im.niko.model.niko.FriendBean;
 import cn.rongcloud.im.niko.model.niko.MyLikeBean;
@@ -170,5 +171,9 @@ public interface UserService {
     @POST(ScUrl.FOLLOWINGS_REMOVE)
     @Headers(NetConstant.JSON)
     LiveData<Result<Boolean>> removeFollowings(@Body RequestBody body);
+
+    @POST(ScUrl.FOLLOWING_LIST)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<List<FollowBean>>> getFollowList(@Body RequestBody body);
 
 }

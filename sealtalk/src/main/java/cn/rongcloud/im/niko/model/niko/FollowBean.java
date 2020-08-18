@@ -23,6 +23,15 @@ public class FollowBean {
     private String NameColor;
     private String UserIcon;
     private boolean Gender;
+    private boolean select;
+
+    public boolean isSelect() {
+        return select;
+    }
+
+    public void setSelect(boolean select) {
+        this.select = select;
+    }
 
     public String getAlias() {
         return Alias;

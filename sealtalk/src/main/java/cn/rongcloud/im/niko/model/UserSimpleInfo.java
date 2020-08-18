@@ -11,6 +11,17 @@ public class UserSimpleInfo{
     @SerializedName(value = "name" ,alternate = {"nickname"})
     private String name;
 
+    @ColumnInfo(name = "name_color")
+    private String nameColor;
+
+    public String getNameColor() {
+        return nameColor;
+    }
+
+    public void setNameColor(String nameColor) {
+        this.nameColor = nameColor;
+    }
+
     public String getId() {
         return id;
     }

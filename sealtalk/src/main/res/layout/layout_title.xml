@@ -50,7 +50,7 @@
 
     <EditText
         android:id="@+id/et_search"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/seal_search_title_bar_et_margin"
         android:layout_marginRight="@dimen/seal_search_title_bar_et_margin"

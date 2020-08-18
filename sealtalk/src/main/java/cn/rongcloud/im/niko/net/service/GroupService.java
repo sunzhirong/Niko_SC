@@ -38,8 +38,6 @@ public interface GroupService {
     @POST(SealTalkUrl.GROUP_TRANSFER)
     LiveData<Result> transferGroup(@Body RequestBody body);
 
-    @GET(SealTalkUrl.GROUP_GET_BULLETIN)
-    LiveData<Result<GroupNoticeResult>> getGroupBulletin(@Query("groupId") String id);
 
     @POST(SealTalkUrl.GROUP_SET_PORTRAIT_URL)
     LiveData<Result> setGroupPortraitUri(@Body RequestBody body);

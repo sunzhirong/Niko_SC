@@ -369,11 +369,11 @@
             android:value="CHANNAL" />
 
         <!-- 高德地图-->
-        <!--
+
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="替换你申请的高德地图 ApiKey" />
-        -->
+            android:value="cc40b3714d71db72c12ecfe10a1fdc58" />
+
 
         <!--
         <meta-data
@@ -558,6 +558,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.FriendsRequestListActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.SelectAtPersonActivity" />
+        <activity android:name=".ui.activity.SealSearchBaseActivity" />
 
 
         <!--推送配置项-->
