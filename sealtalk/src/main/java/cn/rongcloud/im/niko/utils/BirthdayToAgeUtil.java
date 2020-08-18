@@ -1,5 +1,7 @@
 package cn.rongcloud.im.niko.utils;
 
+import android.text.TextUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,9 +16,10 @@ public class BirthdayToAgeUtil {
     private static int year;
     private static int month;
     private static int day;
-    public static String BirthdayToAge(String birthday1) {
-        birthday = birthday1;
-        stringToInt(birthday, "yyyy-MM-dd");
+    public static String birthdayToAge(String birthday) {
+        if(TextUtils.isEmpty(birthday)){return "";}
+        BirthdayToAgeUtil.birthday = birthday;
+        stringToInt(BirthdayToAgeUtil.birthday, "yyyy-MM-dd");
         // 得到当前时间的年、月、日
         Calendar cal = Calendar.getInstance();
         int yearNow = cal.get(Calendar.YEAR);

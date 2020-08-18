@@ -43,6 +43,59 @@ public class UserInfo {
     @ColumnInfo(name = "name_color")
     private String nameColor;
 
+
+    @ColumnInfo(name = "bio")
+    private String bio;//个人简介
+    @ColumnInfo(name = "location")
+    private String location;
+    @ColumnInfo(name = "school")
+    private String school;
+    @ColumnInfo(name = "dob")
+    private String dob;
+
+    @ColumnInfo(name = "is_man")
+    private boolean isMan;
+
+    public boolean isMan() {
+        return isMan;
+    }
+
+    public void setMan(boolean man) {
+        isMan = man;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
     public String getNameColor() {
         return nameColor;
     }

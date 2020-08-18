@@ -45,6 +45,9 @@ public class UserInfoViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Result<Boolean>> removeFollowingsResult =  new SingleSourceLiveData<>();
     private SingleSourceLiveData<Result<Boolean>> addFollowingsResult =  new SingleSourceLiveData<>();
     private SingleSourceLiveData<Result<List<FollowBean>>> followResult =  new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Resource<Void>> updateProfileResult =  new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Resource<String>> uploadResult =  new SingleSourceLiveData<>();
+
 
 
 
@@ -264,5 +267,21 @@ public class UserInfoViewModel extends AndroidViewModel {
 
     public SingleSourceLiveData<Result<List<FollowBean>>> getFollowListResult() {
         return followResult;
+    }
+
+    public SingleSourceLiveData<Resource<Void>> getUpdateProfile() {
+        return updateProfileResult;
+    }
+
+    public void updateProfile(int type, String key, Object value) {
+        updateProfileResult.setSource(userTask.updateProfile(type, key, value));
+    }
+
+    public void uploadAvatar(Uri uri){
+        uploadResult.setSource(userTask.upload(uri));
+    }
+
+    public SingleSourceLiveData<Resource<String>> getUploadResult(){
+        return uploadResult;
     }
 }

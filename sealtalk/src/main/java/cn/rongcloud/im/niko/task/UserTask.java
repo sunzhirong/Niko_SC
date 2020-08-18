@@ -3,10 +3,8 @@ package cn.rongcloud.im.niko.task;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
-import com.google.gson.Gson;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -14,11 +12,13 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.rongcloud.im.niko.SealApp;
 import cn.rongcloud.im.niko.common.ErrorCode;
 import cn.rongcloud.im.niko.common.LogTag;
 import cn.rongcloud.im.niko.common.NetConstant;
@@ -28,23 +28,18 @@ import cn.rongcloud.im.niko.db.dao.FriendDao;
 import cn.rongcloud.im.niko.db.dao.GroupDao;
 import cn.rongcloud.im.niko.db.dao.UserDao;
 import cn.rongcloud.im.niko.db.model.BlackListEntity;
-import cn.rongcloud.im.niko.db.model.FriendBlackInfo;
 import cn.rongcloud.im.niko.db.model.GroupEntity;
 import cn.rongcloud.im.niko.db.model.UserInfo;
 import cn.rongcloud.im.niko.file.FileManager;
 import cn.rongcloud.im.niko.im.IMManager;
 import cn.rongcloud.im.niko.model.BlackListUser;
 import cn.rongcloud.im.niko.model.ContactGroupResult;
-import cn.rongcloud.im.niko.model.GetPokeResult;
-import cn.rongcloud.im.niko.model.LoginResult;
 import cn.rongcloud.im.niko.model.RegionResult;
-import cn.rongcloud.im.niko.model.RegisterResult;
 import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Result;
 import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.model.UserCacheInfo;
 import cn.rongcloud.im.niko.model.UserSimpleInfo;
-import cn.rongcloud.im.niko.model.VerifyResult;
 import cn.rongcloud.im.niko.model.niko.CommentBean;
 import cn.rongcloud.im.niko.model.niko.FollowBean;
 import cn.rongcloud.im.niko.model.niko.FollowRequestInfo;
@@ -58,11 +53,15 @@ import cn.rongcloud.im.niko.net.RetrofitUtil;
 import cn.rongcloud.im.niko.net.ScInterceptor;
 import cn.rongcloud.im.niko.net.request.CommentAtReq;
 import cn.rongcloud.im.niko.net.service.TokenService;
+import cn.rongcloud.im.niko.net.service.UploadService;
 import cn.rongcloud.im.niko.net.service.UserService;
 import cn.rongcloud.im.niko.net.token.TokenHttpClientManager;
+import cn.rongcloud.im.niko.net.upload.UploadHttpClientManager;
 import cn.rongcloud.im.niko.sp.CountryCache;
+import cn.rongcloud.im.niko.sp.ProfileUtils;
 import cn.rongcloud.im.niko.sp.UserCache;
 import cn.rongcloud.im.niko.utils.CharacterParser;
+import cn.rongcloud.im.niko.utils.FileUtils;
 import cn.rongcloud.im.niko.utils.NetworkBoundResource;
 import cn.rongcloud.im.niko.utils.NetworkOnlyResource;
 import cn.rongcloud.im.niko.utils.RongGenerate;
@@ -70,6 +69,8 @@ import cn.rongcloud.im.niko.utils.SearchUtils;
 import cn.rongcloud.im.niko.utils.glideutils.GlideImageLoaderUtil;
 import cn.rongcloud.im.niko.utils.log.SLog;
 import io.rong.imlib.model.Conversation;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 /**
@@ -78,6 +79,7 @@ import okhttp3.RequestBody;
 public class UserTask {
     private FileManager fileManager;
     private UserService userService;
+    private UploadService uploadService;
     private TokenService tokenService;
     private Context context;
     private DbManager dbManager;
@@ -91,6 +93,8 @@ public class UserTask {
         this.context = context.getApplicationContext();
         userService = HttpClientManager.getInstance(context).getClient().createService(UserService.class);
         tokenService = TokenHttpClientManager.getInstance(context).getClient().createService(TokenService.class);
+        uploadService = UploadHttpClientManager.getInstance(context).getClient().createService(UploadService.class);
+
 
         dbManager = DbManager.getInstance(context.getApplicationContext());
         fileManager = new FileManager(context.getApplicationContext());
@@ -166,12 +170,22 @@ public class UserTask {
                 if (rsData == null) {
                     return;
                 }
+
+                if(userId.equals(imManager.getCurrentId())){
+                    ProfileUtils.sProfileInfo = rsData;
+                }
+
                 userInfo.setId(String.valueOf(rsData.getHead().getUID()));
                 userInfo.setAlias(rsData.getHead().getAlias());
                 userInfo.setAliasSpelling(SearchUtils.fullSearchableString(rsData.getHead().getAlias()));
                 userInfo.setName(rsData.getHead().getName());
                 userInfo.setPortraitUri(GlideImageLoaderUtil.getScString(rsData.getHead().getUserIcon()));
                 userInfo.setNameColor(rsData.getHead().getNameColor());
+                userInfo.setDob(rsData.getDOB());
+                userInfo.setBio(rsData.getBio());
+                userInfo.setLocation(rsData.getLocation());
+                userInfo.setSchool(rsData.getSchool());
+                userInfo.setMan(rsData.getHead().isGender());
                 SLog.e(LogTag.DB, "NetworkBoundResource saveCallResult Impl:" + JSON.toJSONString(userInfo));
 
                 UserDao userDao = dbManager.getUserDao();
@@ -1032,5 +1046,82 @@ public class UserTask {
         paramsMap.put("Data", 0);
         RequestBody requestBody = RetrofitUtil.createJsonRequest(paramsMap);
         return userService.getFollowList(requestBody);
+    }
+
+
+    public LiveData<Resource<Void>> updateProfile(int type,String key,Object value){
+        return new NetworkOnlyResource<Void, Result<Void>>() {
+            @NonNull
+            @Override
+            protected LiveData<Result<Void>> createCall() {
+                return userService.updateProfileInfo(RetrofitUtil.createJsonRequest(ProfileUtils.getUpdateInfo(type,key,value)));
+            }
+
+            @Override
+            protected void saveCallResult(@NonNull Void item) {
+                UserDao userDao = dbManager.getUserDao();
+                String userId = imManager.getCurrentId();
+                if (userDao != null) {
+                    switch (key){
+                        case "Name":
+                            userDao.updateNickName(userId, (String)value,CharacterParser.getInstance().getSpelling((String)value));
+                            break;
+                        case "Bio":
+                            userDao.updateBIO(userId, (String)value);
+                            break;
+                        case "Location":
+                            userDao.updateLocation(userId, (String)value);
+                            break;
+                        case "School":
+                            userDao.updateSchool(userId, (String)value);
+                            break;
+                        case "DOB":
+                            userDao.updateDOB(userId, (String)value);
+                            break;
+                        case "Gender":
+                            userDao.updateGender(userId, (boolean)value);
+                            break;
+                    }
+
+                }
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<String>> upload(Uri uri){
+        return new NetworkOnlyResource<String, Result<String>>() {
+            @NonNull
+            @Override
+            protected LiveData<Result<String>> createCall() {
+                File uploadFile = new File(uri.getPath());
+                if (!uploadFile.exists()) {
+                    uploadFile = new File(FileUtils.getRealPathFromUri(SealApp.getApplication(),uri));
+                }
+                RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), uploadFile);
+                MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);//表单类型
+//                builder.addFormDataPart("uploadFile", uploadFile.getPath(), imageBody);//imgfile 后台接收图片流的参数名
+                builder.addFormDataPart("uploadFile", uploadFile.getAbsolutePath(), imageBody);//imgfile 后台接收图片流的参数名
+
+                List<MultipartBody.Part> parts = builder.build().parts();
+                SLog.e("niko",JSON.toJSONString(imageBody)+"--"+JSON.toJSONString(uploadFile));
+
+                String imageBase64 = FileUtils.getImageBase64(uploadFile.getAbsolutePath());
+                SLog.e("niko","base64 = "+ imageBase64);
+
+
+                return uploadService.uploadAvatar(parts);
+            }
+
+
+            @Override
+            protected void saveCallResult(@NonNull String item) {
+                UserDao userDao = dbManager.getUserDao();
+                String userId = imManager.getCurrentId();
+                if (userDao != null) {
+                    userDao.updateAvatar(userId, item);
+                }
+
+            }
+        }.asLiveData();
     }
 }

@@ -46,4 +46,31 @@ public interface UserDao {
     @Query("UPDATE user SET friend_status=:friendStatus WHERE id in (:idList)")
     int updateFriendsStatus(List<String> idList, int friendStatus);
 
+
+    //加入新的dao
+
+    @Query("UPDATE user SET portrait_uri=:portraitUrl WHERE id=:id")
+    int updateAvatar(String id, String portraitUrl);
+
+    @Query("UPDATE user SET name=:name, name_spelling=:nameSpelling WHERE id=:id")
+    int updateNickName(String id, String name,String nameSpelling);
+
+    @Query("UPDATE user SET is_man=:is_man WHERE id=:id")
+    int updateGender(String id, boolean is_man);
+
+    @Query("UPDATE user SET location=:location WHERE id=:id")
+    int updateLocation(String id, String location);
+
+    @Query("UPDATE user SET bio=:bio WHERE id=:id")
+    int updateBIO(String id, String bio);
+
+    @Query("UPDATE user SET school=:school WHERE id=:id")
+    int updateSchool(String id, String school);
+
+    @Query("UPDATE user SET dob=:dob WHERE id=:id")
+    int updateDOB(String id, String dob);
+
+
+
+
 }

@@ -42,7 +42,7 @@ public class ScInterceptor implements Interceptor {
 
     public static String getDV() {
 //        return "niko";
-        return "20200210qq1";
+        return "20200210q";
     }
 
     private static String getLG() {

@@ -176,4 +176,8 @@ public interface UserService {
     @Headers(NetConstant.JSON)
     LiveData<Result<List<FollowBean>>> getFollowList(@Body RequestBody body);
 
+    @POST(ScUrl.PROFILE_UPDATE)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<Void>> updateProfileInfo(@Body RequestBody body);
+
 }

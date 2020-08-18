@@ -345,6 +345,10 @@ public class SettingItemView extends LinearLayout {
         ivImage.setVisibility(visibility);
     }
 
+    public ImageView getIvImage() {
+        return ivImage;
+    }
+
     /**
      * 设置左侧图片
      *

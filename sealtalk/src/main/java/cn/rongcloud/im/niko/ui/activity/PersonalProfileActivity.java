@@ -9,8 +9,10 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import cn.rongcloud.im.niko.R;
+import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.ui.BaseActivity;
 import cn.rongcloud.im.niko.ui.widget.TitleBar;
 import cn.rongcloud.im.niko.viewmodel.UserInfoViewModel;
@@ -37,10 +39,10 @@ public class PersonalProfileActivity extends BaseActivity {
     }
 
     private void initView() {
-//        initViewModel();
+        initViewModel();
         mTvSubmit = mTitleBar.getTitleBarTvRight();
         mTvSubmit.setOnClickListener(v -> {
-//            mUserInfoViewModel.updateProfile(2,"Bio",mEtContent.getText().toString().trim());
+            mUserInfoViewModel.updateProfile(2,"Bio",mEtContent.getText().toString().trim());
         });
         mEtContent.addTextChangedListener(new TextWatcher() {
             @Override
@@ -69,15 +71,16 @@ public class PersonalProfileActivity extends BaseActivity {
         }
     }
 
-//    private void initViewModel() {
-//        mUserInfoViewModel = ViewModelProviders.of(this).get(UserInfoViewModel.class);
-//        mUserInfoViewModel.getUpdateProfile().observe(this, profileInfoResult -> {
-//            if (profileInfoResult.RsCode == 3) {
+    private void initViewModel() {
+        mUserInfoViewModel = ViewModelProviders.of(this).get(UserInfoViewModel.class);
+        mUserInfoViewModel.getUpdateProfile().observe(this, profileInfoResult -> {
+            if (profileInfoResult.status == Status.SUCCESS) {
 //                ProfileUtils.sProfileInfo.setBio(mEtContent.getText().toString().trim());
 //                mUserInfoViewModel.getProfileCache().saveUserCache(ProfileUtils.sProfileInfo);
 //                EventBus.getDefault().post(new RefreshProfileEvent());
-//                finish();
-//            }
-//        });
-//    }
+                hideInputKeyboard();
+                finish();
+            }
+        });
+    }
 }

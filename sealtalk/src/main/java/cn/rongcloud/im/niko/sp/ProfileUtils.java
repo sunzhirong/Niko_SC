@@ -43,9 +43,9 @@ public class ProfileUtils {
             headMap.put(key,value);
         }
 
-        dataMap.put("Head", new Gson().toJson(headMap));
+        dataMap.put("Head", headMap);
 
-        map.put("Data", new Gson().toJson(dataMap));
+        map.put("Data", dataMap);
         return map;
     }
 

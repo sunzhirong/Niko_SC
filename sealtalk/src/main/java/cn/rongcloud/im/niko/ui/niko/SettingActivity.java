@@ -61,13 +61,6 @@ public class SettingActivity extends BaseActivity {
 
                 break;
             case R.id.siv_contact:
-//                DbManager.getInstance(mContext).openDb("niko");
-//
-//                new Thread(() -> {
-//                    UserInfo niko = DbManager.getInstance(mContext).getUserDao().getUserByIdSync("1");
-//                    Log.e("niko",JSON.toJSONString(niko));
-//
-//                }).start();
                 readyGo(VipActivity.class);
                 break;
             case R.id.siv_modify_pwd:

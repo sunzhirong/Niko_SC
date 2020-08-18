@@ -120,36 +120,6 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
      */
     private List<Fragment> fragments = new ArrayList<>();
 
-    protected List<View> touchViews = new ArrayList<>();
-
-//    protected List<View> getExcludeTouchHideInputViews(){
-//        Fragment fragment = fragments.get(2);
-//        if(fragment instanceof ChatFragment) {
-//            ChatFragment mChatFragment = (ChatFragment) fragment;
-//            if (mChatFragment.getCommentFragment() != null) {
-//                if (mChatFragment.getCommentFragment().getLlInput() != null && mChatFragment.getCommentFragment().getLlInput().getVisibility() == View.VISIBLE) {
-//                    if (touchViews.size() == 0) {
-//                        touchViews.add(mChatFragment.getCommentFragment().getLlInput());
-//                    }
-//                    return touchViews;
-//                }
-//            }
-//        }
-//        return null;
-//    }
-//    protected void hideInput() {
-//        Log.e("soft","hideinput");
-//        touchViews.clear();
-////        Fragment fragment = fragments.get(2);
-////        if(fragment instanceof ChatFragment) {
-////            ChatFragment mChatFragment = (ChatFragment) fragment;
-////            if(mChatFragment.getCommentFragment()!=null){
-////                if(mChatFragment.getCommentFragment().getLlInput()!=null&&mChatFragment.getCommentFragment().getLlInput().getVisibility()==View.VISIBLE){
-////                    mChatFragment.getCommentFragment().getLlInput().setVisibility(View.GONE);
-////                }
-////            }
-////        }
-//    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
