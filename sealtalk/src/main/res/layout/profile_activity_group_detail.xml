@@ -87,19 +87,12 @@
                 android:paddingLeft="1dp"
                 android:paddingRight="1dp" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#fff">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.25dp"
-                    android:layout_marginLeft="14dp"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginRight="14dp"
-                    android:background="#dfdfdd" />
-            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="14dp"
+                android:background="@color/line" />
 
 
             <cn.rongcloud.im.niko.ui.view.SettingItemView
@@ -107,6 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:item_content="@string/profile_search_message"
+                app:item_content_text_color="@color/blackB"
                 app:item_right_image="@drawable/seal_ic_arrow_right" />
 
 
@@ -115,6 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:item_content="@string/profile_message_notice"
+                app:item_content_text_color="@color/blackB"
                 app:item_switch="true">
 
             </cn.rongcloud.im.niko.ui.view.SettingItemView>
@@ -124,6 +119,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:item_content="@string/profile_set_top"
+                app:item_content_text_color="@color/blackB"
                 app:item_switch="true" />
 
             <TextView

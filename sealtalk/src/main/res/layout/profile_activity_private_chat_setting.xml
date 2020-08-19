@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/ll_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -59,7 +60,7 @@
         android:layout_height="0.5dp"
         android:layout_marginLeft="13dp"
         android:layout_marginRight="11dp"
-        android:background="@color/divider_color" />
+        android:background="@color/line" />
 
     <cn.rongcloud.im.niko.ui.view.SettingItemView
         android:id="@+id/profile_siv_detail_blacklist"

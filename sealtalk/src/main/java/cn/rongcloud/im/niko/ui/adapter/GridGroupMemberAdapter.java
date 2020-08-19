@@ -57,7 +57,7 @@ public class GridGroupMemberAdapter extends BaseAdapter {
                 usernameTv.setText("踢人");
                 ImageLoader.getInstance().cancelDisplayTask(avatarView);
                 avatarView.setImageDrawable(null);
-                avatarView.setBackgroundResource(R.drawable.profile_ic_grid_member_delete);
+                avatarView.setBackgroundResource(R.drawable.delete_people);
                 avatarView.setOnClickListener(v -> {
                     if (onItemClickedListener != null) {
                         onItemClickedListener.onAddOrDeleteMemberClicked(false);
@@ -67,7 +67,7 @@ public class GridGroupMemberAdapter extends BaseAdapter {
                 usernameTv.setText("邀请");
                 ImageLoader.getInstance().cancelDisplayTask(avatarView);
                 avatarView.setImageDrawable(null);
-                avatarView.setBackgroundResource(R.drawable.profile_ic_grid_member_add);
+                avatarView.setBackgroundResource(R.drawable.add_people);
 
                 avatarView.setOnClickListener(v -> {
                     if (onItemClickedListener != null) {
@@ -81,7 +81,7 @@ public class GridGroupMemberAdapter extends BaseAdapter {
             usernameTv.setText("邀请");
             ImageLoader.getInstance().cancelDisplayTask(avatarView);
             avatarView.setImageDrawable(null);
-            avatarView.setBackgroundResource(R.drawable.profile_ic_grid_member_add);
+            avatarView.setBackgroundResource(R.drawable.add_people);
             viewHolder.avatarUrl = null;
 
             avatarView.setOnClickListener(v -> {

@@ -174,19 +174,19 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
             @Override
             public void onChanged(GroupMember member) {
                 // 更具身份去控制对应的操作
-                if (member.getMemberRole() == GroupMember.Role.GROUP_OWNER) {
-                    quitGroupBtn.setText(R.string.profile_dismiss_group);
+                if (member.getMemberRole() == GroupMember.Role.GROUP_OWNER) {//群主
+                    quitGroupBtn.setText("");
                     // 根据是否是群组判断是否可以选择删除成员
                     memberAdapter.setAllowDeleteMember(true);
-                } else if (member.getMemberRole() == GroupMember.Role.MANAGEMENT) {
+                } else if (member.getMemberRole() == GroupMember.Role.MANAGEMENT) {//管理员
                     groupPortraitUiv.setClickable(false);
                     groupNameSiv.setClickable(false);
-                    quitGroupBtn.setText(R.string.profile_quit_group);
+                    quitGroupBtn.setText("退出群聊");
                     memberAdapter.setAllowDeleteMember(true);
-                } else {
+                } else {//普通群员
                     groupPortraitUiv.setClickable(false);
                     groupNameSiv.setClickable(false);
-                    quitGroupBtn.setText(R.string.profile_quit_group);
+                    quitGroupBtn.setText("退出群聊");
                     memberAdapter.setAllowDeleteMember(false);
                 }
             }
