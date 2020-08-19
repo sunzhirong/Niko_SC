@@ -123,7 +123,7 @@ public abstract class TitleAndSearchBaseActivity extends TitleBaseActivity {
         TextView titleConfirmTv = titleBar.getTvRight();
         if (enable) {
             titleConfirmTv.setClickable(true);
-            titleConfirmTv.setTextColor(getResources().getColor(android.R.color.white));
+            titleConfirmTv.setTextColor(getResources().getColor(android.R.color.black));
         } else {
             titleConfirmTv.setClickable(false);
             titleConfirmTv.setTextColor(getResources().getColor(android.R.color.darker_gray));

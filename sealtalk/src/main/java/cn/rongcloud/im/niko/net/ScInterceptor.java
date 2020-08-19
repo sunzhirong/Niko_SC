@@ -5,7 +5,6 @@ import android.util.Log;
 import java.io.IOException;
 
 import cn.rongcloud.im.niko.common.NetConstant;
-import cn.rongcloud.im.niko.utils.log.SLog;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -41,8 +40,8 @@ public class ScInterceptor implements Interceptor {
     }
 
     public static String getDV() {
-//        return "niko";
-        return "20200210q";
+        return "niko666";
+//        return "20200210q";
     }
 
     private static String getLG() {

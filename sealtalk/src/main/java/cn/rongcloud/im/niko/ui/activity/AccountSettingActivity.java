@@ -83,7 +83,7 @@ public class AccountSettingActivity extends TitleBaseActivity implements View.On
     }
 
     private void showExitDialog() {
-        CommonDialog.Builder  builder = new CommonDialog.Builder();
+        CommonDialog.Builder builder = new CommonDialog.Builder();
         builder.setContentMessage(getString(R.string.seal_mine_set_account_dialog_logout_message));
         builder.setDialogButtonClickListener(new CommonDialog.OnDialogButtonClickListener() {
             @Override

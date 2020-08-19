@@ -78,7 +78,7 @@ public class GridGroupMemberAdapter extends BaseAdapter {
 
             viewHolder.avatarUrl = null;
         } else if ((isAllowDelete && position == getCount() - 2) && isAllowAdd) {
-            usernameTv.setText("");
+            usernameTv.setText("邀请");
             ImageLoader.getInstance().cancelDisplayTask(avatarView);
             avatarView.setImageDrawable(null);
             avatarView.setBackgroundResource(R.drawable.profile_ic_grid_member_add);

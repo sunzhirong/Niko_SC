@@ -83,6 +83,7 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
     private String groupCreatorId;
 
     private final int REQUEST_CODE_PERMISSION = 115;
+    private CommonDialog mDeleteDialog;
 
 
     @Override
@@ -587,9 +588,25 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
             groupDetailViewModel.addGroupMember(addMemberList);
         } else if (requestCode == REQUEST_REMOVE_GROUP_MEMBER && resultCode == RESULT_OK) {
             // 删除群组成员
-            List<String> removeMemberList = data.getStringArrayListExtra(IntentExtra.LIST_STR_ID_LIST);
-            SLog.i(TAG, "removeMemberList.size(): " + removeMemberList.size());
-            groupDetailViewModel.removeGroupMember(removeMemberList);
+            mDeleteDialog = new CommonDialog.Builder().setTitleText("确定将该用户删除吗?")
+                    .setContentVisible(View.GONE)
+                    .setConfirmColor(R.color.color_red_text)
+                    .setDialogButtonClickListener(new CommonDialog.OnDialogButtonClickListener() {
+                        @Override
+                        public void onPositiveClick(View v, Bundle bundle) {
+                            mDeleteDialog.show(getSupportFragmentManager(), "delete_dialog");
+                            List<String> removeMemberList = data.getStringArrayListExtra(IntentExtra.LIST_STR_ID_LIST);
+                            SLog.i(TAG, "removeMemberList.size(): " + removeMemberList.size());
+                            groupDetailViewModel.removeGroupMember(removeMemberList);
+                        }
+
+                        @Override
+                        public void onNegativeClick(View v, Bundle bundle) {
+
+                        }
+                    })
+                    .build();
+            mDeleteDialog.show(getSupportFragmentManager(), "clear_group");
         }
     }
 

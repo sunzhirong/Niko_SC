@@ -5,12 +5,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
-
-import java.util.ArrayList;
-
 import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.ui.fragment.SelectMultiFriendFragment;
 import cn.rongcloud.im.niko.ui.interfaces.OnSelectCountChangeListener;
@@ -64,7 +63,7 @@ public class SelectMultiFriendsActivity extends SelectBaseActivity implements Vi
     private void setConfirmEnable(boolean isEnable) {
         if (isEnable) {
             titleConfirmTv.setClickable(true);
-            titleConfirmTv.setTextColor(getResources().getColor(android.R.color.white));
+            titleConfirmTv.setTextColor(getResources().getColor(android.R.color.black));
         } else {
             titleConfirmTv.setClickable(false);
             titleConfirmTv.setTextColor(getResources().getColor(android.R.color.darker_gray));

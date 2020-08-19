@@ -11,13 +11,12 @@ import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.db.model.UserInfo;
 import cn.rongcloud.im.niko.model.Resource;
@@ -103,7 +102,7 @@ public class UpdateStAccountActivity extends TitleBaseActivity {
     private void setConfirmEnable(boolean isEnable) {
         if (isEnable) {
             titleConfirmTv.setClickable(true);
-            titleConfirmTv.setTextColor(getResources().getColor(android.R.color.white));
+            titleConfirmTv.setTextColor(getResources().getColor(android.R.color.black));
         } else {
             titleConfirmTv.setClickable(false);
             titleConfirmTv.setTextColor(getResources().getColor(android.R.color.darker_gray));

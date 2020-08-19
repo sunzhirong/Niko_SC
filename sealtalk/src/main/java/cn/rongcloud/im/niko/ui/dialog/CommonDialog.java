@@ -11,14 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-
 import cn.rongcloud.im.niko.R;
+import cn.rongcloud.im.niko.SealApp;
 
 /**
  * 通用对话框
@@ -32,7 +32,9 @@ public class CommonDialog extends DialogFragment {
         public OnDialogButtonClickListener listener;
         public int positiveText;
         public int negativeText;
-        public int titleText;
+        public String titleText;
+        public int confirmTextColor;
+        public int contentVisible = View.VISIBLE;
         private boolean isOnlyConfirm;
     }
 
@@ -74,7 +76,7 @@ public class CommonDialog extends DialogFragment {
         Button negative = view.findViewById(R.id.dialog_btn_negative);
         Button positive = view.findViewById(R.id.dialog_btn_positive);
         View btnSeparate = view.findViewById(R.id.dialog_v_btn_separate);
-        RelativeLayout contentContainer = view.findViewById(R.id.dialog_content_container);
+        LinearLayout contentContainer = view.findViewById(R.id.dialog_content_container);
         TextView content = view.findViewById(R.id.dialog_tv_content);
         TextView title = view.findViewById(R.id.dialog_tv_title);
         negative.setOnClickListener(new View.OnClickListener() {
@@ -118,15 +120,30 @@ public class CommonDialog extends DialogFragment {
             negative.setText(params.negativeText);
         }
 
-        if (params.titleText > 0) {
+        if (!TextUtils.isEmpty(params.titleText)) {
             title.setText(params.titleText);
             title.setVisibility(View.VISIBLE);
         }
+
+        if (params.confirmTextColor > 0) {
+            positive.setTextColor(getResources().getColor(params.confirmTextColor));
+        }
+
+        content.setVisibility(params.contentVisible);
 
         if (params.isOnlyConfirm) {
             negative.setVisibility(View.GONE);
             btnSeparate.setVisibility(View.GONE);
             positive.setBackgroundResource(R.drawable.common_dialog_single_positive_seletor);
+        }
+
+
+        //按照设计图配置一个默认样式
+        if (TextUtils.isEmpty(title.getText().toString().trim()) && !TextUtils.isEmpty(content.getText().toString().trim())) {
+            title.setVisibility(View.VISIBLE);
+            content.setVisibility(View.GONE);
+            title.setText(content.getText().toString().trim());
+            positive.setTextColor(getResources().getColor(R.color.color_red_text));
         }
 
         setCancelable(params.isCancelable);
@@ -252,8 +269,25 @@ public class CommonDialog extends DialogFragment {
             return this;
         }
 
-        public Builder setTitleText(int titleText) {
+        public Builder setTitleText(int stringId) {
+            params.titleText = SealApp.getApplication().getApplicationContext().getResources().getString(stringId);
+            return this;
+        }
+
+        public Builder setTitleText(String titleText) {
             params.titleText = titleText;
+            return this;
+        }
+
+        //新增修改确认按钮颜色
+        public Builder setConfirmColor(int color) {
+            params.confirmTextColor = color;
+            return this;
+        }
+
+        //新增内容是否可见
+        public Builder setContentVisible(int visible) {
+            params.contentVisible = visible;
             return this;
         }
 

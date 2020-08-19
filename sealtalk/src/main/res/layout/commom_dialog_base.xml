@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/common_dialog_width"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_margin="@dimen/dp_42"
     android:background="@drawable/common_dialog_bg"
     android:minHeight="@dimen/common_dialog_min_height"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/dialog_content_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_90"
         android:gravity="center"
-        android:minHeight="@dimen/common_dialog_common_min_height"
         android:orientation="vertical">
 
         <TextView
@@ -21,38 +22,33 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingLeft="@dimen/common_dialog_text_margin_left"
-            android:paddingTop="@dimen/common_dialog_title_text_margin_top"
             android:paddingRight="@dimen/common_dialog_text_margin_right"
-            android:textColor="@color/common_dialog_base_text"
-            android:textSize="@dimen/common_dialog_title_text_size"
+            android:textColor="@color/blackA"
+            android:textSize="14dp"
+            android:textStyle="bold"
             android:visibility="gone"
-            tools:text="Title"
             tools:visibility="visible" />
 
         <TextView
             android:id="@+id/dialog_tv_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/dialog_tv_title"
+            android:layout_marginTop="@dimen/dp_12"
             android:gravity="center"
-            android:paddingLeft="@dimen/common_dialog_text_margin_left"
-            android:paddingTop="@dimen/common_dialog_text_margin_top"
-            android:paddingRight="@dimen/common_dialog_text_margin_right"
-            android:paddingBottom="@dimen/common_dialog_text_margin_bottom"
+            android:paddingLeft="@dimen/dp_25"
+            android:paddingRight="@dimen/dp_25"
             android:textColor="#65666C"
-            android:textSize="12sp"
-            tools:text="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" />
-
-    </RelativeLayout>
+            android:textSize="12sp" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/common_dialog_line_width"
-        android:background="@color/common_dialog_base_line" />
+        android:layout_height="0.5dp"
+        android:background="#EBEBEB" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/common_dialog_button_height"
+        android:layout_height="@dimen/dp_55"
         android:orientation="horizontal">
 
         <Button
@@ -60,29 +56,28 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/common_dialog_negative_seletor"
+            android:background="@null"
             android:text="@string/common_cancel"
-            android:textColor="@color/common_dialog_base_text"
-            android:textSize="@dimen/common_dialog_text_size" />
+            android:textColor="@color/blackA"
+            android:textSize="14dp"
+            android:textStyle="bold" />
 
         <View
             android:id="@+id/dialog_v_btn_separate"
-            android:layout_width="@dimen/common_dialog_line_width"
+            android:layout_width="0.5dp"
             android:layout_height="match_parent"
-            android:background="@color/common_dialog_base_line" />
+            android:background="#EBEBEB" />
 
         <Button
             android:id="@+id/dialog_btn_positive"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/common_dialog_positive_seletor"
+            android:background="@null"
             android:text="@string/common_confirm"
-            android:textColor="@color/default_clickable_text"
-            android:textSize="@dimen/common_dialog_text_size"
-
-            />
-
+            android:textColor="#1F76FF"
+            android:textSize="14dp"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </LinearLayout>
