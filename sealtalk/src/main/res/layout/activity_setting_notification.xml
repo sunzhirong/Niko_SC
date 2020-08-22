@@ -1,44 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <cn.rongcloud.im.niko.ui.widget.TitleBar
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="@string/notification_setting"/>
+        app:title="@string/notification_setting" />
 
     <cn.rongcloud.im.niko.ui.view.SettingItemView
         android:id="@+id/siv_no_disturb"
         android:layout_width="match_parent"
         android:layout_height="@dimen/seal_mine_setting_item_height"
-        app:item_switch="true"
-        app:item_content="@string/no_disturb" />
+        app:item_content="@string/no_disturb"
+        app:item_switch="true" />
+
     <cn.rongcloud.im.niko.ui.view.SettingItemView
         android:id="@+id/siv_show_detail"
         android:layout_width="match_parent"
         android:layout_height="@dimen/seal_mine_setting_item_height"
-        app:item_switch="true"
-        app:item_content="@string/show_noti_detail" />
+        app:item_content="@string/show_noti_detail"
+        app:item_switch="true" />
 
     <View
-        android:layout_margin="12dp"
-        style="@style/lineStyle"/>
+        style="@style/lineStyle"
+        android:layout_margin="12dp" />
 
     <cn.rongcloud.im.niko.ui.view.SettingItemView
         android:id="@+id/siv_sound"
         android:layout_width="match_parent"
         android:layout_height="@dimen/seal_mine_setting_item_height"
-        app:item_switch="true"
-        app:item_content="@string/sound" />
+        app:item_content="@string/sound"
+        app:item_switch="true" />
+
     <cn.rongcloud.im.niko.ui.view.SettingItemView
         android:id="@+id/siv_vibrate"
         android:layout_width="match_parent"
         android:layout_height="@dimen/seal_mine_setting_item_height"
-        app:item_switch="true"
-        app:item_content="@string/vibrate" />
+        app:item_content="@string/vibrate"
+        app:item_switch="true" />
 
 </LinearLayout>

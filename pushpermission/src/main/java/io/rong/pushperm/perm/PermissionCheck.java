@@ -61,7 +61,7 @@ public class PermissionCheck {
      * @param context
      * @return
      */
-    private static boolean isNotificationEnabled(Context context) {
+    public static boolean isNotificationEnabled(Context context) {
 
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT) {
             return false;
