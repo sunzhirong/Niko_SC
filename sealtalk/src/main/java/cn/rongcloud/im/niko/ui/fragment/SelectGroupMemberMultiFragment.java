@@ -4,7 +4,11 @@ import cn.rongcloud.im.niko.viewmodel.SelectBaseViewModel;
 
 public class SelectGroupMemberMultiFragment extends SelectMultiFriendFragment {
     private String groupId;
+
     private SelectBaseViewModel selectBaseViewModel;
+
+
+
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;

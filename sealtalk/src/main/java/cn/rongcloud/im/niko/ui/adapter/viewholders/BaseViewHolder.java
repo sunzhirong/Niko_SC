@@ -12,6 +12,8 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
 
     abstract public void update(T t);
 
+    public void update(T t,boolean canSelect){}
+
     public void setChecked(boolean b) {
 
     }

@@ -375,6 +375,74 @@ public class FriendTask {
                 return friendService.getFriendInfo(userId);
             }
         }.asLiveData();
+//        return new NetworkBoundResource<FriendShipInfo, Result<FriendShipInfo>>() {
+//            @Override
+//            protected void saveCallResult(@NonNull Result<FriendShipInfo> item) {
+//                UserDao userDao = dbManager.getUserDao();
+//                FriendDao friendDao = dbManager.getFriendDao();
+//                if (userDao == null || friendDao == null) return;
+//
+//                FriendShipInfo friendShipInfo = item.getRsData();
+//                if (friendShipInfo == null) return;
+//
+//                UserInfo userInfo = new UserInfo();
+//                FriendInfo friendInfo = new FriendInfo();
+//                userInfo.setId(friendShipInfo.getUser().getId());
+//                userInfo.setName(friendShipInfo.getUser().getNickname());
+//                String portraitUri = friendShipInfo.getUser().getPortraitUri();
+//                // 若头像为空则生成默认头像
+//                if (TextUtils.isEmpty(portraitUri)) {
+//                    portraitUri = RongGenerate.generateDefaultAvatar(context, friendShipInfo.getUser().getId(), friendShipInfo.getUser().getNickname());
+//                }
+//                userInfo.setPortraitUri(portraitUri);
+//                userInfo.setAlias(friendShipInfo.getDisplayName());
+//                userInfo.setFriendStatus(FriendStatus.IS_FRIEND.getStatusCode());
+//                userInfo.setPhoneNumber(friendShipInfo.getUser().getPhone());
+//                userInfo.setRegion(friendShipInfo.getUser().getRegion());
+//                userInfo.setAliasSpelling(SearchUtils.fullSearchableString(friendShipInfo.getDisplayName()));
+//                userInfo.setAliasSpellingInitial(SearchUtils.initialSearchableString(friendShipInfo.getDisplayName()));
+//                userInfo.setNameSpelling(SearchUtils.fullSearchableString(friendShipInfo.getUser().getNickname()));
+//                userInfo.setNameSpellingInitial(SearchUtils.initialSearchableString(friendShipInfo.getUser().getNickname()));
+//                if (!TextUtils.isEmpty(friendShipInfo.getDisplayName())) {
+//                    userInfo.setOrderSpelling(CharacterParser.getInstance().getSpelling(friendShipInfo.getDisplayName()));
+//                } else {
+//                    userInfo.setOrderSpelling(CharacterParser.getInstance().getSpelling(friendShipInfo.getUser().getNickname()));
+//                }
+//
+//                friendInfo.setId(friendShipInfo.getUser().getId());
+//                friendInfo.setMessage(friendShipInfo.getMessage());
+//                friendInfo.setUpdatedAt(friendShipInfo.getUpdatedAt() == null ? friendShipInfo.getUser().getUpdatedAt() : friendShipInfo.getUpdatedAt());
+//
+//                userDao.insertUser(userInfo);
+//                friendDao.insertFriendShip(friendInfo);
+//
+//                // 更新 IMKit 显示缓存
+//                String name = userInfo.getAlias();
+//                if (TextUtils.isEmpty(name)) {
+//                    name = userInfo.getName();
+//                }
+//                IMManager.getInstance().updateUserInfoCache(userInfo.getId(), name, Uri.parse(userInfo.getPortraitUri()));
+//            }
+//
+//            @NonNull
+//            @Override
+//            protected LiveData<FriendShipInfo> loadFromDb() {
+//                FriendDao friendDao = dbManager.getFriendDao();
+//                LiveData<FriendShipInfo> friendInfo;
+//                if (friendDao == null) {
+//                    friendInfo = new MutableLiveData<>(null);
+//                } else {
+//                    friendInfo = friendDao.getFriendInfo(userId);
+//                }
+//                return friendInfo;
+//            }
+//
+//            @NonNull
+//            @Override
+//            protected LiveData<Result<FriendShipInfo>> createCall() {
+//                return friendService.getFriendInfo(userId);
+//            }
+//        }.asLiveData();
     }
 
     public FriendShipInfo getFriendShipInfoFromDBSync(String userId) {
@@ -433,54 +501,6 @@ public class FriendTask {
         return dbManager.getFriendDao().searchFriendShip(match);
     }
 
-//    /**
-//     * 设置好友备注名
-//     *
-//     * @param friendId
-//     * @param alias
-//     * @return
-//     */
-//    public LiveData<Resource<Void>> setFriendAliasName(String friendId, String alias) {
-//        return new NetworkOnlyResource<Void, Result>() {
-//            @Override
-//            protected void saveCallResult(@NonNull Void item) {
-//                UserDao userDao = dbManager.getUserDao();
-//                if (userDao != null) {
-//                    String aliasSpelling = CharacterParser.getInstance().getSpelling(alias);
-//                    userDao.updateAlias(friendId, alias, aliasSpelling);
-//
-//                    UserInfo userInfo = userDao.getUserByIdSync(friendId);
-//                    // 更新 IMKit 显示缓存
-//                    String name = userInfo.getAlias();
-//                    if (TextUtils.isEmpty(name)) {
-//                        name = userInfo.getName();
-//                    }
-//                    IMManager.getInstance().updateUserInfoCache(userInfo.getId(), name, Uri.parse(userInfo.getPortraitUri()));
-//                    // 需要获取此用户所在自己的哪些群组， 然后遍历修改其群组的个人信息。
-//                    // 用于当有备注的好友在群组时， 显示备注名称
-//                    GroupMemberDao groupMemberDao = dbManager.getGroupMemberDao();
-//                    List<String> groupIds = groupMemberDao.getGroupIdListByUserId(friendId);
-//                    if (groupIds != null && groupIds.size() > 0) {
-//                        for (String groupId : groupIds) {
-//                            //如果有设置群昵称，则不设置好友别名
-//                            if (TextUtils.isEmpty(groupMemberDao.getGroupMemberInfoDes(groupId, friendId).getGroupNickname())) {
-//                                IMManager.getInstance().updateGroupMemberInfoCache(groupId, friendId, name);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//
-//            @NonNull
-//            @Override
-//            protected LiveData<Result> createCall() {
-//                HashMap<String, Object> bodyMap = new HashMap<>();
-//                bodyMap.put("friendId", friendId);
-//                bodyMap.put("displayName", alias);
-//                return friendService.setAlias(RetrofitUtil.createJsonRequest(bodyMap));
-//            }
-//        }.asLiveData();
-//    }
 
 
     /**

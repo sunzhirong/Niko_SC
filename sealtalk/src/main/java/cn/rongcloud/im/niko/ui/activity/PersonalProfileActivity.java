@@ -41,6 +41,7 @@ public class PersonalProfileActivity extends BaseActivity {
     private void initView() {
         initViewModel();
         mTvSubmit = mTitleBar.getTitleBarTvRight();
+        mTvSubmit.setEnabled(true);
         mTvSubmit.setOnClickListener(v -> {
             mUserInfoViewModel.updateProfile(2,"Bio",mEtContent.getText().toString().trim());
         });

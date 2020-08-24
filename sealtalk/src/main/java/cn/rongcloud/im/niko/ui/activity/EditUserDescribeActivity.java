@@ -1,65 +1,85 @@
 package cn.rongcloud.im.niko.ui.activity;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
+import butterknife.BindView;
 import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.common.IntentExtra;
 import cn.rongcloud.im.niko.db.model.FriendDescription;
-import cn.rongcloud.im.niko.file.FileManager;
-import cn.rongcloud.im.niko.model.CountryInfo;
 import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Status;
-import cn.rongcloud.im.niko.ui.dialog.CommonDialog;
-import cn.rongcloud.im.niko.ui.dialog.SelectPictureBottomDialog;
-import cn.rongcloud.im.niko.utils.ImageLoaderUtils;
-import cn.rongcloud.im.niko.utils.PhotoUtils;
+import cn.rongcloud.im.niko.ui.BaseActivity;
+import cn.rongcloud.im.niko.ui.widget.TitleBar;
 import cn.rongcloud.im.niko.utils.ToastUtils;
-import cn.rongcloud.im.niko.utils.log.SLog;
 import cn.rongcloud.im.niko.viewmodel.EditUserDescribeViewModel;
-import io.rong.imkit.widget.AsyncImageView;
 
-public class EditUserDescribeActivity extends TitleBaseActivity {
+public class EditUserDescribeActivity extends BaseActivity {
 
-    private EditText etDisplayName;
+    @BindView(R.id.title_bar)
+    TitleBar mTitleBar;
+    @BindView(R.id.et_nickname)
+    AppCompatEditText mEtNickname;
+    @BindView(R.id.tv_length)
+    AppCompatTextView mTvLength;
+//    private EditText etDisplayName;
     private String userId;
     private EditUserDescribeViewModel editUserDescribeViewModel;
     public final static int OPERATE_PICTURE_SAVE = 0x1212;
     public final static int OPERATE_PICTURE_DELETE = 0x1211;
+    private TextView mTvSubmit;
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_modify_nickname;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_user_describe);
         userId = getIntent().getStringExtra(IntentExtra.STR_TARGET_ID);
         initView();
         initViewModel();
     }
 
+
     private void initView() {
-        getTitleBar().setTitle(getString(R.string.profile_set_display_name));
-        getTitleBar().setOnBtnRightClickListener(getString(R.string.seal_describe_more_btn_complete), new View.OnClickListener() {
+        mTitleBar.setTitle("备注");
+        mTvSubmit = mTitleBar.getTitleBarTvRight();
+        mTvSubmit.setEnabled(true);
+        mTvSubmit.setOnClickListener(v -> {
+            setFriendDescription();
+        });
+        mEtNickname.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                showSaveConfirmDialog();
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String content = s.toString().trim();
+                mTvLength.setText(String.valueOf(10 - content.length()));
+//                mTvSubmit.setEnabled(!TextUtils.isEmpty(content));
+
             }
         });
-        etDisplayName = findViewById(R.id.et_display_name);
+
     }
 
     private void initViewModel() {
@@ -91,31 +111,14 @@ public class EditUserDescribeActivity extends TitleBaseActivity {
 
     private void updateView(FriendDescription friendDescriptionResource) {
         if (!TextUtils.isEmpty(friendDescriptionResource.getDisplayName())) {
-            etDisplayName.setText(friendDescriptionResource.getDisplayName(), TextView.BufferType.EDITABLE);
+            mEtNickname.setText(friendDescriptionResource.getDisplayName(), TextView.BufferType.EDITABLE);
         }
     }
 
-    private void showSaveConfirmDialog() {
-        CommonDialog.Builder builder = new CommonDialog.Builder();
-        builder.setContentMessage(getString(R.string.seal_describe_more_save_tips));
-        builder.setDialogButtonClickListener(new CommonDialog.OnDialogButtonClickListener() {
-            @Override
-            public void onPositiveClick(View v, Bundle bundle) {
-                setFriendDescription();
-            }
-
-            @Override
-            public void onNegativeClick(View v, Bundle bundle) {
-
-            }
-        });
-        CommonDialog deleteDialog = builder.build();
-        deleteDialog.show(getSupportFragmentManager().beginTransaction(), "AddCategoriesDialogFragment");
-    }
 
     private void setFriendDescription() {
         showLoadingDialog("");
-        editUserDescribeViewModel.setFriendDescription(userId, etDisplayName.getText().toString());
+        editUserDescribeViewModel.setFriendDescription(userId, mEtNickname.getText().toString());
     }
 
 }

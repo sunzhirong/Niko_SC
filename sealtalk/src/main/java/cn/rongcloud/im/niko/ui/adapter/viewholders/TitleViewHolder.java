@@ -21,4 +21,9 @@ public class TitleViewHolder extends BaseViewHolder<ContactModel<CharacterTitleI
     public void update(ContactModel<CharacterTitleInfo> characterTitleInfoContactModel) {
         textView.setText(characterTitleInfoContactModel.getBean().getCharacter());
     }
+
+    @Override
+    public void update(ContactModel<CharacterTitleInfo> characterTitleInfoContactModel,boolean canSelect) {
+        textView.setText(characterTitleInfoContactModel.getBean().getCharacter());
+    }
 }

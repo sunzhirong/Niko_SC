@@ -1,17 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
     <cn.rongcloud.im.niko.ui.view.SealTitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" >
+        <TextView
+            android:visibility="gone"
+            android:layout_marginLeft="@dimen/rc_reference_dimen_size_10"
+            android:id="@+id/tv_cancel"
+            android:textColor="@color/blackB"
+            android:text="取消"
+            android:layout_centerVertical="true"
+            android:textSize="14sp"
+            style="@style/tv16BlackStyle"/>
+
+        <TextView
+            android:visibility="gone"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="管理"
+            android:id="@+id/tv_manager"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:clickable="true"
+            android:maxLines="1"
+            android:textColor="@color/blackA"
+            android:textSize="12sp" />
+
+    </cn.rongcloud.im.niko.ui.view.SealTitleBar>
+
 
     <ViewFlipper
         android:id="@+id/layout_container"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        />
+        android:layout_weight="1" />
 
 </LinearLayout>

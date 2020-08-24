@@ -5,9 +5,11 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -27,6 +29,7 @@ public abstract class TitleAndSearchBaseActivity extends TitleBaseActivity {
     public static final int SEARCH_TEXT_INPUT_DELAY_MILLIS = 500;
     private FrameLayout containerLayout;
     private TextView searchTv;
+    private EditText etSearch;
     private SealTitleBar titleBar;
     private Handler delayHandler;
 
@@ -39,6 +42,7 @@ public abstract class TitleAndSearchBaseActivity extends TitleBaseActivity {
 
         containerLayout = findViewById(R.id.title_and_search_container);
         searchTv = findViewById(R.id.title_and_search_tv_search);
+        etSearch = findViewById(R.id.title_et_search);
         titleBar = getTitleBar();
 
         delayHandler = new Handler();
@@ -48,41 +52,44 @@ public abstract class TitleAndSearchBaseActivity extends TitleBaseActivity {
 
     private void initTitleAndSearchView(){
         // 设置搜索框的点击事件
-        searchTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSearchTitle();
-            }
-        });
+//        searchTv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showSearchTitle();
+//            }
+//        });
 
         // 设置搜索框的清除文本点击事件
-        titleBar.setOnSearchClearTextClickedListener(new SealTitleBar.OnSearchClearTextClickedListener() {
-            @Override
-            public void onSearchClearTextClicked() {
-                showNormalTitle();
-            }
-        });
+//        titleBar.setOnSearchClearTextClickedListener(new SealTitleBar.OnSearchClearTextClickedListener() {
+//            @Override
+//            public void onSearchClearTextClicked() {
+//                showNormalTitle();
+//            }
+//        });
 
         // 设置后退键的点击事件
-        getTitleBar().setOnBtnLeftClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeSearchOrExit();
-            }
-        });
+//        getTitleBar().setOnBtnLeftClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                closeSearchOrExit();
+//            }
+//        });
 
         // 设置标题栏搜索输入框的文本变化监听
-        titleBar.addSeachTextChangedListener(new TextWatcher() {
+        etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.e("beforeTextChanged","s="+s.toString());
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.e("onTextChanged","s="+s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                Log.e("afterTextChanged","s="+s.toString());
                 delayHandler.removeCallbacks(searchKeywordRunnable);
                 String keyword = s.toString();
                 int delay = SEARCH_TEXT_INPUT_DELAY_MILLIS;
@@ -101,10 +108,12 @@ public abstract class TitleAndSearchBaseActivity extends TitleBaseActivity {
     private Runnable searchKeywordRunnable = new Runnable() {
         @Override
         public void run() {
-            if(titleBar != null) {
-                String keyword = titleBar.getEtSearch().getText().toString();
-                onSearch(keyword);
-            }
+            String keyword = etSearch.getText().toString().trim();
+            onSearch(keyword);
+//            if(titleBar != null) {
+//                String keyword = titleBar.getEtSearch().getText().toString();
+//                onSearch(keyword);
+//            }
         }
     };
 
@@ -177,4 +186,9 @@ public abstract class TitleAndSearchBaseActivity extends TitleBaseActivity {
             finish();
         }
     }
+
+//    @Override
+//    public SealTitleBar getTitleBar() {
+//        return titleBar;
+//    }
 }

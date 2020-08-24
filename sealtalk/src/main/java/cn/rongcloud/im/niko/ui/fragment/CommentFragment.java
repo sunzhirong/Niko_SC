@@ -66,6 +66,8 @@ public class CommentFragment extends BaseFragment {
     private CommentRvAdapter mCommentRvAdapter;
     private CommentBean mCommentBean;
 
+    private int type = NetConstant.TYPE_REFRESH;
+
     public LinearLayout getLlInput() {
         return mLlInput;
     }
@@ -104,13 +106,15 @@ public class CommentFragment extends BaseFragment {
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mUserInfoViewModel.getCommentList(NetConstant.SKIP, NetConstant.TAKE);
+                type = NetConstant.TYPE_REFRESH;
+                mUserInfoViewModel.getCommentList(0, NetConstant.PAGE_SIZE);
             }
         });
         mRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-
+                type = NetConstant.TYPE_LOAD_MORE;
+                mUserInfoViewModel.getCommentList(mCommentRvAdapter.getItemCount(), NetConstant.PAGE_SIZE);
             }
         });
 
@@ -187,11 +191,16 @@ public class CommentFragment extends BaseFragment {
         mUserInfoViewModel.getCommentListResult().observe(this, result -> {
             if (result.RsCode == NetConstant.REQUEST_SUCCESS_CODE) {
                 List<CommentBean> rsData = result.RsData;
-                mCommentRvAdapter.setDatas(rsData);
+                if(type==NetConstant.TYPE_REFRESH){
+                    mCommentRvAdapter.setDatas(rsData);
+                }else {
+                    mCommentRvAdapter.addDatas(rsData);
+                }
             }
             mRefreshLayout.finishRefresh();
+            mRefreshLayout.finishLoadMore();
         });
-        mUserInfoViewModel.getCommentList(NetConstant.SKIP, NetConstant.TAKE);
+        mUserInfoViewModel.getCommentList(0, NetConstant.PAGE_SIZE);
 
         mUserInfoViewModel.getCmtAddResult().observe(this, result -> {
             if (result.RsCode == NetConstant.REQUEST_SUCCESS_CODE) {

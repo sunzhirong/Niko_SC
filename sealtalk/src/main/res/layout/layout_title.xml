@@ -16,6 +16,7 @@
         android:drawableLeft="@drawable/seal_ic_title_back" />
 
 
+
     <FrameLayout
         android:id="@+id/fl_content"
         android:layout_width="wrap_content"
@@ -94,7 +95,7 @@
             android:clickable="true"
             android:maxLines="1"
             android:textColor="@color/blackA"
-            android:textSize="@dimen/seal_title_bar_text_size"
+            android:textSize="12sp"
             android:visibility="gone" />
     </LinearLayout>
 </RelativeLayout>

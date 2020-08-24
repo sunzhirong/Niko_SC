@@ -30,7 +30,7 @@
     <dimen name="seal_search_title_bar_height">48dp</dimen>
     <dimen name="seal_search_title_bar_et_margin">8dp</dimen>
     <dimen name="seal_search_title_bar_et_padding">8dp</dimen>
-    <dimen name="seal_search_title_bar_et_text_size">16dp</dimen>
+    <dimen name="seal_search_title_bar_et_text_size">13sp</dimen>
     <dimen name="seal_search_title_bar_line_margin_top">12dp</dimen>
     <dimen name="seal_search_title_bar_line_margin_bottom">12dp</dimen>
     <dimen name="seal_search_title_bar_line_height">24dp</dimen>
@@ -131,8 +131,8 @@
     <dimen name="seal_contact_fragment_bar_width">20dp</dimen>
     <dimen name="seal_contact_item_height">55dp</dimen>
     <dimen name="seal_contact_item_padding">12dp</dimen>
-    <dimen name="seal_contact_item_portrait_width">36dp</dimen>
-    <dimen name="seal_contact_item_portrait_height">36dp</dimen>
+    <dimen name="seal_contact_item_portrait_width">38dp</dimen>
+    <dimen name="seal_contact_item_portrait_height">38dp</dimen>
     <dimen name="seal_contact_item_portrait_margin_left">12dp</dimen>
     <dimen name="seal_contact_item_portrait_radius">3dp</dimen>
     <dimen name="seal_contact_item_name_margin_left">12dp</dimen>

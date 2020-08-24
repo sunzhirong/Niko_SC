@@ -146,8 +146,10 @@ public class GridGroupMemberAdapter extends BaseAdapter {
      * @param isAllowDelete
      */
     public void setAllowDeleteMember(boolean isAllowDelete) {
-        this.isAllowDelete = isAllowDelete;
-        notifyDataSetChanged();
+        //都不允许选择删除
+
+//        this.isAllowDelete = isAllowDelete;
+//        notifyDataSetChanged();
     }
 
     /**

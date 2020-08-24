@@ -103,6 +103,7 @@ public class ModifyNicknameActivity extends BaseActivity {
 
     private void initEt() {
         mTvSubmit = mTitleBar.getTitleBarTvRight();
+        mTvSubmit.setEnabled(true);
         mTvSubmit.setOnClickListener(v -> {
             updateProfile();
         });
@@ -121,7 +122,7 @@ public class ModifyNicknameActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 String content = s.toString().trim();
                 mTvLength.setText(String.valueOf(10 - content.length()));
-                mTvSubmit.setEnabled(!TextUtils.isEmpty(content));
+//                mTvSubmit.setEnabled(!TextUtils.isEmpty(content));
                 switch (mType) {
                     case SettingPersonInfoActivity.TYPE_NICKNAME:
                         mTvTips.setVisibility(mTvSubmit.isEnabled() ? View.GONE : View.VISIBLE);

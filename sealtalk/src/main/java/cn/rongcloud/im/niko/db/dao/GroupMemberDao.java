@@ -30,7 +30,7 @@ public interface GroupMemberDao {
             "where user_id=:userId")
     List<String> getGroupIdListByUserId(String userId);
 
-    @Query("SELECT group_member.user_id, group_member.group_id, group_member.nickname, group_member.role, group_member.join_time, nickname_spelling,user.name, user.name_spelling, user.portrait_uri, user.alias" +
+    @Query("SELECT group_member.name_color,group_member.user_id, group_member.group_id, group_member.nickname, group_member.role, group_member.join_time, nickname_spelling,user.name, user.name_spelling, user.portrait_uri, user.alias" +
             " FROM group_member " +
             "INNER JOIN user ON group_member.user_id = user.id " +
             "where group_id=:groupId and " +
@@ -39,7 +39,7 @@ public interface GroupMemberDao {
             "ORDER BY join_time asc")
     LiveData<List<GroupMember>> getGroupMemberList(String groupId, String filterByName);
 
-    @Query("SELECT group_member.user_id, group_member.group_id, group_member.nickname, group_member.role, group_member.join_time, nickname_spelling,user.name, user.name_spelling, user.portrait_uri, user.alias" +
+    @Query("SELECT group_member.name_color,group_member.user_id, group_member.group_id, group_member.nickname, group_member.role, group_member.join_time, nickname_spelling,user.name, user.name_spelling, user.portrait_uri, user.alias" +
             " FROM group_member " +
             "INNER JOIN user ON group_member.user_id = user.id " +
             "where group_id=:groupId and group_member.user_id=:memberId")
@@ -57,7 +57,7 @@ public interface GroupMemberDao {
     @Query("update group_member set nickname=:value where group_id=:groupId And user_id=:userId")
     void updateMemberNickName(String value, String groupId, String userId);
 
-    @Query("SELECT group_member.user_id, group_member.group_id, group_member.nickname, group_member.role, group_member.join_time, nickname_spelling,user.name, user.name_spelling, user.portrait_uri, user.alias" +
+    @Query("SELECT group_member.name_color,group_member.user_id, group_member.group_id, group_member.nickname, group_member.role, group_member.join_time, nickname_spelling,user.name, user.name_spelling, user.portrait_uri, user.alias" +
             " FROM group_member " +
             "INNER JOIN user ON group_member.user_id = user.id " +
             "where group_id=:groupId and " +

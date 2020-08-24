@@ -24,6 +24,8 @@ public class SelectMultiFriendsActivity extends SelectBaseActivity implements Vi
     private SelectMultiViewModel selectMultiViewModel;
     private TextView titleConfirmTv;
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,10 @@ public class SelectMultiFriendsActivity extends SelectBaseActivity implements Vi
         initViewModel();
     }
 
+    protected boolean keyboardEnable(){
+        return false;
+    }
+
     private void initViewModel() {
         selectMultiViewModel = ViewModelProviders.of(this).get(SelectMultiViewModel.class);
 
@@ -52,7 +58,16 @@ public class SelectMultiFriendsActivity extends SelectBaseActivity implements Vi
             } else {
                 setConfirmEnable(false);
             }
+            setRightTvText(selectCount);
         });
+    }
+
+    protected void setRightTvText(int selectCount) {
+
+    }
+
+    protected void cancelAndClearSelect(){
+        selectMultiViewModel.cancelAllCheck();
     }
 
     /**
@@ -128,5 +143,9 @@ public class SelectMultiFriendsActivity extends SelectBaseActivity implements Vi
                 selectMultiFriendFragment.search(keyword);
             }
         }
+    }
+
+    public TextView getTitleConfirmTv() {
+        return titleConfirmTv;
     }
 }

@@ -56,7 +56,7 @@ import io.rong.imlib.model.UserInfo;
 import io.rong.message.TextMessage;
 import io.rong.imkit.userInfoCache.RongUserInfoManager;
 
-@ProviderTag(messageContent = TextMessage.class)
+@ProviderTag(messageContent = TextMessage.class,showSummaryWithName=false)
 public class MyTextMessageItemProvider extends TextMessageItemProvider {
 
     private boolean isLike = false;

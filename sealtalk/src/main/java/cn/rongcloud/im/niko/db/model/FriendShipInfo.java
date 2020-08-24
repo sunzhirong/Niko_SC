@@ -30,7 +30,7 @@ public class FriendShipInfo implements Parcelable {
     @ColumnInfo(name= "nickname_spelling")
     private String groupDisplayNameSpelling;
 
-    @ColumnInfo(name= "nickname_color")
+    @ColumnInfo(name= "name_color")
     private String nameColor;
 
     public String getNameColor() {
@@ -135,6 +135,7 @@ public class FriendShipInfo implements Parcelable {
         dest.writeString(this.disPlayNameSpelling);
         dest.writeString(this.groupDisplayName);
         dest.writeString(this.groupDisplayNameSpelling);
+        dest.writeString(this.nameColor);
     }
 
     public FriendShipInfo() {
@@ -150,6 +151,7 @@ public class FriendShipInfo implements Parcelable {
         this.disPlayNameSpelling = in.readString();
         this.groupDisplayName = in.readString();
         this.groupDisplayNameSpelling = in.readString();
+        this.nameColor = in.readString();
     }
 
     public static final Parcelable.Creator<FriendShipInfo> CREATOR = new Parcelable.Creator<FriendShipInfo>() {

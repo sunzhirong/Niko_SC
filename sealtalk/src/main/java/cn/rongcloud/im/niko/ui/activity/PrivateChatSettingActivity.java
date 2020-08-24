@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSON;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import cn.rongcloud.im.niko.R;
@@ -22,6 +23,7 @@ import cn.rongcloud.im.niko.db.model.FriendDescription;
 import cn.rongcloud.im.niko.db.model.FriendDetailInfo;
 import cn.rongcloud.im.niko.db.model.FriendShipInfo;
 import cn.rongcloud.im.niko.db.model.ScLikeDetail;
+import cn.rongcloud.im.niko.db.model.UserInfo;
 import cn.rongcloud.im.niko.event.DeleteFriendEvent;
 import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Status;
@@ -78,31 +80,22 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
         initData();
         EventBus.getDefault().register(this);
 
-        ThreadManager.getInstance().runOnWorkThread(new Runnable() {
-            @Override
-            public void run() {
-                List<ScLikeDetail> allDetails = DbManager.getInstance(mContext).getScLikeDao().getAllDetails();
-                Log.e("db","all details = "+ JSON.toJSONString(allDetails));
-            }
+        ThreadManager.getInstance().runOnWorkThread(() -> {
+            List<UserInfo> all = DbManager.getInstance(mContext).getUserDao().getAll();
+            Log.e("all",all.size()+"");
         });
 
-//        ThreadManager.getInstance().runOnWorkThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                List<ScLikeDetail> allDetails = DbManager.getInstance(mContext).getScLikeDao().getDetailsById("BJT0-LLUQ-1KK5-EV38");
-//                Log.e("db","getDetailsById1 details = "+ JSON.toJSONString(allDetails));
-//            }
-//        });
-//
-//        ThreadManager.getInstance().runOnWorkThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                List<ScLikeDetail> allDetails = DbManager.getInstance(mContext).getScLikeDao().getDetailsById("BJSD-UQ9E-4RM5-EV3V");
-//                Log.e("db","getDetailsById2 details = "+ JSON.toJSONString(allDetails));
-//            }
-//        });
+        ThreadManager.getInstance().runOnWorkThread(() -> {
+            List<FriendShipInfo> allFriendsExcludeGroup = DbManager.getInstance(mContext).getFriendDao().getAllFriendsExcludeGroup1("185");
+            Log.e("all",allFriendsExcludeGroup.size()+"");
 
+        });
 
+        ThreadManager.getInstance().runOnWorkThread(() -> {
+            List<FriendShipInfo> allFriendsExcludeGroup = DbManager.getInstance(mContext).getFriendDao().getAll();
+            Log.e("all",allFriendsExcludeGroup.size()+"");
+
+        });
 
     }
 

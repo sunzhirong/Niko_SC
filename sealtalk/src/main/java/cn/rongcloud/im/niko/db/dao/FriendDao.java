@@ -61,6 +61,7 @@ public interface FriendDao {
             "order by user.order_spelling")
     LiveData<List<FriendShipInfo>> searchFriendShip(String matchSearch);
 
+
     @Query("SELECT user.id,user.name,user.portrait_uri FROM black_list INNER JOIN user ON black_list.id = user.id WHERE black_list.id=:userId")
     LiveData<UserSimpleInfo> getUserInBlackList(String userId);
 
@@ -82,7 +83,7 @@ public interface FriendDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void updateBlackList(List<BlackListEntity> blackListEntityList);
 
-    @Query("SELECT friend.id as id ,alias,portrait_uri,name,region,phone_number,friend_status,message,updateAt,alias_spelling, name_spelling,order_spelling " +
+    @Query("SELECT friend.id as id ,alias,portrait_uri,name,region,phone_number,friend_status,message,updateAt,alias_spelling, name_spelling,order_spelling,name_color " +
             "FROM friend " +
             "left join user " +
             "on friend.id = user.id " +
@@ -91,7 +92,7 @@ public interface FriendDao {
             "order by user.order_spelling")
     LiveData<List<FriendShipInfo>> getAllFriendsExcludeGroup(String excludeGroupId);
 
-    @Query("SELECT friend.id as id ,alias,portrait_uri,name,region,phone_number,friend_status,message,updateAt,alias_spelling, name_spelling,order_spelling " +
+    @Query("SELECT friend.id as id ,alias,portrait_uri,name,region,phone_number,friend_status,message,updateAt,alias_spelling, name_spelling,order_spelling,name_color " +
             "FROM friend " +
             "left join user " +
             "on friend.id = user.id " +
@@ -170,6 +171,19 @@ public interface FriendDao {
 
 
 
+    @Query("SELECT friend.id as id ,alias,portrait_uri,name,region,phone_number,friend_status,message,updateAt,alias_spelling, name_spelling,order_spelling,name_color " +
+            "FROM friend " +
+            "left join user " +
+            "on friend.id = user.id " +
+            "where friend.id " +
+            "not in (select DISTINCT(group_member.user_id) from group_member where group_member.group_id =:excludeGroupId) " +
+            "order by user.order_spelling")
+    List<FriendShipInfo> getAllFriendsExcludeGroup1(String excludeGroupId);
 
-
+    @Query("SELECT friend.id as id ,alias,portrait_uri,name,region,phone_number,friend_status,message,updateAt,alias_spelling, name_spelling,order_spelling,name_color " +
+            "FROM friend " +
+            "left join user " +
+            "on friend.id = user.id " +
+            "order by user.order_spelling")
+    List<FriendShipInfo> getAll();
 }

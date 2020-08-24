@@ -10,7 +10,7 @@
         android:paddingRight="14dp"
         android:id="@+id/rlContainer"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
+        android:layout_height="@dimen/seal_title_bar_height"
         android:background="@color/white">
 
         <TextView

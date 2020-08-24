@@ -21,6 +21,12 @@ public class SelectContactAdapter extends RecyclerView.Adapter<BaseViewHolder<Co
     private List<ContactModel> data;
     private OnCheckContactClickListener checkableItemClickListener;
 
+    private boolean canSelect;
+
+    public void setCanSelect(boolean canSelect) {
+        this.canSelect = canSelect;
+    }
+
     public SelectContactAdapter(OnCheckContactClickListener onContactItemClickListener) {
         this.data = new ArrayList<ContactModel>();
         this.checkableItemClickListener = onContactItemClickListener;
@@ -39,7 +45,7 @@ public class SelectContactAdapter extends RecyclerView.Adapter<BaseViewHolder<Co
         View itemView = inflater.inflate(viewType, parent, false);
         switch (viewType) {
             case R.layout.select_fragment_contact_item:
-                viewHolder = new CheckableContactViewHolder(itemView, checkableItemClickListener);
+                viewHolder = new CheckableContactViewHolder(itemView, checkableItemClickListener,canSelect);
                 break;
             case R.layout.contact_contact_title:
                 viewHolder = new TitleViewHolder(itemView);
@@ -52,7 +58,7 @@ public class SelectContactAdapter extends RecyclerView.Adapter<BaseViewHolder<Co
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder<ContactModel> holder, int position) {
-        holder.update(data.get(position));
+        holder.update(data.get(position),canSelect);
     }
 
 

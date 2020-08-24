@@ -3,16 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="#ebebeb">
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/catalog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ebebeb"
         android:paddingLeft="12dip"
         android:paddingTop="5dip"
         android:paddingBottom="5dip"
         android:text="A"
-        android:textColor="#999999" />
+        android:textColor="#202129" />
 </LinearLayout>

@@ -48,7 +48,7 @@ import io.rong.message.RichContentMessage;
 
 @ProviderTag(
         messageContent = RichContentMessage.class,
-        showReadState = true
+        showSummaryWithName=false
 )
 public class MyRichContentMessageItemProvider extends RichContentMessageItemProvider {
 

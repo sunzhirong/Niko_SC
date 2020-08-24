@@ -19,6 +19,12 @@ public class NetConstant {
 
     public final static int SKIP = 0;
     public final static int TAKE = 1000;
+    public final static int PAGE_SIZE = 10;
+
+
+    public final static int TYPE_REFRESH = 0;
+    public final static int TYPE_LOAD_MORE = 1;
+
 
     public final static String PWD_REGEX = "";
 }

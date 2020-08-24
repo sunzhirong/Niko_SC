@@ -134,8 +134,8 @@ public class SealTitleBar extends RelativeLayout {
                 etSearch.setVisibility(View.GONE);
                 tvTyping.setVisibility(View.VISIBLE);
                 flContent.setVisibility(View.VISIBLE);
-
                 break;
+
             default:
                 // Do nothing
                 break;

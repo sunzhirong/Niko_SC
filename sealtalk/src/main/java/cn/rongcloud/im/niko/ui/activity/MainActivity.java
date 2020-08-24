@@ -31,12 +31,10 @@ import cn.rongcloud.im.niko.event.CommentHeightEvent;
 import cn.rongcloud.im.niko.event.ItemCommentEvent;
 import cn.rongcloud.im.niko.event.ShowMoreEvent;
 import cn.rongcloud.im.niko.ui.BaseActivity;
-import cn.rongcloud.im.niko.ui.dialog.MorePopWindow;
 import cn.rongcloud.im.niko.ui.fragment.ChatFragment;
 import cn.rongcloud.im.niko.ui.fragment.MainContactsListFragment;
 import cn.rongcloud.im.niko.ui.fragment.MainConversationListFragment;
 import cn.rongcloud.im.niko.ui.fragment.MainMeFragment;
-import cn.rongcloud.im.niko.ui.niko.SelectMemberActivity;
 import cn.rongcloud.im.niko.ui.niko.SettingActivity;
 import cn.rongcloud.im.niko.ui.view.MainBottomTabGroupView;
 import cn.rongcloud.im.niko.ui.view.MainBottomTabItem;
@@ -49,7 +47,7 @@ import cn.rongcloud.im.niko.viewmodel.MainViewModel;
 import io.rong.eventbus.EventBus;
 import io.rong.imkit.RongIM;
 
-public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWindowItemClickListener {
+public class MainActivity extends BaseActivity  {
     public static final String PARAMS_TAB_INDEX = "tab_index";
     private static final int REQUEST_START_CHAT = 0;
     private static final int REQUEST_START_GROUP = 1;
@@ -63,6 +61,7 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
 
     private View mask;
     private int mMaskMarginHeight;
+    private int mCurrentItem;
 
     /**
      * tab 项枚举
@@ -173,13 +172,6 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
             }
         });
 
-        findViewById(R.id.btn_more).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MorePopWindow morePopWindow = new MorePopWindow(MainActivity.this, MainActivity.this);
-                morePopWindow.showPopupWindow(v);
-            }
-        });
 
         // 底部按钮
         tabGroupView = findViewById(R.id.tg_bottom_tabs);
@@ -245,24 +237,26 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
 //                        startActivity(intent);
 //                    }
 //                }
-                changeFragment(fragments.get(item.id));
-                if (item.id == Tab.ME.getValue()) {
+                if (item.id!=mCurrentItem&&item.id == Tab.ME.getValue()) {
                     Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                     startActivity(intent);
                 }
+                changeFragment(fragments.get(item.id));
+                mCurrentItem = item.id;
+
             }
         });
 
-        tabGroupView.setOnTabDoubleClickListener(new MainBottomTabGroupView.OnTabDoubleClickListener() {
-            @Override
-            public void onDoubleClick(TabItem item, View view) {
-                // 双击定位到某一个未读消息位置
-                if (item.id == Tab.CHAT.getValue()) {
-                    MainConversationListFragment fragment = (MainConversationListFragment) fragments.get(Tab.CHAT.getValue());
-                    fragment.focusUnreadItem();
-                }
-            }
-        });
+//        tabGroupView.setOnTabDoubleClickListener(new MainBottomTabGroupView.OnTabDoubleClickListener() {
+//            @Override
+//            public void onDoubleClick(TabItem item, View view) {
+//                // 双击定位到某一个未读消息位置
+//                if (item.id == Tab.CHAT.getValue()) {
+//                    MainConversationListFragment fragment = (MainConversationListFragment) fragments.get(Tab.CHAT.getValue());
+//                    fragment.focusUnreadItem();
+//                }
+//            }
+//        });
 
         // 未读数拖拽
         ((MainBottomTabItem) tabGroupView.getView(Tab.CHAT.getValue())).setTabUnReadNumDragListener(new DragPointView.OnDragListencer() {
@@ -274,7 +268,7 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
                 clearUnreadStatus();
             }
         });
-        ((MainBottomTabItem) tabGroupView.getView(Tab.CHAT.getValue())).setNumVisibility(View.VISIBLE);
+//        ((MainBottomTabItem) tabGroupView.getView(Tab.CHAT.getValue())).setNumVisibility(View.VISIBLE);
     }
 
 
@@ -395,42 +389,6 @@ public class MainActivity extends BaseActivity implements MorePopWindow.OnPopWin
     }
 
 
-    /**
-     * 发起单聊
-     */
-    @Override
-    public void onStartChartClick() {
-        Intent intent = new Intent(this, SelectSingleFriendActivity.class);
-        startActivityForResult(intent, REQUEST_START_CHAT);
-    }
-
-    /**
-     * 创建群组
-     */
-    @Override
-    public void onCreateGroupClick() {
-//        Intent intent = new Intent(this, SelectCreateGroupActivity.class);
-//        startActivityForResult(intent, REQUEST_START_GROUP);
-        readyGo(SelectMemberActivity.class);
-    }
-
-    /**
-     * 添加好友
-     */
-    @Override
-    public void onAddFriendClick() {
-        Intent intent = new Intent(this, AddFriendActivity.class);
-        startActivity(intent);
-    }
-
-    /**
-     * 扫一扫
-     */
-    @Override
-    public void onScanClick() {
-        Intent intent = new Intent(this, ScanActivity.class);
-        startActivity(intent);
-    }
 
     @Override
     protected void onDestroy() {

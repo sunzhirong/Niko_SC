@@ -40,7 +40,10 @@ import cn.rongcloud.im.niko.im.plugin.PokeExtensionModule;
 import cn.rongcloud.im.niko.im.plugin.ScLikeExtensionModule;
 import cn.rongcloud.im.niko.im.provider.ContactNotificationMessageProvider;
 import cn.rongcloud.im.niko.im.provider.GroupApplyMessageProvider;
+import cn.rongcloud.im.niko.im.provider.MyImageMessageItemProvider;
+import cn.rongcloud.im.niko.im.provider.MyLocationMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.MyRichContentMessageItemProvider;
+import cn.rongcloud.im.niko.im.provider.MySightMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.MyTextMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.PokeMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.ScLikeMessageItemProvider;
@@ -191,16 +194,16 @@ public class IMManager {
      * 缓存登录
      */
     private void cacheConnectIM() {
-        if (RongIM.getInstance().getCurrentConnectionStatus() == RongIMClient.ConnectionStatusListener.ConnectionStatus.CONNECTED) {
-            autologinResult.setValue(true);
-            return;
-        }
+//        if (RongIM.getInstance().getCurrentConnectionStatus() == RongIMClient.ConnectionStatusListener.ConnectionStatus.CONNECTED) {
+//            autologinResult.setValue(true);
+//            return;
+//        }
 
-        UserCacheInfo userCache = this.userCache.getUserCache();
-        if (userCache == null) {
-            autologinResult.setValue(false);
-            return;
-        }
+//        UserCacheInfo userCache = this.userCache.getUserCache();
+//        if (userCache == null) {
+//            autologinResult.setValue(false);
+//            return;
+//        }
 
 //        String loginToken = this.userCache.getUserCache().getLoginToken();
         String loginToken = SPUtils.getIMToken(SealApp.getApplication());
@@ -557,6 +560,7 @@ public class IMManager {
     }
 
     /**
+     *
      * 初始化会话列表相关事件
      */
     private void initConversationList() {
@@ -813,6 +817,12 @@ public class IMManager {
         RongIM.registerMessageTemplate(new MyTextMessageItemProvider());
         //自定义图文item
         RongIM.registerMessageTemplate(new MyRichContentMessageItemProvider());
+
+        RongIM.registerMessageTemplate(new MyImageMessageItemProvider());
+
+        RongIM.registerMessageTemplate(new MySightMessageItemProvider());
+
+        RongIM.registerMessageTemplate(new MyLocationMessageItemProvider());
 
     }
 

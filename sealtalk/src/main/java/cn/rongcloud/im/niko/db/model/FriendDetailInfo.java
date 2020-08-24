@@ -44,6 +44,8 @@ public class FriendDetailInfo implements Parcelable {
     @Ignore
     private long createdTime;
 
+
+
     @NonNull
     public String getId() {
         return id;

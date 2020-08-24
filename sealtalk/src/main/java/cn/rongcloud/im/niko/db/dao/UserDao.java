@@ -73,5 +73,6 @@ public interface UserDao {
     @Query("UPDATE user SET name_color=:nameColor WHERE id=:id")
     int updateNameColor(String id, String nameColor);
 
-
+    @Query("SELECT * FROM user ")
+    List<UserInfo> getAll();
 }

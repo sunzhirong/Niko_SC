@@ -16,6 +16,7 @@ public class SelectBaseActivity extends TitleAndSearchBaseActivity {
     private TextView tvConfirm;
     private View bottomLayout;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

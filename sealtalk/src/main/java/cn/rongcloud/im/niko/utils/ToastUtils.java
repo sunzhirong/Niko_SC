@@ -2,6 +2,7 @@ package cn.rongcloud.im.niko.utils;
 
 import android.os.Build;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.widget.Toast;
 
 import cn.rongcloud.im.niko.SealApp;
@@ -23,6 +24,7 @@ public class ToastUtils {
         } else {
             lastToast = Toast.makeText(SealApp.getApplication(), message, Toast.LENGTH_SHORT);
         }
+        lastToast.setGravity(Gravity.CENTER, 0, 0);
         lastToast.show();
     }
 
@@ -47,13 +49,16 @@ public class ToastUtils {
 
         // 9.0 以上直接用调用即可防止重复的显示的问题，且如果复用 Toast 会出现无法再出弹出对话框问题
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-             Toast.makeText(SealApp.getApplication(), message, duration).show();
+            Toast toast = Toast.makeText(SealApp.getApplication(), message, duration);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
         } else {
             if (lastToast != null) {
                 lastToast.setText(message);
             } else {
                 lastToast = Toast.makeText(SealApp.getApplication(), message, duration);
             }
+            lastToast.setGravity(Gravity.CENTER, 0, 0);
             lastToast.show();
         }
     }

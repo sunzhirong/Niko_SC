@@ -567,7 +567,6 @@ public class GroupTask {
                     if (TextUtils.isEmpty(nameInKitCache)) {
                         nameInKitCache = user.getName();
                     }
-                    groupEntity.setNameColor(info.getNameColor());
                     groupEntity.setNickName(displayName);
                     groupEntity.setNickNameSpelling(SearchUtils.fullSearchableString(displayName));
                     groupEntity.setUserId(user.getId());
@@ -596,6 +595,7 @@ public class GroupTask {
                             userInfo.setName(user.getName());
                             userInfo.setNameSpelling(SearchUtils.fullSearchableString(user.getName()));
                             userInfo.setPortraitUri(user.getPortraitUri());
+                            userInfo.setNameColor(info.getNameColor());
                             newUserList.add(userInfo);
                         }
                     }

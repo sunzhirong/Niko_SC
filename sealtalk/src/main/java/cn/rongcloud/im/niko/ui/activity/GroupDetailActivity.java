@@ -1,10 +1,7 @@
 package cn.rongcloud.im.niko.ui.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,9 +9,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import cn.rongcloud.im.niko.R;
@@ -28,21 +23,17 @@ import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.ui.adapter.GridGroupMemberAdapter;
 import cn.rongcloud.im.niko.ui.dialog.CommonDialog;
 import cn.rongcloud.im.niko.ui.dialog.LoadingDialog;
-import cn.rongcloud.im.niko.ui.dialog.SelectPictureBottomDialog;
 import cn.rongcloud.im.niko.ui.dialog.SimpleInputDialog;
 import cn.rongcloud.im.niko.ui.view.SealTitleBar;
 import cn.rongcloud.im.niko.ui.view.SettingItemView;
 import cn.rongcloud.im.niko.ui.widget.SelectableRoundedImageView;
 import cn.rongcloud.im.niko.ui.widget.WrapHeightGridView;
-import cn.rongcloud.im.niko.utils.CheckPermissionUtils;
 import cn.rongcloud.im.niko.utils.ImageLoaderUtils;
 import cn.rongcloud.im.niko.utils.ToastUtils;
 import cn.rongcloud.im.niko.utils.log.SLog;
 import cn.rongcloud.im.niko.viewmodel.GroupDetailViewModel;
 import io.rong.imkit.emoticon.AndroidEmoji;
-import io.rong.imkit.userInfoCache.RongUserInfoManager;
 import io.rong.imlib.model.Conversation;
-import io.rong.imlib.model.Group;
 
 /**
  * 群组详细界面
@@ -61,7 +52,7 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
     /**
      * 最大显示成员数
      */
-    private final int SHOW_GROUP_MEMBER_LIMIT = 30;
+    private final int SHOW_GROUP_MEMBER_LIMIT = 20;
 
     private SealTitleBar titleBar;
     private WrapHeightGridView groupMemberGv;
@@ -76,13 +67,11 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
     private String groupName;
     private String grouportraitUrl;
     private SelectableRoundedImageView groupPortraitUiv;
-    private TextView allGroupMemberSiv;
     private TextView groupNameSiv;
     private SettingItemView notifyNoticeSiv;
     private SettingItemView onTopSiv;
     private String groupCreatorId;
 
-    private final int REQUEST_CODE_PERMISSION = 115;
     private CommonDialog mDeleteDialog;
 
 
@@ -127,12 +116,10 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
 
             @Override
             public void onMemberClicked(GroupMember groupMember) {
-                showMemberInfo(groupMember);
+//                showMemberInfo(groupMember);
             }
         });
 
-        // 全部群成员
-        allGroupMemberSiv = findViewById(R.id.profile_siv_all_group_member);
         findViewById(R.id.tv_more).setOnClickListener(this);
 
         // 查询历史消息
@@ -175,19 +162,24 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
             public void onChanged(GroupMember member) {
                 // 更具身份去控制对应的操作
                 if (member.getMemberRole() == GroupMember.Role.GROUP_OWNER) {//群主
-                    quitGroupBtn.setText("");
-                    // 根据是否是群组判断是否可以选择删除成员
-                    memberAdapter.setAllowDeleteMember(true);
+//                    quitGroupBtn.setText("");
+//                    // 根据是否是群组判断是否可以选择删除成员
+//                    memberAdapter.setAllowDeleteMember(true);
+
+                    groupPortraitUiv.setClickable(false);
+                    groupNameSiv.setClickable(false);
+                    quitGroupBtn.setText("解散群聊");
+//                    memberAdapter.setAllowDeleteMember(true);
                 } else if (member.getMemberRole() == GroupMember.Role.MANAGEMENT) {//管理员
                     groupPortraitUiv.setClickable(false);
                     groupNameSiv.setClickable(false);
                     quitGroupBtn.setText("退出群聊");
-                    memberAdapter.setAllowDeleteMember(true);
+//                    memberAdapter.setAllowDeleteMember(true);
                 } else {//普通群员
                     groupPortraitUiv.setClickable(false);
                     groupNameSiv.setClickable(false);
                     quitGroupBtn.setText("退出群聊");
-                    memberAdapter.setAllowDeleteMember(false);
+//                    memberAdapter.setAllowDeleteMember(false);
                 }
             }
         });
@@ -352,20 +344,6 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
         return false;
     }
 
-    /**
-     * 是否是群管理员
-     *
-     * @return
-     */
-    private boolean isGroupManager() {
-        if (groupDetailViewModel != null) {
-            GroupMember selfGroupInfo = groupDetailViewModel.getMyselfInfo().getValue();
-            if (selfGroupInfo != null) {
-                return selfGroupInfo.getMemberRole() == GroupMember.Role.MANAGEMENT;
-            }
-        }
-        return false;
-    }
 
     /**
      * 更新群信息
@@ -373,13 +351,6 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
      * @param groupInfo
      */
     private void updateGroupInfoView(GroupEntity groupInfo) {
-        // 标题
-//        String title = getString(R.string.profile_group_info) + "(" + groupInfo.getMemberCount() + ")";
-//        titleBar.setTitle(title);
-
-        // 群成员数量
-//        String allMemberTxt = "群聊成员" + "(" + groupInfo.getMemberCount() + ")";
-//        allGroupMemberSiv.setText(allMemberTxt);
         // 显示群组头像
         grouportraitUrl = groupInfo.getPortraitUri();
         ImageLoaderUtils.displayGroupPortraitImage(groupInfo.getPortraitUri(), groupPortraitUiv);
@@ -406,13 +377,14 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_more:
-                showAllGroupMember();
+//                showAllGroupMember();
+                toMemberManage(false);
                 break;
             case R.id.profile_siv_group_search_history_message:
                 showSearchHistoryMessage();
                 break;
             case R.id.profile_siv_user_header:
-                setGroupPortrait();
+//                setGroupPortrait();
                 break;
             case R.id.profile_siv_group_name_container:
                 editGroupName();
@@ -425,21 +397,6 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
         }
     }
 
-    /**
-     * 显示成员信息
-     *
-     * @param groupMember
-     */
-    private void showMemberInfo(GroupMember groupMember) {
-        Intent intent = new Intent(this, UserDetailActivity.class);
-        intent.putExtra(IntentExtra.STR_TARGET_ID, groupMember.getUserId());
-        intent.putExtra(IntentExtra.GROUP_ID, groupMember.getGroupId());
-        Group groupInfo = RongUserInfoManager.getInstance().getGroupInfo(groupId);
-        if (groupInfo != null) {
-            intent.putExtra(IntentExtra.STR_GROUP_NAME, groupInfo.getName());
-        }
-        startActivity(intent);
-    }
 
     /**
      * 显示管理成员界面
@@ -448,10 +405,13 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
      */
     private void toMemberManage(boolean isAdd) {
         if (isAdd) {
+            //邀请新的成员
             Intent intent = new Intent(this, SelectFriendExcludeGroupActivity.class);
             intent.putExtra(IntentExtra.STR_TARGET_ID, groupId);
+            intent.putExtra(IntentExtra.CAN_SELECT, true);
             startActivityForResult(intent, REQUEST_ADD_GROUP_MEMBER);
         } else {
+            //选择该群的成员
             Intent intent = new Intent(this, SelectGroupMemberActivity.class);
             intent.putExtra(IntentExtra.STR_TARGET_ID, groupId);
             ArrayList<String> excludeList = new ArrayList<>();  // 不可选择的成员 id 列表
@@ -462,20 +422,12 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
             if (groupCreatorId != null && !currentId.equals(groupCreatorId)) {
                 excludeList.add(groupCreatorId);
             }
-
             intent.putExtra(IntentExtra.LIST_EXCLUDE_ID_LIST, excludeList);
+            intent.putExtra(IntentExtra.CAN_SELECT, isGroupOwner());
             startActivityForResult(intent, REQUEST_REMOVE_GROUP_MEMBER);
         }
     }
 
-    /**
-     * 显示全部群组成员
-     */
-    public void showAllGroupMember() {
-        Intent intent = new Intent(this, GroupMemberListActivity.class);
-        intent.putExtra(IntentExtra.STR_TARGET_ID, groupId);
-        startActivity(intent);
-    }
 
     /**
      * 显示搜索历史消息
@@ -520,22 +472,6 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
         dialog.show(getSupportFragmentManager(), null);
     }
 
-    /**
-     * 编辑群组头像
-     */
-    private void setGroupPortrait() {
-
-        SelectPictureBottomDialog.Builder builder = new SelectPictureBottomDialog.Builder();
-        builder.setOnSelectPictureListener(new SelectPictureBottomDialog.OnSelectPictureListener() {
-            @Override
-            public void onSelectPicture(Uri uri) {
-                SLog.d(TAG, "select picture, uri:" + uri);
-                groupDetailViewModel.setGroupPortrait(uri);
-            }
-        });
-        SelectPictureBottomDialog dialog = builder.build();
-        dialog.show(getSupportFragmentManager(), null);
-    }
 
 
     /**
@@ -594,7 +530,7 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
                     .setDialogButtonClickListener(new CommonDialog.OnDialogButtonClickListener() {
                         @Override
                         public void onPositiveClick(View v, Bundle bundle) {
-                            mDeleteDialog.show(getSupportFragmentManager(), "delete_dialog");
+//                            mDeleteDialog.show(getSupportFragmentManager(), "delete_dialog");
                             List<String> removeMemberList = data.getStringArrayListExtra(IntentExtra.LIST_STR_ID_LIST);
                             SLog.i(TAG, "removeMemberList.size(): " + removeMemberList.size());
                             groupDetailViewModel.removeGroupMember(removeMemberList);
@@ -610,39 +546,4 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_CODE_PERMISSION && !CheckPermissionUtils.allPermissionGranted(grantResults)) {
-            List<String> permissionsNotGranted = new ArrayList<>();
-            for (String permission : permissions) {
-                if (!ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
-                    permissionsNotGranted.add(permission);
-                }
-            }
-            if (permissionsNotGranted.size() > 0) {
-                DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case DialogInterface.BUTTON_POSITIVE:
-                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                                intent.setData(uri);
-                                startActivityForResult(intent, requestCode);
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                };
-                CheckPermissionUtils.showPermissionAlert(this, getResources().getString(R.string.seal_grant_permissions) + CheckPermissionUtils.getNotGrantedPermissionMsg(this, permissionsNotGranted), listener);
-            } else {
-                ToastUtils.showToast(getString(R.string.seal_set_clean_time_fail));
-            }
-        } else {
-            //权限获得后在请求次网络设置状态
-        }
-    }
 }

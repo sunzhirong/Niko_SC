@@ -6,6 +6,7 @@
     android:clipToPadding="false"
     >
     <TextView
+        android:visibility="gone"
         android:id="@+id/title_and_search_tv_search"
         android:layout_width="match_parent"
         android:layout_height="44dp"
@@ -20,6 +21,12 @@
         android:gravity="left|center_vertical"
         android:text="@string/seal_search"
         />
+
+    <EditText
+        android:id="@+id/title_et_search"
+        style="@style/searchEtStyle"
+        android:hint="找不到搜索试试" />
+
     <FrameLayout
         android:id="@+id/title_and_search_container"
         android:layout_width="match_parent"
