@@ -196,4 +196,9 @@ public interface UserService {
     @Headers(NetConstant.JSON)
     LiveData<Result<Boolean>> hasSetPassword();
 
+
+    @POST(ScUrl.LOG_OUT)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<Void>> logout();
+
 }

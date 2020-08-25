@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,7 @@ public class SettingItemView extends LinearLayout {
         ivRightImage.setVisibility(GONE);
 
         view.setBackgroundResource(R.drawable.seal_mine_setting_item_selector);
+
 
         TypedArray ta = attrs == null ? null : getContext().obtainStyledAttributes(attrs, R.styleable.SettingItemView);
         if (ta != null) {

@@ -10,6 +10,7 @@ import androidx.multidex.MultiDexApplication;
 import com.facebook.stetho.Stetho;
 
 import cn.rongcloud.im.niko.common.ErrorCode;
+import cn.rongcloud.im.niko.common.NetConstant;
 import cn.rongcloud.im.niko.contact.PhoneContactManager;
 import cn.rongcloud.im.niko.im.IMManager;
 import cn.rongcloud.im.niko.ui.activity.MainActivity;
@@ -75,6 +76,8 @@ public class SealApp extends MultiDexApplication {
 
         // 监听 App 前后台变化
         observeAppInBackground();
+
+        NetConstant.DETAULT_DV = String.valueOf(System.currentTimeMillis());
     }
 
     public static SealApp getApplication() {

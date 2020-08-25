@@ -14,11 +14,12 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/tv_left"
             android:drawableLeft="@drawable/img_chat_pop_left"
-            android:text="2"
             style="@style/tv16WhiteStyle"/>
 
         <View
+            android:id="@+id/line"
             android:layout_marginRight="6dp"
             android:layout_marginLeft="6dp"
             android:background="@color/white"
@@ -26,8 +27,8 @@
             android:layout_height="14dp"/>
 
         <TextView
+            android:id="@+id/tv_right"
             android:drawableLeft="@drawable/img_chat_pop_right"
-            android:text="2"
             style="@style/tv16WhiteStyle"/>
         
     </LinearLayout>

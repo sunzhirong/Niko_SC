@@ -54,6 +54,7 @@ public class UserInfoViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Result<Boolean>> hasSetPasswordResult =  new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Boolean>> changePwResult = new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Boolean>> setPwResult = new SingleSourceLiveData<>();
+    private SingleSourceLiveData<Resource<Void>> logoutResult = new SingleSourceLiveData<>();
 
 
 
@@ -186,8 +187,11 @@ public class UserInfoViewModel extends AndroidViewModel {
      * 退出
      */
     public void logout() {
-        imManager.logout();
-        userTask.logout();
+        logoutResult.setSource(userTask.logout());
+    }
+
+    public LiveData<Resource<Void>> getLogoutResult() {
+        return logoutResult;
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {

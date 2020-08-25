@@ -29,7 +29,8 @@ import io.rong.imlib.model.Conversation;
 public class PrivateChatSettingViewModel extends AndroidViewModel {
     private final String TAG = "PrivateChatSettingViewModel";
     private UserTask userTask;
-    private MediatorLiveData<Resource<FriendShipInfo>> friendShipInfoLiveData = new MediatorLiveData<>();
+//    private MediatorLiveData<Resource<FriendShipInfo>> friendShipInfoLiveData = new MediatorLiveData<>();
+    private MediatorLiveData<Resource<UserInfo>> friendShipInfoLiveData = new MediatorLiveData<>();
 
     private String targetId;
     private Conversation.ConversationType conversationType;
@@ -63,36 +64,12 @@ public class PrivateChatSettingViewModel extends AndroidViewModel {
      */
     public void requestFriendInfo() {
         // 支持加入信息是自己的话，支持查看自己， 则需要查询自己的信息
-        if (IMManager.getInstance().getCurrentId().equals(targetId)) {
-            friendShipInfoLiveData.addSource(userTask.getUserInfo(targetId), new Observer<Resource<UserInfo>>() {
-                @Override
-                public void onChanged(Resource<UserInfo> resource) {
-                    if (resource != null && resource.data != null) {
-                        UserInfo data = resource.data;
-                        FriendShipInfo info = new FriendShipInfo();
-                        info.setDisplayName(data.getAlias());
-                        info.setDisPlayNameSpelling(data.getAliasSpelling());
-                        FriendDetailInfo friendDetailInfo = new FriendDetailInfo();
-                        friendDetailInfo.setNickname(data.getName());
-                        friendDetailInfo.setId(data.getId());
-                        friendDetailInfo.setPhone(data.getPhoneNumber());
-                        friendDetailInfo.setNameSpelling(data.getNameSpelling());
-                        friendDetailInfo.setOrderSpelling(data.getOrderSpelling());
-                        friendDetailInfo.setPortraitUri(data.getPortraitUri());
-                        friendDetailInfo.setRegion(data.getRegion());
-                        info.setUser(friendDetailInfo);
-                        friendShipInfoLiveData.postValue(new Resource<>(resource.status, info, resource.code));
-                    }
-                }
-            });
-        } else {
-            friendShipInfoLiveData.addSource(friendTask.getFriendInfo(targetId), new Observer<Resource<FriendShipInfo>>() {
-                @Override
-                public void onChanged(Resource<FriendShipInfo> friendShipInfoResource) {
-                    friendShipInfoLiveData.postValue(friendShipInfoResource);
-                }
-            });
-        }
+        friendShipInfoLiveData.addSource(friendTask.getUserInfo(targetId), new Observer<Resource<UserInfo>>() {
+            @Override
+            public void onChanged(Resource<UserInfo> friendShipInfoResource) {
+                friendShipInfoLiveData.postValue(friendShipInfoResource);
+            }
+        });
     }
 
     /**
@@ -100,7 +77,7 @@ public class PrivateChatSettingViewModel extends AndroidViewModel {
      *
      * @return
      */
-    public LiveData<Resource<FriendShipInfo>> getFriendInfo() {
+    public LiveData<Resource<UserInfo>> getFriendInfo() {
         return friendShipInfoLiveData;
     }
 

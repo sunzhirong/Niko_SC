@@ -129,7 +129,12 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
         groupPortraitUiv.setOnClickListener(this);
         // 群名称
         groupNameSiv = findViewById(R.id.profile_siv_group_name_container);
-        groupNameSiv.setOnClickListener(this);
+        groupNameSiv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editGroupName();
+            }
+        });
 
 
         // 消息免打扰
@@ -167,7 +172,7 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
 //                    memberAdapter.setAllowDeleteMember(true);
 
                     groupPortraitUiv.setClickable(false);
-                    groupNameSiv.setClickable(false);
+                    groupNameSiv.setClickable(true);
                     quitGroupBtn.setText("解散群聊");
 //                    memberAdapter.setAllowDeleteMember(true);
                 } else if (member.getMemberRole() == GroupMember.Role.MANAGEMENT) {//管理员

@@ -20,7 +20,7 @@ public class CommentBean {
     private ProfileHeadInfo UserHead;
     private int CmID;
     private String Msg;
-    private String Utc;
+    private long Utc;
     private String MdGuid;
     private int UID;
     private int TUID;
@@ -75,11 +75,11 @@ public class CommentBean {
         this.Msg = Msg;
     }
 
-    public String getUtc() {
+    public long getUtc() {
         return Utc;
     }
 
-    public void setUtc(String Utc) {
+    public void setUtc(long Utc) {
         this.Utc = Utc;
     }
 

@@ -39,9 +39,12 @@ public class ScInterceptor implements Interceptor {
         return NetConstant.Authorization;
     }
 
+
+
     public static String getDV() {
-        return "niko6611111";
-//        return "20200210q";
+//        return NetConstant.DETAULT_DV;
+//        return System.currentTimeMillis()+"";
+        return "niko111";
     }
 
     private static String getLG() {

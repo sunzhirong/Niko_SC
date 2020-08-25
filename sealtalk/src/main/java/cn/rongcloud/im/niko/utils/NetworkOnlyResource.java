@@ -42,6 +42,7 @@ public abstract class NetworkOnlyResource<ResultType,RequestType> {
                 if(response instanceof Result){
                     int code = ((Result)response).RsCode;
                     if(code != NetConstant.REQUEST_SUCCESS_CODE){
+//                        result.setValue(Resource.error(code, null, ((Result)response).RsMsg));
                         result.setValue(Resource.error(code, null));
                         return;
                     } else {

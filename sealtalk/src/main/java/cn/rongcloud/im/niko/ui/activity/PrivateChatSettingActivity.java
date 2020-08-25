@@ -27,6 +27,7 @@ import cn.rongcloud.im.niko.db.model.UserInfo;
 import cn.rongcloud.im.niko.event.DeleteFriendEvent;
 import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Status;
+import cn.rongcloud.im.niko.sp.ProfileUtils;
 import cn.rongcloud.im.niko.ui.dialog.CommonDialog;
 import cn.rongcloud.im.niko.ui.view.SealTitleBar;
 import cn.rongcloud.im.niko.ui.view.SettingItemView;
@@ -48,8 +49,6 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
     private SettingItemView isTopSb;
 
     private String targetId;
-    private String name;
-    private String portraitUrl;
     private Conversation.ConversationType conversationType;
     private SelectableRoundedImageView portraitIv;
     private TextView nameTv;
@@ -80,22 +79,22 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
         initData();
         EventBus.getDefault().register(this);
 
-        ThreadManager.getInstance().runOnWorkThread(() -> {
-            List<UserInfo> all = DbManager.getInstance(mContext).getUserDao().getAll();
-            Log.e("all",all.size()+"");
-        });
-
-        ThreadManager.getInstance().runOnWorkThread(() -> {
-            List<FriendShipInfo> allFriendsExcludeGroup = DbManager.getInstance(mContext).getFriendDao().getAllFriendsExcludeGroup1("185");
-            Log.e("all",allFriendsExcludeGroup.size()+"");
-
-        });
-
-        ThreadManager.getInstance().runOnWorkThread(() -> {
-            List<FriendShipInfo> allFriendsExcludeGroup = DbManager.getInstance(mContext).getFriendDao().getAll();
-            Log.e("all",allFriendsExcludeGroup.size()+"");
-
-        });
+//        ThreadManager.getInstance().runOnWorkThread(() -> {
+//            List<UserInfo> all = DbManager.getInstance(mContext).getUserDao().getAll();
+//            Log.e("all",all.size()+"");
+//        });
+//
+//        ThreadManager.getInstance().runOnWorkThread(() -> {
+//            List<FriendShipInfo> allFriendsExcludeGroup = DbManager.getInstance(mContext).getFriendDao().getAllFriendsExcludeGroup1("185");
+//            Log.e("all",allFriendsExcludeGroup.size()+"");
+//
+//        });
+//
+//        ThreadManager.getInstance().runOnWorkThread(() -> {
+//            List<FriendShipInfo> allFriendsExcludeGroup = DbManager.getInstance(mContext).getFriendDao().getAll();
+//            Log.e("all",allFriendsExcludeGroup.size()+"");
+//
+//        });
 
     }
 
@@ -123,25 +122,16 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
     private void initViewModel() {
         privateChatSettingViewModel = ViewModelProviders.of(this, new PrivateChatSettingViewModel.Factory(getApplication(), targetId, conversationType)).get(PrivateChatSettingViewModel.class);
         privateChatSettingViewModel.getFriendInfo().observe(this, friendShipInfoResource -> {
-            FriendShipInfo data = friendShipInfoResource.data;
+            UserInfo data = friendShipInfoResource.data;
+//            FriendShipInfo data = friendShipInfoResource.data;
             if (data == null) return;
 
-            String displayName = data.getDisplayName();
-            FriendDetailInfo user = data.getUser();
+            String displayName = TextUtils.isEmpty(data.getAlias())?data.getName():data.getAlias();
 
             // 设置备注名
-            if (!TextUtils.isEmpty(displayName)) {
-                nameTv.setText(displayName);
-                name = displayName;
-            } else if (user != null) {
-                nameTv.setText(user.getNickname());
-                name = user.getNickname();
-            }
-
-            if (user != null) {
-                ImageLoaderUtils.displayUserPortraitImage(user.getPortraitUri(), portraitIv);
-                portraitUrl = user.getPortraitUri();
-            }
+            nameTv.setText(displayName);
+            nameTv.setTextColor(ProfileUtils.getNameColor(data.getNameColor()));
+            ImageLoaderUtils.displayUserPortraitImage(data.getPortraitUri(), portraitIv);
         });
 
 

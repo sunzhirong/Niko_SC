@@ -102,8 +102,8 @@ public class LoginViewModel extends AndroidViewModel {
         return verifyResult;
     }
 
-    public void getUserToken(String phone) {
-        getUserTokenResult.setSource(userTask.getUserToken(phone));
+    public void getUserToken(String phone,String pwd) {
+        getUserTokenResult.setSource(userTask.getUserToken(phone,pwd));
     }
 
     public SingleSourceLiveData<TokenBean> getGetUserTokenResult() {

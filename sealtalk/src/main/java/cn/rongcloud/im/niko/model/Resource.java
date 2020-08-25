@@ -28,6 +28,13 @@ public class Resource<T> {
         this.message = ErrorCode.fromCode(code).getMessage();
     }
 
+//    public Resource(@NonNull Status status, @Nullable T data, @Nullable int code,String msg) {
+//        this.status = status;
+//        this.data = data;
+//        this.code = code;
+//        this.message = msg;
+//    }
+
     public static <T> Resource<T> success(@Nullable T data) {
         return new Resource<>(Status.SUCCESS, data, ErrorCode.NONE_ERROR.getCode());
     }
@@ -35,6 +42,10 @@ public class Resource<T> {
     public static <T> Resource<T> error(int code, @Nullable T data) {
         return new Resource<>(Status.ERROR, data, code);
     }
+
+//    public static <T> Resource<T> error(int code, @Nullable T data,String msg) {
+//        return new Resource<>(Status.ERROR, data, code,msg);
+//    }
 
     public static <T> Resource<T> loading(@Nullable T data) {
         return new Resource<>(Status.LOADING, data, ErrorCode.NONE_ERROR.getCode());

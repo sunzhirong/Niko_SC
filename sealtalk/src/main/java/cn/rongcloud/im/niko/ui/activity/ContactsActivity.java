@@ -28,6 +28,7 @@ import cn.rongcloud.im.niko.event.AliasChangeSuccessEvent;
 import cn.rongcloud.im.niko.event.ContactsItemClickEvent;
 import cn.rongcloud.im.niko.model.niko.FollowRequestInfo;
 import cn.rongcloud.im.niko.model.niko.FriendBean;
+import cn.rongcloud.im.niko.sp.SPUtils;
 import cn.rongcloud.im.niko.ui.BaseActivity;
 import cn.rongcloud.im.niko.ui.adapter.MembersAdapter;
 import cn.rongcloud.im.niko.ui.fragment.MainContactsListFragment;
@@ -223,9 +224,14 @@ public class ContactsActivity extends BaseActivity implements MembersAdapter.OnD
         if (mRsData.size() > 0) {
             mTvCount.setVisibility(View.VISIBLE);
             mTvCount.setText(String.valueOf(mRsData.size()));
+            SPUtils.setFriendsRequestCount(mContext,mRsData.size());
+
         } else {
             mTvCount.setVisibility(View.GONE);
+            SPUtils.setFriendsRequestCount(mContext,0);
+
         }
+
     }
 
     public void onEventMainThread(AddFollowCompleteEvent event) {

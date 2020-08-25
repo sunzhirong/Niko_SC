@@ -29,7 +29,9 @@ import cn.rongcloud.im.niko.common.IntentExtra;
 import cn.rongcloud.im.niko.db.model.FriendShipInfo;
 import cn.rongcloud.im.niko.event.CommentHeightEvent;
 import cn.rongcloud.im.niko.event.ItemCommentEvent;
+import cn.rongcloud.im.niko.event.LogoutEvent;
 import cn.rongcloud.im.niko.event.ShowMoreEvent;
+import cn.rongcloud.im.niko.sp.SPUtils;
 import cn.rongcloud.im.niko.ui.BaseActivity;
 import cn.rongcloud.im.niko.ui.fragment.ChatFragment;
 import cn.rongcloud.im.niko.ui.fragment.MainContactsListFragment;
@@ -62,6 +64,8 @@ public class MainActivity extends BaseActivity  {
     private View mask;
     private int mMaskMarginHeight;
     private int mCurrentItem;
+
+    private boolean canShowUnread = false;
 
     /**
      * tab 项枚举
@@ -238,8 +242,13 @@ public class MainActivity extends BaseActivity  {
 //                    }
 //                }
                 if (item.id!=mCurrentItem&&item.id == Tab.ME.getValue()) {
+                    mCurrentItem = item.id;
                     Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                     startActivity(intent);
+                    return;
+                }
+                if(item.id == Tab.ME.getValue()){
+                    return;
                 }
                 changeFragment(fragments.get(item.id));
                 mCurrentItem = item.id;
@@ -276,10 +285,13 @@ public class MainActivity extends BaseActivity  {
      * 初始化 initFragmentViewPager
      */
     private void initFragments() {
-        fragments.add(new MainConversationListFragment());
-        fragments.add(new MainContactsListFragment());
+
+
+        fragments.add(new Fragment());
+        fragments.add(new Fragment());
         fragments.add(new ChatFragment());
-        fragments.add(new MainMeFragment());
+        fragments.add(new Fragment());
+
 
         for (Fragment fragment : fragments) {
             addFragment(fragment);
@@ -317,15 +329,18 @@ public class MainActivity extends BaseActivity  {
         mainViewModel.getUnReadNum().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer count) {
-                MainBottomTabItem chatTab = (MainBottomTabItem) tabGroupView.getView(Tab.FIND.getValue());
-                if (count == 0) {
-                    chatTab.setNumVisibility(View.GONE);
-                } else if (count > 0 && count < 100) {
-                    chatTab.setNumVisibility(View.VISIBLE);
-                    chatTab.setNum(String.valueOf(count));
-                } else {
-                    chatTab.setVisibility(View.VISIBLE);
-                    chatTab.setNum(getString(R.string.seal_main_chat_tab_more_read_message));
+                SPUtils.setUnreadMsgCount(mContext,count);
+                if(canShowUnread) {
+                    MainBottomTabItem chatTab = (MainBottomTabItem) tabGroupView.getView(Tab.FIND.getValue());
+                    if (count == 0) {
+                        chatTab.setNumVisibility(View.GONE);
+                    } else if (count > 0 && count < 100) {
+                        chatTab.setNumVisibility(View.VISIBLE);
+                        chatTab.setNum(String.valueOf(count));
+                    } else {
+                        chatTab.setVisibility(View.VISIBLE);
+                        chatTab.setNum(getString(R.string.seal_main_chat_tab_more_read_message));
+                    }
                 }
             }
         });
@@ -406,7 +421,14 @@ public class MainActivity extends BaseActivity  {
 
     private void showTipsPop() {
         mPop = new ChatTipsPop(this);
-        View tabsView = tabGroupView.getView(Tab.FIND.getValue()).findViewById(R.id.iv_tab_img);
+        int friendsRequestCount = SPUtils.getFriendsRequestCount(mContext);
+        int unreadMsgCount = SPUtils.getUnreadMsgCount(mContext);
+        mPop.setLeftRightCount(friendsRequestCount,unreadMsgCount);
+        if(friendsRequestCount==0&&unreadMsgCount==0){
+            return;
+        }
+//        View tabsView = tabGroupView.getView(Tab.FIND.getValue()).findViewById(R.id.iv_tab_img);
+        View tabsView = tabGroupView.getView(Tab.FIND.getValue()).findViewById(R.id.ll_tab);
         mPop.showUp(tabsView);
     }
 
@@ -419,14 +441,18 @@ public class MainActivity extends BaseActivity  {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    canShowUnread = true;
                     if (isDestroyed()) {
                         return;
                     }
                     if (mPop != null && mPop.isShowing()) {
                         mPop.dismiss();
                         if (tabGroupView != null) {
-//                            ((MainBottomTabItem) tabGroupView.getView(Tab.FIND.getValue())).setNum("11");
-                            ((MainBottomTabItem) tabGroupView.getView(Tab.FIND.getValue())).setNumVisibility(View.VISIBLE);
+                            int unreadMsgCount = SPUtils.getUnreadMsgCount(mContext);
+                            if(unreadMsgCount!=0) {
+                                ((MainBottomTabItem) tabGroupView.getView(Tab.FIND.getValue())).setNum(String.valueOf(unreadMsgCount));
+                                ((MainBottomTabItem) tabGroupView.getView(Tab.FIND.getValue())).setNumVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 }
@@ -440,6 +466,9 @@ public class MainActivity extends BaseActivity  {
 
     public void onEventMainThread(ItemCommentEvent event) {
         mask.setVisibility(View.VISIBLE);
+    }
+    public void onEventMainThread(LogoutEvent event) {
+        finish();
     }
 
     public void onEventMainThread(CommentHeightEvent event) {

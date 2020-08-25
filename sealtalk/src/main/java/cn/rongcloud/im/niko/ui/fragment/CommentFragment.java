@@ -67,6 +67,7 @@ public class CommentFragment extends BaseFragment {
     private CommentBean mCommentBean;
 
     private int type = NetConstant.TYPE_REFRESH;
+    private List<CommentBean> mRsData;
 
     public LinearLayout getLlInput() {
         return mLlInput;
@@ -182,6 +183,38 @@ public class CommentFragment extends BaseFragment {
                 EventBus.getDefault().post(new CommentHeightEvent(height));
             }
         });
+
+        mEtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String content = s.toString().trim();
+                if(TextUtils.isEmpty(content)){
+                    mCommentRvAdapter.setDatas(mRsData);
+                    return;
+                }
+                if(mRsData!=null&&mRsData.size()!=0){
+                    List<CommentBean> list = new ArrayList<>();
+                    for(CommentBean bean : mRsData){
+                        if(!TextUtils.isEmpty(bean.getMsg())&&bean.getMsg().contains(content)){
+                            list.add(bean);
+                        }
+                    }
+                    mCommentRvAdapter.setDatas(list);
+                }else {
+                    mCommentRvAdapter.setDatas(new ArrayList<>());
+                }
+            }
+        });
     }
 
 
@@ -190,11 +223,11 @@ public class CommentFragment extends BaseFragment {
         mUserInfoViewModel = ViewModelProviders.of(this).get(UserInfoViewModel.class);
         mUserInfoViewModel.getCommentListResult().observe(this, result -> {
             if (result.RsCode == NetConstant.REQUEST_SUCCESS_CODE) {
-                List<CommentBean> rsData = result.RsData;
+                mRsData = result.RsData;
                 if(type==NetConstant.TYPE_REFRESH){
-                    mCommentRvAdapter.setDatas(rsData);
+                    mCommentRvAdapter.setDatas(mRsData);
                 }else {
-                    mCommentRvAdapter.addDatas(rsData);
+                    mCommentRvAdapter.addDatas(mRsData);
                 }
             }
             mRefreshLayout.finishRefresh();

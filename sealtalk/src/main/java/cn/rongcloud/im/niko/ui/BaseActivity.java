@@ -40,6 +40,7 @@ import butterknife.Unbinder;
 import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.common.IntentExtra;
 import cn.rongcloud.im.niko.im.IMManager;
+import cn.rongcloud.im.niko.sp.UserCache;
 import cn.rongcloud.im.niko.ui.activity.LoginActivity;
 import cn.rongcloud.im.niko.ui.dialog.LoadingDialog;
 import cn.rongcloud.im.niko.utils.DisplayUtils;
@@ -88,6 +89,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                      */
                     if (isLogout) {
                         SLog.d(BaseActivity.class.getCanonicalName(), "Log out.");
+                        UserCache userCache = new UserCache(mContext);
+                        userCache.logoutClear();
                         sendLogoutNotify();
                         IMManager.getInstance().resetKickedOfflineState();
                         Intent intent = new Intent(BaseActivity.this, LoginActivity.class);

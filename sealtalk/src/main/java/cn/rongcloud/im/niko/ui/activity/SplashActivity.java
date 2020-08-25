@@ -70,6 +70,7 @@ public class SplashActivity extends BaseActivity {
         //初始化user信息
         NetConstant.Authorization = "Bearer "+SPUtils.getUserToken(this);
         startActivity(new Intent(this, MainActivity.class));
+        finish();
 //        if (intentUri != null) {
 //            goWithUri();
 //        } else {

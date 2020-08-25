@@ -39,8 +39,8 @@
             android:layout_alignParentBottom="true"
             android:background="@drawable/img_chat_contact"
             android:layout_marginLeft="@dimen/dp_14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="24dp"
+            android:layout_height="24dp"/>
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/btn_more"
@@ -49,8 +49,8 @@
             android:layout_alignParentEnd="true"
             android:background="@drawable/img_chat_more"
             android:layout_marginRight="@dimen/dp_14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="24dp"
+            android:layout_height="24dp"/>
 
     </RelativeLayout>
 

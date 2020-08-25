@@ -59,6 +59,7 @@ import cn.rongcloud.im.niko.net.token.TokenHttpClientManager;
 import cn.rongcloud.im.niko.net.upload.UploadHttpClientManager;
 import cn.rongcloud.im.niko.sp.CountryCache;
 import cn.rongcloud.im.niko.sp.ProfileUtils;
+import cn.rongcloud.im.niko.sp.SPUtils;
 import cn.rongcloud.im.niko.sp.UserCache;
 import cn.rongcloud.im.niko.ui.adapter.models.VIPCheckBean;
 import cn.rongcloud.im.niko.ui.adapter.models.VIPConfigBean;
@@ -137,6 +138,7 @@ public class UserTask {
                             // 存储当前登录成功的用户信息
                             UserCacheInfo info = new UserCacheInfo(s, data, phone, password, region, countryCache.getCountryInfoByRegion(region));
                             userCache.saveUserCache(info);
+                            SPUtils.setIMToken(SealApp.getApplication(),data);
                         }
 
                         @Override
@@ -801,13 +803,46 @@ public class UserTask {
         return result;
     }
 
+//    /**
+//     * 退出登录
+//     */
+//    public void logout() {
+//        userCache.logoutClear();
+//        dbManager.closeDb();
+//
+//        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
+//            @NonNull
+//            @Override
+//            protected LiveData<Result<Boolean>> createCall() {
+//                return userService.logout();
+//            }
+//        }.asLiveData();
+//    }
+
     /**
      * 退出登录
      */
-    public void logout() {
-        userCache.logoutClear();
-        dbManager.closeDb();
+    public LiveData<Resource<Void>> logout() {
+
+        return new NetworkOnlyResource<Void, Result<Void>>() {
+
+            @Override
+            protected void saveCallResult(@NonNull Void item) {
+                    userCache.logoutClear();
+                    dbManager.closeDb();
+                    imManager.logout();
+                    //清空token
+
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<Result<Void>> createCall() {
+                return userService.logout();
+            }
+        }.asLiveData();
     }
+
 
     /**
      * 设置是否接收戳一下消息
@@ -861,14 +896,14 @@ public class UserTask {
         return userService.verifyCodeNiko(body);
     }
 
-    public LiveData<TokenBean> getUserToken(String phone) {
+    public LiveData<TokenBean> getUserToken(String phone,String pwd) {
         HashMap<String, String> paramsMap = new HashMap<>();
         paramsMap.put("grant_type", "password");
         paramsMap.put("scope", "jjApiScope");
         paramsMap.put("UserName", phone);
-        paramsMap.put("Password", ScInterceptor.getDV() + "9999");
-//        paramsMap.put("Password","20200210" + "9999");
-        paramsMap.put("VCode", "9999");
+//        paramsMap.put("Password", ScInterceptor.getDV() + "9999");
+        paramsMap.put("Password", pwd);
+//        paramsMap.put("VCode", "9999");
         NetConstant.Authorization = "Basic ampBcHBBcGlDbGllbnQ6Q2lyY2xlMjAyMEBXb3JsZA==";
         Map<String, RequestBody> stringRequestBodyMap = RetrofitUtil.generateRequestBody(paramsMap);
         return tokenService.connectToken(stringRequestBodyMap);
@@ -1076,4 +1111,6 @@ public class UserTask {
             }
         }.asLiveData();
     }
+
+
 }

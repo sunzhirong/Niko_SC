@@ -15,6 +15,7 @@ public class NetConstant {
     public final static String JSON = "Content-Type:application/json";
 
     public static String Authorization = "Basic ampBcHBBcGlDbGllbnQ6Q2lyY2xlMjAyMEBXb3JsZA==";
+    public static String DETAULT_DV ;
 
 
     public final static int SKIP = 0;

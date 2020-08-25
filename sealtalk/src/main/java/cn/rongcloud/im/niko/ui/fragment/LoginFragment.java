@@ -135,10 +135,10 @@ public class LoginFragment extends BaseFragment {
                 if (tokenBean != null && !TextUtils.isEmpty(tokenBean.getAccess_token())) {
                     showToast("成功");
                     //获取msg需要赋值
-                    NetConstant.Authorization = "Bearer "+tokenBean.getAccess_token();
-                    loginViewModel.getSms(phoneNumberEdit.getText().toString().trim());
+//                    NetConstant.Authorization = "Bearer "+tokenBean.getAccess_token();
+//                    loginViewModel.getSms(phoneNumberEdit.getText().toString().trim());
 
-//                    loginViewModel.getUserToken();
+                    loginViewModel.getUserToken(phoneNumberEdit.getText().toString().trim(),passwordEdit.getText().toString().trim());
 
                 } else {
                     showToast("失败");
@@ -164,7 +164,7 @@ public class LoginFragment extends BaseFragment {
             public void onChanged(Result result) {
                 if (result.RsCode == 3) {
                     showToast("成功");
-                    loginViewModel.getUserToken(phoneNumberEdit.getText().toString().trim());
+                    loginViewModel.getUserToken(phoneNumberEdit.getText().toString().trim(),passwordEdit.getText().toString().trim());
                 } else {
                     showToast("失败");
                 }
@@ -185,27 +185,9 @@ public class LoginFragment extends BaseFragment {
                     loginViewModel.login("",phoneNumberEdit.getText().toString().trim(),"");
                 } else {
                     showToast("失败");
-
                 }
             }
         });
-
-
-//        loginViewModel.getGetTokenResult().observe(this, new Observer<TokenBean>() {
-//            @Override
-//            public void onChanged(TokenBean tokenBean) {
-//                if (tokenBean != null && !TextUtils.isEmpty(tokenBean.getAccess_token())) {
-//                    SLog.d("login","GetToken 成功");
-//                    NetConstant.Authorization = "Bearer "+tokenBean.getAccess_token();
-//                    SPUtils.setUserToken(getContext(),tokenBean.getAccess_token());
-//                    SPUtils.setLogin(getContext(),true);
-//                    ProfileUtils.sProfileInfo = new ProfileInfo();
-//                    login("","","");
-//                } else {
-//                    SLog.d("login","GetToken 失败");
-//                }
-//            }
-//        });
 
 
     }
@@ -215,9 +197,8 @@ public class LoginFragment extends BaseFragment {
     protected void onClick(View v, int id) {
         switch (id) {
             case R.id.btn_login:
-//                login("", "", "");
-//                UserTask.phone = phoneNumberEdit.getText().toString().trim();
                 loginViewModel.getToken();
+//                loginViewModel.login("",phoneNumberEdit.getText().toString().trim(),passwordEdit.getText().toString().trim());
                 break;
             case R.id.ll_country_select:
 //                loginViewModel.getToken();

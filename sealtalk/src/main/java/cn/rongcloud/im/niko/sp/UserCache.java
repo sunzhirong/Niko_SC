@@ -6,6 +6,8 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 
+import cn.rongcloud.im.niko.SealApp;
+import cn.rongcloud.im.niko.common.NetConstant;
 import cn.rongcloud.im.niko.model.UserCacheInfo;
 
 /**
@@ -89,6 +91,12 @@ public class UserCache {
      * 退出登录所要清理的缓存
      */
     public void logoutClear() {
+        NetConstant.Authorization = "Basic ampBcHBBcGlDbGllbnQ6Q2lyY2xlMjAyMEBXb3JsZA==";
+        SPUtils.setUserToken(SealApp.getApplication(),"");
+        SPUtils.setFriendsRequestCount(SealApp.getApplication(),0);
+        SPUtils.setIMToken(SealApp.getApplication(),"");
+
+
         UserCacheInfo userCache = getUserCache();
         if (userCache == null) {
             return ;

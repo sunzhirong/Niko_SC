@@ -8,10 +8,13 @@ import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.rongcloud.im.niko.R;
+import cn.rongcloud.im.niko.event.LogoutEvent;
+import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.sp.ProfileUtils;
 import cn.rongcloud.im.niko.sp.SPUtils;
 import cn.rongcloud.im.niko.ui.BaseActivity;
 import cn.rongcloud.im.niko.ui.activity.ContactCompanyActivity;
+import cn.rongcloud.im.niko.ui.activity.LoginActivity;
 import cn.rongcloud.im.niko.ui.activity.ModifyPwdActivity;
 import cn.rongcloud.im.niko.ui.activity.SettingNotificationActivity;
 import cn.rongcloud.im.niko.ui.activity.SettingPersonInfoActivity;
@@ -21,6 +24,7 @@ import cn.rongcloud.im.niko.ui.dialog.ClearCacheDialog;
 import cn.rongcloud.im.niko.ui.dialog.CommonDialog;
 import cn.rongcloud.im.niko.ui.view.SettingItemView;
 import cn.rongcloud.im.niko.viewmodel.UserInfoViewModel;
+import io.rong.eventbus.EventBus;
 
 public class SettingActivity extends BaseActivity {
     @BindView(R.id.siv_info)
@@ -58,6 +62,30 @@ public class SettingActivity extends BaseActivity {
             }
         });
         mUserInfoViewModel.hasSetPassword();
+
+        mUserInfoViewModel.getLogoutResult().observe(this,resource->{
+            if (resource.status == Status.SUCCESS) {
+                dismissLoadingDialog(new Runnable() {
+                    @Override
+                    public void run() {
+                        //退出到login
+                        readyGo(LoginActivity.class);
+                        EventBus.getDefault().post(new LogoutEvent());
+                        finish();
+                    }
+                });
+
+            } else if (resource.status == Status.LOADING) {
+                showLoadingDialog("");
+            } else {
+                dismissLoadingDialog(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast(resource.message);
+                    }
+                });
+            }
+        });
     }
 
     @OnClick({R.id.siv_info, R.id.siv_notification, R.id.siv_hobby, R.id.siv_contact, R.id.siv_modify_pwd,

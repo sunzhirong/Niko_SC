@@ -14,6 +14,7 @@ import cn.rongcloud.im.niko.model.GetContactInfoResult;
 import cn.rongcloud.im.niko.model.Result;
 import cn.rongcloud.im.niko.model.SearchFriendInfo;
 import cn.rongcloud.im.niko.model.niko.FriendBean;
+import cn.rongcloud.im.niko.model.niko.ProfileInfo;
 import cn.rongcloud.im.niko.net.ScUrl;
 import cn.rongcloud.im.niko.net.SealTalkUrl;
 import okhttp3.RequestBody;
@@ -26,14 +27,14 @@ import retrofit2.http.QueryMap;
 
 public interface FriendService {
 
-    /**
-     * 获取好友信息
-     *
-     * @param friendId
-     * @return
-     */
-    @GET(SealTalkUrl.GET_FRIEND_PROFILE)
-    LiveData<Result<FriendShipInfo>> getFriendInfo(@Path("friendId") String friendId);
+//    /**
+//     * 获取好友信息
+//     *
+//     * @param friendId
+//     * @return
+//     */
+//    @GET(SealTalkUrl.GET_FRIEND_PROFILE)
+//    LiveData<Result<FriendShipInfo>> getFriendInfo(@Path("friendId") String friendId);
 
     /**
      * 同意添加好友
@@ -124,4 +125,18 @@ public interface FriendService {
     @POST(ScUrl.TOP_A_FRIEND_NO)
     @Headers(NetConstant.JSON)
     LiveData<Result<Boolean>> topNo(@Body RequestBody body);
+
+
+    /**
+     * 获取好友信息
+     *
+     * @param friendId
+     * @return
+     */
+    @GET(SealTalkUrl.GET_FRIEND_PROFILE)
+    LiveData<Result<FriendShipInfo>> getFriendInfo(@Path("friendId") String friendId);
+
+    @POST(ScUrl.GET_OTHER_PROFILE)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<ProfileInfo>> getFriendInfo(@Body RequestBody body);
 }

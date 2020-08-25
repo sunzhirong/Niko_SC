@@ -126,4 +126,10 @@ public class BirthdayToAgeUtil {
         }
         return dt;
     }
+
+    public static String formatTimeMillis(long millis){
+        Date date = new Date(millis);
+        return new SimpleDateFormat(FORMAT_Y_M).format(date);
+    }
+
 }

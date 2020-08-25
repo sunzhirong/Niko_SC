@@ -53,11 +53,11 @@ public class ItemComment extends BaseItemView {
         GlideImageLoaderUtil.loadRoundImg(mContext,mIvRight,commentBean.getMdGuid(),10);
 
 
-        String type = "",msg = commentBean.getMsg(),date= commentBean.getUtc();
-        if(!TextUtils.isEmpty(date)&&date.length()>10){
-            date = date.substring(5,10);
-        }
-        date = BirthdayToAgeUtil.scFormatYearMonth(date);
+        String type = "",msg = commentBean.getMsg(),date= "";
+//        if(!TextUtils.isEmpty(date)&&date.length()>10){
+//            date = date.substring(5,10);
+//        }
+        date = BirthdayToAgeUtil.formatTimeMillis(commentBean.getUtc());
         String name = commentBean.getUserHead().getName();
         if(commentBean.getTUID() == 0 && commentBean.getAtUID() == 0){
             //别人评论你
