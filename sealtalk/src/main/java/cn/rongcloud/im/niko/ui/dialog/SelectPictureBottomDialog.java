@@ -24,6 +24,9 @@ public class SelectPictureBottomDialog extends BaseBottomDialog {
     private static OnSelectPictureListener listener;
     private int mType;
 
+    private static final int REQUEST_CAMERA = 1;
+    private static final int REQUEST_ALBUM = 2;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -35,7 +38,7 @@ public class SelectPictureBottomDialog extends BaseBottomDialog {
                     int checkPermission = getActivity().checkSelfPermission(Manifest.permission.CAMERA);
                     if (checkPermission != PackageManager.PERMISSION_GRANTED) {
                         //if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
-                        requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_ASK_PERMISSIONS);
+                        requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
                         //}
                         return;
                     }
@@ -43,7 +46,7 @@ public class SelectPictureBottomDialog extends BaseBottomDialog {
                     // 从6.0系统(API 23)开始，访问外置存储需要动态申请权限
                     checkPermission = getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
                     if (checkPermission != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_PERMISSIONS);
+                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CAMERA);
                         return;
                     }
                 }
@@ -58,7 +61,7 @@ public class SelectPictureBottomDialog extends BaseBottomDialog {
                 if (Build.VERSION.SDK_INT >= 23) {
                     int checkPermission = getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
                     if (checkPermission != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_PERMISSIONS);
+                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_ALBUM);
                         return;
                     }
                 }
@@ -68,7 +71,6 @@ public class SelectPictureBottomDialog extends BaseBottomDialog {
         view.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 dismiss();
             }
         });
@@ -86,8 +88,41 @@ public class SelectPictureBottomDialog extends BaseBottomDialog {
             public void onPhotoCancel() {
                 dismiss();
             }
-        },mType);
+        }, mType);
         return view;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==REQUEST_CAMERA){
+            if (Build.VERSION.SDK_INT >= 23) {
+                int checkPermission = getActivity().checkSelfPermission(Manifest.permission.CAMERA);
+                if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+                    //if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
+                    //}
+                    return;
+                }
+
+                // 从6.0系统(API 23)开始，访问外置存储需要动态申请权限
+                checkPermission = getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CAMERA);
+                    return;
+                }
+                photoUtils.takePicture(SelectPictureBottomDialog.this);
+            }
+        }else if(requestCode==REQUEST_ALBUM){
+            if (Build.VERSION.SDK_INT >= 23) {
+                int checkPermission = getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_ALBUM);
+                    return;
+                }
+            }
+            photoUtils.selectPicture(SelectPictureBottomDialog.this);
+        }
     }
 
     @Override
@@ -128,9 +163,10 @@ public class SelectPictureBottomDialog extends BaseBottomDialog {
 
     /**
      * 设置是否需要裁剪的类型
+     *
      * @param type
      */
-    public void setType(int type){
+    public void setType(int type) {
         mType = type;
     }
 

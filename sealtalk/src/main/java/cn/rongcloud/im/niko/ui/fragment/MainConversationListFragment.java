@@ -3,12 +3,17 @@ package cn.rongcloud.im.niko.ui.fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+
+import com.alibaba.fastjson.JSON;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import cn.rongcloud.im.niko.db.model.GroupNoticeInfo;
@@ -17,8 +22,11 @@ import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.ui.activity.MainActivity;
 import cn.rongcloud.im.niko.ui.adapter.ConversationListAdapterEx;
 import cn.rongcloud.im.niko.viewmodel.GroupNoticeInfoViewModel;
+import io.rong.common.RLog;
 import io.rong.imkit.fragment.ConversationListFragment;
+import io.rong.imkit.fragment.IHistoryDataResultCallback;
 import io.rong.imkit.widget.adapter.ConversationListAdapter;
+import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 
 public class MainConversationListFragment extends ConversationListFragment {
@@ -28,6 +36,7 @@ public class MainConversationListFragment extends ConversationListFragment {
     private MainActivity mainActivity;
     private int position = 0;
 
+    private Conversation.ConversationType[] conversationTypes = new Conversation.ConversationType[]{Conversation.ConversationType.PRIVATE,Conversation.ConversationType.GROUP};
 
     public static MainConversationListFragment getInstance(int position) {
         MainConversationListFragment sf = new MainConversationListFragment();
@@ -41,6 +50,8 @@ public class MainConversationListFragment extends ConversationListFragment {
         setUri();
         initViewModel();
         view.setTag(position);
+
+
     }
 
     @Override
@@ -63,7 +74,33 @@ public class MainConversationListFragment extends ConversationListFragment {
                 .build();
 
         setUri(uri);
+
+//        try {
+//            RongIMClient.getInstance().getConversationListByPage(new RongIMClient.ResultCallback<List<Conversation>>() {
+//                public void onSuccess(List<Conversation> conversations) {
+//                    Log.e(ConversationListFragment.TAG, "getConversationList ="+ JSON.toJSONString(conversations));
+//                }
+//
+//                public void onError(RongIMClient.ErrorCode e) {
+//                    Log.e(ConversationListFragment.TAG, "getConversationList Error");
+//
+//                }
+//            }, 0, 100, conversationTypes);
+//
+//        }catch (Exception e){
+//            Log.e(TAG,e.getMessage());
+//        }
     }
+
+//    protected void initFragment(Uri uri) {
+//        super.initFragment(uri);
+//        if (RongIMClient.getInstance().getCurrentConnectionStatus().equals(ConnectionStatus.DISCONNECTED)) {
+//            RLog.d(TAG, "RongCloud haven't been connected yet, so the conversation list display blank !!!");
+//        } else {
+//            this.getConversationList(conversationTypes,false);
+//        }
+//    }
+
 
 
     @Override
@@ -105,4 +142,42 @@ public class MainConversationListFragment extends ConversationListFragment {
         });
     }
 
+
+
+
+    private void getConversationList(Conversation.ConversationType[] conversationTypes, final boolean isLoadMore) {
+        RongIMClient.getInstance().getConversationListByPage(new RongIMClient.ResultCallback<List<Conversation>>() {
+            public void onSuccess(List<Conversation> conversations) {
+//                List<Conversation> resultConversations = new ArrayList();
+//                if (conversations != null) {
+//                    ConversationListFragment.this.timestamp = ((Conversation)conversations.get(conversations.size() - 1)).getSentTime();
+//                    Iterator var3 = conversations.iterator();
+//
+//                    while(var3.hasNext()) {
+//                        Conversation conversation = (Conversation)var3.next();
+//                        if (!ConversationListFragment.this.shouldFilterConversation(conversation.getConversationType(), conversation.getTargetId())) {
+//                            resultConversations.add(conversation);
+//                        }
+//                    }
+//                }
+                Log.e(ConversationListFragment.TAG, "getConversationList ="+ JSON.toJSONString(conversations));
+            }
+
+            public void onError(RongIMClient.ErrorCode e) {
+                Log.e(ConversationListFragment.TAG, "getConversationList Error");
+
+            }
+        }, 0, 100, conversationTypes);
+//        getConversationList(conversationTypes, new IHistoryDataResultCallback<List<Conversation>>() {
+//            public void onResult(List<Conversation> data) {
+//                Log.e(ConversationListFragment.TAG, "getConversationList ="+ JSON.toJSONString(data));
+//
+//            }
+//
+//            public void onError() {
+//                Log.e(ConversationListFragment.TAG, "getConversationList Error");
+//
+//            }
+//        }, isLoadMore);
+    }
 }

@@ -1,7 +1,7 @@
 <resources>
 
     <!--    扩展部分高度 和 个数-->
-    <dimen name="rc_extension_board_height">120dp</dimen>
+<!--    <dimen name="rc_extension_board_height">120dp</dimen>-->
     <integer name="rc_extension_plugin_count_per_page">4</integer>
 
     <dimen name="fab_margin">16dp</dimen>

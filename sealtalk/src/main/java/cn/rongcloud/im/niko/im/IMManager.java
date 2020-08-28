@@ -45,6 +45,7 @@ import cn.rongcloud.im.niko.im.provider.MyLocationMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.MyRichContentMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.MySightMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.MyTextMessageItemProvider;
+import cn.rongcloud.im.niko.im.provider.MyVoiceMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.PokeMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.ScLikeMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.SealGroupConNtfMessageProvider;
@@ -108,6 +109,7 @@ import io.rong.message.ImageMessage;
 import io.rong.message.RichContentMessage;
 import io.rong.message.TextMessage;
 import io.rong.recognizer.RecognizeExtensionModule;
+import io.rong.sight.SightExtensionModule;
 
 public class IMManager {
     private static volatile IMManager instance;
@@ -824,6 +826,9 @@ public class IMManager {
 
         RongIM.registerMessageTemplate(new MyLocationMessageItemProvider());
 
+        RongIM.registerMessageTemplate(new MyVoiceMessageItemProvider(SealApp.getApplication()));
+
+
     }
 
     /**
@@ -1203,6 +1208,7 @@ public class IMManager {
                     configCache.setNotifiQuietHours(getCurrentId(), startTime, spanMinutes);
                     result.setValue(Resource.success(configCache.getNotifiQUietHours(getCurrentId())));
                 }
+
             }
 
             @Override

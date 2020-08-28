@@ -13,7 +13,10 @@
     android:paddingTop="6dp">
 
     <TextView
+        android:textSize="12sp"
+        android:textColor="#65666C"
         android:id="@id/rc_time"
+        android:background="@null"
         style="@style/RCTheme.MessageTime"
         android:layout_width="wrap_content"
         android:layout_height="20dp"

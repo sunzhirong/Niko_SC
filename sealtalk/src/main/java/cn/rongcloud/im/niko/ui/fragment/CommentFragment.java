@@ -179,7 +179,6 @@ public class CommentFragment extends BaseFragment {
             @Override
             public void onGlobalLayout() {
                 int height = mEtInput.getHeight();
-                Log.e("mEtInput","mEtInput="+height);
                 EventBus.getDefault().post(new CommentHeightEvent(height));
             }
         });
@@ -252,7 +251,6 @@ public class CommentFragment extends BaseFragment {
         for (FollowBean bean : event.list) {
             result = result.concat("@").concat(bean.getName()).concat(" ");
         }
-        SLog.e("niko", result);
         mEtInput.setText(mEtInput.getText() + result);
         mEtInput.setSelection(mEtInput.getText().toString().length());
     }
