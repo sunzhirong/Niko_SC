@@ -1,10 +1,14 @@
 package cn.rongcloud.im.niko.utils;
 
+import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.SealApp;
 import cn.rongcloud.im.niko.common.ErrorCode;
 
@@ -13,21 +17,23 @@ import cn.rongcloud.im.niko.common.ErrorCode;
  */
 public class ToastUtils {
     private static Toast lastToast;
+    private static TextView mTextView;
 
     public static void showErrorToast(ErrorCode errorCode) {
         //根据错误码进行对应错误提示
         String message = errorCode.getMessage();
         if (TextUtils.isEmpty(message)) return;
 
-        if (lastToast != null) {
-            lastToast.setText(message);
-        } else {
-            lastToast = Toast.makeText(SealApp.getApplication(), message, Toast.LENGTH_SHORT);
-        }
-        lastToast.setGravity(Gravity.CENTER, 0, 0);
+//        if (lastToast != null) {
+//            lastToast.setText(message);
+//        } else {
+//            lastToast = Toast.makeText(SealApp.getApplication(), message, Toast.LENGTH_SHORT);
+//        }
+//        lastToast.setGravity(Gravity.CENTER, 0, 0);
+        lastToast = makeToast(SealApp.getApplication(), message);
         lastToast.show();
     }
-
+//    rc_bg_toast
     public static void showErrorToast(int errorCode) {
         showErrorToast(ErrorCode.fromCode(errorCode));
     }
@@ -53,13 +59,35 @@ public class ToastUtils {
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         } else {
-            if (lastToast != null) {
-                lastToast.setText(message);
-            } else {
-                lastToast = Toast.makeText(SealApp.getApplication(), message, duration);
-            }
-            lastToast.setGravity(Gravity.CENTER, 0, 0);
+//            if (lastToast != null) {
+//                lastToast.setText(message);
+//            } else {
+//                lastToast = Toast.makeText(SealApp.getApplication(), message, duration);
+//            }
+//            lastToast.setGravity(Gravity.CENTER, 0, 0);
+            lastToast = makeToast(SealApp.getApplication(), message);
             lastToast.show();
         }
+    }
+
+
+
+    private static Toast makeToast(Context context,String message) {
+        if (lastToast == null) {
+            lastToast = new Toast(context);
+             //设置自定义Toast的位置
+            View layout = View.inflate(context, R.layout.toast, null);
+            mTextView = ((TextView) layout.findViewById(R.id.message));
+            mTextView.setText(message);
+            lastToast.setView(layout);
+            //设置Toast的位置在屏幕中间
+            lastToast.setGravity(Gravity.CENTER, 0, 0);
+            lastToast.setDuration(Toast.LENGTH_SHORT);
+        } else {
+            mTextView.setText(message);
+        }
+        return lastToast;
+
+
     }
 }

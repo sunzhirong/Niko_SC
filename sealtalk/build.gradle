@@ -102,8 +102,8 @@ dependencies {
     api 'cn.rongcloud.sdk:call_lib:4.0.2'
     api 'cn.rongcloud.sdk:call_kit:4.0.2'
 
-//    api project(path: ':contactcard')
-//    api project(path: ':recognizer')
-//    api project(path: ':pushpermission')
+    api project(path: ':contactcard')
+    api project(path: ':recognizer')
+    api project(path: ':pushpermission')
 }
 // apply plugin: 'com.huawei.agconnect'

@@ -33,6 +33,15 @@ public class ConversationListAdapterEx extends ConversationListAdapter {
     private boolean isFirstRefresh = true;
     private GroupApplyMessageListener messageListener;
 
+    public List<UIConversation> getList(){
+        return mList;
+    }
+
+    public void setList(List<UIConversation> list){
+        mList = list;
+        notifyDataSetChanged();
+    }
+
     public ConversationListAdapterEx(Context context) {
         super(context);
         mGroupNotifyUnReadCount = 0;

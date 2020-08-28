@@ -40,6 +40,7 @@ import cn.rongcloud.im.niko.im.plugin.PokeExtensionModule;
 import cn.rongcloud.im.niko.im.plugin.ScLikeExtensionModule;
 import cn.rongcloud.im.niko.im.provider.ContactNotificationMessageProvider;
 import cn.rongcloud.im.niko.im.provider.GroupApplyMessageProvider;
+import cn.rongcloud.im.niko.im.provider.MyHQVoiceMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.MyImageMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.MyLocationMessageItemProvider;
 import cn.rongcloud.im.niko.im.provider.MyRichContentMessageItemProvider;
@@ -827,6 +828,7 @@ public class IMManager {
         RongIM.registerMessageTemplate(new MyLocationMessageItemProvider());
 
         RongIM.registerMessageTemplate(new MyVoiceMessageItemProvider(SealApp.getApplication()));
+        RongIM.registerMessageTemplate(new MyHQVoiceMessageItemProvider());
 
 
     }
