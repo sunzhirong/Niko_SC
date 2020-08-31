@@ -50,7 +50,6 @@ import cn.rongcloud.im.niko.model.niko.ProfileInfo;
 import cn.rongcloud.im.niko.model.niko.TokenBean;
 import cn.rongcloud.im.niko.net.HttpClientManager;
 import cn.rongcloud.im.niko.net.RetrofitUtil;
-import cn.rongcloud.im.niko.net.ScInterceptor;
 import cn.rongcloud.im.niko.net.request.CommentAtReq;
 import cn.rongcloud.im.niko.net.service.TokenService;
 import cn.rongcloud.im.niko.net.service.UploadService;
@@ -63,6 +62,7 @@ import cn.rongcloud.im.niko.sp.SPUtils;
 import cn.rongcloud.im.niko.sp.UserCache;
 import cn.rongcloud.im.niko.ui.adapter.models.VIPCheckBean;
 import cn.rongcloud.im.niko.ui.adapter.models.VIPConfigBean;
+import cn.rongcloud.im.niko.utils.BirthdayToAgeUtil;
 import cn.rongcloud.im.niko.utils.CharacterParser;
 import cn.rongcloud.im.niko.utils.FileUtils;
 import cn.rongcloud.im.niko.utils.NetworkBoundResource;
@@ -157,6 +157,111 @@ public class UserTask {
         });
         return result;
     }
+    public LiveData<Resource<UserInfo>> getCurrentUserInfo(final String userId) {
+        return new NetworkBoundResource<UserInfo, Result<ProfileInfo>>() {
+            @Override
+            protected void saveCallResult(@NonNull Result<ProfileInfo> item) {
+                ProfileInfo rsData = item.getRsData();
+                UserInfo userInfo = new UserInfo();
+
+                if (rsData == null) {
+                    return;
+                }
+
+                if(userId.equals(imManager.getCurrentId())){
+                    ProfileUtils.sProfileInfo = rsData;
+                }
+
+                userInfo.setId(String.valueOf(rsData.getHead().getUID()));
+                userInfo.setAlias(rsData.getHead().getAlias());
+                userInfo.setAliasSpelling(SearchUtils.fullSearchableString(rsData.getHead().getAlias()));
+                userInfo.setName(rsData.getHead().getName());
+                userInfo.setPortraitUri(GlideImageLoaderUtil.getScString(rsData.getHead().getUserIcon()));
+                userInfo.setNameColor(rsData.getHead().getNameColor());
+                userInfo.setDob(BirthdayToAgeUtil.longToString(rsData.getDOB()));
+                userInfo.setBio(rsData.getBio());
+                userInfo.setLocation(rsData.getLocation());
+                userInfo.setSchool(rsData.getSchool());
+                userInfo.setMan(rsData.getHead().isGender());
+                SLog.e(LogTag.DB, "NetworkBoundResource saveCallResult Impl:" + JSON.toJSONString(userInfo));
+
+                UserDao userDao = dbManager.getUserDao();
+                if (userDao != null) {
+                    String nameSpelling = SearchUtils.fullSearchableString(userInfo.getName());
+
+                    userInfo.setNameSpelling(nameSpelling);
+                    String portraitUri = userInfo.getPortraitUri();
+
+                    // 当没有头像时生成默认头像
+                    if (TextUtils.isEmpty(portraitUri)) {
+                        portraitUri = RongGenerate.generateDefaultAvatar(context, userInfo.getId(), userInfo.getName());
+                        userInfo.setPortraitUri(portraitUri);
+                    }
+
+                    String stAccount = userInfo.getStAccount();
+                    if (!TextUtils.isEmpty(stAccount)) {
+                        userDao.updateSAccount(userInfo.getId(), stAccount);
+                    }
+                    String gender = userInfo.getGender();
+                    if (!TextUtils.isEmpty(gender)) {
+                        userDao.updateGender(userInfo.getId(), gender);
+                    }
+//                    userDao.updateNickName(userId, (String)value,CharacterParser.getInstance().getSpelling((String)value));
+                    userDao.updateBIO(userId, userInfo.getBio());
+                    userDao.updateLocation(userId, userInfo.getLocation());
+                    userDao.updateSchool(userId, userInfo.getSchool());
+                    userDao.updateDOB(userId, userInfo.getDob());
+                    userDao.updateGender(userId, userInfo.isMan());
+                    userDao.updateNameColor(userId, userInfo.getNameColor());
+//                    userDao.updatePortraitUri(userId, (String)value);
+
+
+                    // 更新现有用户信息若没有则创建新的用户信息，防止覆盖其他已有字段
+                    int resultCount = userDao.updateNameAndPortrait(userInfo.getId(), userInfo.getName(), nameSpelling, portraitUri);
+                    if (resultCount == 0) {
+                        // 当前用户的话， 判断是否有电话号码， 没有则从缓存中取出
+                        if (userInfo.getId().equals(imManager.getCurrentId())) {
+                            UserCacheInfo cacheInfo = userCache.getUserCache();
+                            if (cacheInfo != null && cacheInfo.getId().equals(userInfo.getId())) {
+                                userInfo.setPhoneNumber(cacheInfo.getPhoneNumber());
+                            }
+                        }
+
+                        userDao.insertUser(userInfo);
+                    }
+                }
+
+                // 更新 IMKit 显示缓存
+                String alias = "";
+                if (userDao != null) {
+                    alias = userDao.getUserByIdSync(userInfo.getId()).getAlias();
+                }
+                //有备注名的时，使用备注名
+                String name = TextUtils.isEmpty(alias) ? userInfo.getName() : alias;
+                IMManager.getInstance().updateUserInfoCache(userInfo.getId(), name, Uri.parse(userInfo.getPortraitUri()));
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<UserInfo> loadFromDb() {
+                UserDao userDao = dbManager.getUserDao();
+                if (userDao != null) {
+                    return userDao.getUserById(userId);
+                } else {
+                    return new MediatorLiveData<>();
+                }
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<Result<ProfileInfo>> createCall() {
+                return userService.getUserInfo();
+            }
+
+        }.asLiveData();
+    }
+
+
 
     /**
      * 获取用户信息
@@ -185,7 +290,7 @@ public class UserTask {
                 userInfo.setName(rsData.getHead().getName());
                 userInfo.setPortraitUri(GlideImageLoaderUtil.getScString(rsData.getHead().getUserIcon()));
                 userInfo.setNameColor(rsData.getHead().getNameColor());
-                userInfo.setDob(rsData.getDOB());
+                userInfo.setDob(BirthdayToAgeUtil.longToString(rsData.getDOB()));
                 userInfo.setBio(rsData.getBio());
                 userInfo.setLocation(rsData.getLocation());
                 userInfo.setSchool(rsData.getSchool());

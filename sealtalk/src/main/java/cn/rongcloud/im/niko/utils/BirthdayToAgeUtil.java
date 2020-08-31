@@ -46,6 +46,13 @@ public class BirthdayToAgeUtil {
         return ageStr;
     }
 
+
+    public static String longToString(long strTime){
+        strTime = strTime* 1000;
+        Date date = new Date(strTime);
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+    }
+
     /**
      * String类型转换成date类型
      * strTime: 要转换的string类型的时间，
@@ -53,7 +60,7 @@ public class BirthdayToAgeUtil {
      * //yyyy年MM月dd日 HH时mm分ss秒，
      * strTime的时间格式必须要与formatType的时间格式相同
      */
-    private static Date stringToDate(String strTime, String formatType) {
+    private static Date longToString(String strTime, String formatType) {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat(formatType);
             Date date;
@@ -76,7 +83,7 @@ public class BirthdayToAgeUtil {
         try {
             //String类型转换为date类型
             Calendar calendar = Calendar.getInstance();
-            Date date = stringToDate(strTime, formatType);
+            Date date = longToString(strTime, formatType);
             calendar.setTime(date);
             if (date == null) {
             } else {
@@ -131,5 +138,7 @@ public class BirthdayToAgeUtil {
         Date date = new Date(millis);
         return new SimpleDateFormat(FORMAT_Y_M).format(date);
     }
+
+
 
 }

@@ -67,7 +67,7 @@ public class DatePicker extends LinearLayout implements YearPicker.OnYearSelecte
 		initAttrs(context, attrs);
 		mYearPicker.setBackgroundDrawable(getBackground());
 		int year = Calendar.getInstance().get(Calendar.YEAR);
-		mYearPicker.setStartYear(2000);
+		mYearPicker.setStartYear(1900);
 		mYearPicker.setEndYear(year);
 		mMonthPicker.setBackgroundDrawable(getBackground());
         mDayPicker.setBackgroundDrawable(getBackground());

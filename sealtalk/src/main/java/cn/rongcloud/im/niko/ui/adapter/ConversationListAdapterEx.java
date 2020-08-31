@@ -1,6 +1,7 @@
 package cn.rongcloud.im.niko.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,8 +13,14 @@ import android.widget.TextView;
 import java.util.List;
 
 import cn.rongcloud.im.niko.R;
+import cn.rongcloud.im.niko.SealApp;
+import cn.rongcloud.im.niko.common.ThreadManager;
+import cn.rongcloud.im.niko.db.DbManager;
+import cn.rongcloud.im.niko.db.dao.UserDao;
 import cn.rongcloud.im.niko.db.model.GroupNoticeInfo;
+import cn.rongcloud.im.niko.db.model.UserInfo;
 import cn.rongcloud.im.niko.im.message.GroupApplyMessage;
+import cn.rongcloud.im.niko.sp.ProfileUtils;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.model.UIConversation;
 import io.rong.imkit.widget.adapter.ConversationListAdapter;
@@ -79,9 +86,22 @@ public class ConversationListAdapterEx extends ConversationListAdapter {
             //更新未读消息数
             updateGroupApplyView(groupView);
         }
-//        id.rc_conversation_title
-        TextView textView = (TextView) v.findViewById(R.id.rc_content).findViewById(R.id.rc_conversation_title);
-        Log.e("textView",textView.getText().toString());
+        TextView tvTitle = (TextView) v.findViewById(R.id.rc_content).findViewById(R.id.rc_conversation_title);
+        Log.e("tvTitle",tvTitle.getText().toString());
+        if(data.getConversationType() == Conversation.ConversationType.PRIVATE){
+            //设置颜色，查询serderid的用户信息
+            //查询点赞数据
+            ThreadManager.getInstance().runOnWorkThread(() ->{
+                String userId = data.getConversationSenderId();
+                UserDao userDao = DbManager.getInstance(SealApp.getApplication()).getUserDao();
+                UserInfo userInfo = userDao.getUserByIdSync(userId);
+                ThreadManager.getInstance().runOnWorkThread(() ->{
+                    tvTitle.setTextColor(ProfileUtils.getNameColor(userInfo.getNameColor()));
+                });
+            });
+        }else {
+            tvTitle.setTextColor(Color.parseColor("#000000"));
+        }
     }
 
     private boolean isGroupApplyMessage(UIConversation data) {

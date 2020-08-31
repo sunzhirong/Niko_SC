@@ -179,7 +179,11 @@ public class UserInfoViewModel extends AndroidViewModel {
      */
     private void requestUserInfo(String userId) {
         SLog.d("ss_usertask", "userId == " + userId);
-        userInfo.setSource(userTask.getUserInfo(userId));
+        if(userId .equals( imManager.getCurrentId())){
+            userInfo.setSource(userTask.getCurrentUserInfo(userId));
+        }else {
+            userInfo.setSource(userTask.getUserInfo(userId));
+        }
     }
 
 

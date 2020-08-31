@@ -109,7 +109,9 @@ public interface UserService {
     LiveData<Result<ProfileInfo>> getUserInfo(@Body RequestBody body);
 
 
-
+    @POST(ScUrl.PROFILE_GET)
+    @Headers(NetConstant.JSON)
+    LiveData<Result<ProfileInfo>> getUserInfo();
     /**
      * 获取黑名单信息
      *

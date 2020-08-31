@@ -19,6 +19,7 @@ import cn.rongcloud.im.niko.db.model.FriendShipInfo;
 import cn.rongcloud.im.niko.db.model.GroupEntity;
 import cn.rongcloud.im.niko.db.model.GroupMemberInfoDes;
 import cn.rongcloud.im.niko.db.model.UserInfo;
+import cn.rongcloud.im.niko.im.IMManager;
 import cn.rongcloud.im.niko.model.AddFriendResult;
 import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Status;
@@ -67,7 +68,12 @@ public class UserDetailViewModel extends AndroidViewModel {
             // 当有结果时，获取用户信息。此前有好友信息则会更新用户表，没有则只获取用户信息
             if (friendShipInfoResource.status != Status.LOADING) {
                 userInfoLiveData.removeSource(friendInfo);
-                userInfoLiveData.addSource(userTask.getUserInfo(userId), resource -> userInfoLiveData.setValue(resource));
+                if(userId .equals( IMManager.getInstance().getCurrentId())){
+                    userInfoLiveData.addSource(userTask.getCurrentUserInfo(userId), resource -> userInfoLiveData.setValue(resource));
+                }else {
+                    userInfoLiveData.addSource(userTask.getUserInfo(userId), resource -> userInfoLiveData.setValue(resource));
+
+                }
             }
         });
         LiveData<Resource<UserSimpleInfo>> blackListUser = userTask.getInBlackListUser(userId);

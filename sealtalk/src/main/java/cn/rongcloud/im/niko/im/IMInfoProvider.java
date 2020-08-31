@@ -120,7 +120,13 @@ public class IMInfoProvider {
      */
     public void updateUserInfo(String userId) {
         ThreadManager.getInstance().runOnUIThread(() -> {
-            LiveData<Resource<UserInfo>> userSource = userTask.getUserInfo(userId);
+            LiveData<Resource<UserInfo>> userSource ;
+            if(userId .equals(IMManager.getInstance().getCurrentId())){
+                userSource = userTask.getCurrentUserInfo(userId);
+            }else {
+                userSource = userTask.getUserInfo(userId);
+            }
+//            LiveData<Resource<UserInfo>> userSource = userTask.getUserInfo(userId);
             triggerLiveData.addSource(userSource, resource -> {
                 if (resource.status == Status.SUCCESS || resource.status == Status.ERROR) {
                     // 确认成功或失败后，移除数据源

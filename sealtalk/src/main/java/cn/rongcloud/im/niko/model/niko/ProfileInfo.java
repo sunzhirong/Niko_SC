@@ -1,11 +1,6 @@
 package cn.rongcloud.im.niko.model.niko;
 
 
-import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 public class ProfileInfo {
     /**
@@ -32,7 +27,7 @@ public class ProfileInfo {
     private int Followings;
     private int Likes;
     private int Moments;
-    private String DOB;
+    private long DOB;
 
     public int getId() {
         return id;
@@ -42,11 +37,11 @@ public class ProfileInfo {
         this.id = id;
     }
 
-    public String getDOB() {
+    public long getDOB() {
         return DOB;
     }
 
-    public void setDOB(String DOB) {
+    public void setDOB(long DOB) {
         this.DOB = DOB;
     }
 
