@@ -18,7 +18,6 @@ import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Result;
 import cn.rongcloud.im.niko.model.VersionInfo;
 import cn.rongcloud.im.niko.net.HttpClientManager;
-import cn.rongcloud.im.niko.net.service.AppService;
 import cn.rongcloud.im.niko.utils.NetworkOnlyResource;
 import io.rong.imkit.RongConfigurationManager;
 import io.rong.imkit.utilities.LangUtils;
@@ -27,11 +26,9 @@ import io.rong.imlib.common.BuildVar;
 
 public class AppTask {
 
-    private AppService appsService;
     private Context context;
 
     public AppTask(Context context) {
-        appsService = HttpClientManager.getInstance(context).getClient().createService(AppService.class);
         this.context = context.getApplicationContext();
     }
 

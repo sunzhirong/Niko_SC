@@ -27,14 +27,6 @@ import retrofit2.http.QueryMap;
 
 public interface FriendService {
 
-//    /**
-//     * 获取好友信息
-//     *
-//     * @param friendId
-//     * @return
-//     */
-//    @GET(SealTalkUrl.GET_FRIEND_PROFILE)
-//    LiveData<Result<FriendShipInfo>> getFriendInfo(@Path("friendId") String friendId);
 
     /**
      * 同意添加好友

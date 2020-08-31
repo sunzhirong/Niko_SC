@@ -36,7 +36,6 @@ import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.model.UploadTokenResult;
 import cn.rongcloud.im.niko.net.HttpClientManager;
 import cn.rongcloud.im.niko.net.RetrofitClient;
-import cn.rongcloud.im.niko.net.service.AppService;
 import cn.rongcloud.im.niko.net.service.UserService;
 import cn.rongcloud.im.niko.utils.FileUtils;
 import cn.rongcloud.im.niko.utils.NetworkOnlyResource;
@@ -50,13 +49,11 @@ import retrofit2.Response;
 public class FileManager {
     private Context context;
     private UserService userService;
-    private AppService appService;
 
     public FileManager(Context context) {
         this.context = context.getApplicationContext();
         RetrofitClient client = HttpClientManager.getInstance(context).getClient();
         userService = client.createService(UserService.class);
-        appService = client.createService(AppService.class);
     }
 
     /**
