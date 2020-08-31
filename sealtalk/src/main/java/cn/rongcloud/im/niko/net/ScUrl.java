@@ -34,7 +34,7 @@ public class ScUrl {
 
 
     public static final String GET_IM_TOKEN = "/api/ScIM/GetImUserToken";
-    public static final String CREATE_GROUP = "/api/ScIM/GroupChatStart";//创建群组
+    public static final String CREATE_GROUP = "/api/ScIM/GroupChatStart";//创建群组g
     public static final String GROUP_CHAT_INFO = "/api/ScIM/GroupChatInfo";//获取群信息 群名和用户信息
     public static final String GROUP_CHAT_INVITE = "/api/ScIM/GroupChatInvite";//群聊邀请
     public static final String GROUP_CHAT_KICK = "/api/ScIM/GroupChatKick";//提出群聊

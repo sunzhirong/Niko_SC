@@ -3,6 +3,7 @@ package cn.rongcloud.im.niko.ui.adapter;
 import android.content.Context;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -78,6 +79,9 @@ public class ConversationListAdapterEx extends ConversationListAdapter {
             //更新未读消息数
             updateGroupApplyView(groupView);
         }
+//        id.rc_conversation_title
+        TextView textView = (TextView) v.findViewById(R.id.rc_content).findViewById(R.id.rc_conversation_title);
+        Log.e("textView",textView.getText().toString());
     }
 
     private boolean isGroupApplyMessage(UIConversation data) {

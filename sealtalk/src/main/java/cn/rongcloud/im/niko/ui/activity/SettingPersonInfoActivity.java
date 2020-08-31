@@ -88,6 +88,7 @@ public class SettingPersonInfoActivity extends BaseActivity {
                 dismissLoadingDialog(new Runnable() {
                     @Override
                     public void run() {
+
                     }
                 });
 
@@ -108,6 +109,7 @@ public class SettingPersonInfoActivity extends BaseActivity {
                 dismissLoadingDialog(new Runnable() {
                     @Override
                     public void run() {
+                        mUserInfoViewModel.updateProfile(3,"UserIcon",resource.data);
                     }
                 });
 

@@ -213,6 +213,16 @@ public class UserTask {
                     if (!TextUtils.isEmpty(gender)) {
                         userDao.updateGender(userInfo.getId(), gender);
                     }
+//                    userDao.updateNickName(userId, (String)value,CharacterParser.getInstance().getSpelling((String)value));
+                    userDao.updateBIO(userId, userInfo.getBio());
+                    userDao.updateLocation(userId, userInfo.getLocation());
+                    userDao.updateSchool(userId, userInfo.getSchool());
+                    userDao.updateDOB(userId, userInfo.getDob());
+                    userDao.updateGender(userId, userInfo.isMan());
+                    userDao.updateNameColor(userId, userInfo.getNameColor());
+//                    userDao.updatePortraitUri(userId, (String)value);
+
+
                     // 更新现有用户信息若没有则创建新的用户信息，防止覆盖其他已有字段
                     int resultCount = userDao.updateNameAndPortrait(userInfo.getId(), userInfo.getName(), nameSpelling, portraitUri);
                     if (resultCount == 0) {
@@ -803,21 +813,6 @@ public class UserTask {
         return result;
     }
 
-//    /**
-//     * 退出登录
-//     */
-//    public void logout() {
-//        userCache.logoutClear();
-//        dbManager.closeDb();
-//
-//        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
-//            @NonNull
-//            @Override
-//            protected LiveData<Result<Boolean>> createCall() {
-//                return userService.logout();
-//            }
-//        }.asLiveData();
-//    }
 
     /**
      * 退出登录
@@ -1021,6 +1016,9 @@ public class UserTask {
                             break;
                         case "NameColor":
                             userDao.updateNameColor(userId, (String)value);
+                            break;
+                        case "UserIcon":
+                            userDao.updatePortraitUri(userId, (String)value);
                             break;
                     }
 
