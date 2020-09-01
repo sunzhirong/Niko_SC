@@ -197,14 +197,10 @@
             android:name=".ui.activity.GroupDetailActivity"
             android:screenOrientation="portrait" />
 
-
-
         <activity
             android:name=".ui.activity.UserDetailActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.SelectSingleFriendActivity"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.activity.SelectGroupMemberActivity"
             android:screenOrientation="portrait" />
@@ -226,22 +222,7 @@
             android:name=".ui.activity.ForwardActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".ui.activity.UpdateNameActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.UpdateStAccountActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.UpdateGenderActivity"
-            android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".ui.activity.CreateGroupActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.UpdatePasswordActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.GroupUserInfoActivity"
             android:screenOrientation="portrait" />
@@ -274,9 +255,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
-            android:name=".ui.activity.GroupSetManagementsActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.activity.EditUserDescribeActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -284,9 +262,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.ForwardSelectedDetailActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.ScanActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.RequestContactPermissionActivity"
@@ -452,7 +427,7 @@
             android:taskAffinity="net.sourceforge.simcpux"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".ui.niko.SettingActivity"
+            android:name=".ui.activity.TitleAndSearchBaseActivity$SettingActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.ContactCompanyActivity"
@@ -492,7 +467,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.MyLikedActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".ui.niko.SelectMemberActivity"
+        <activity android:name=".ui.activity.TitleAndSearchBaseActivity$SelectMemberActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.ContactsActivity"
             android:screenOrientation="portrait"/>

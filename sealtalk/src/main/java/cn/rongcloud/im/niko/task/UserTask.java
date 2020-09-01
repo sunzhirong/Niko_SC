@@ -1134,15 +1134,15 @@ public class UserTask {
         }.asLiveData();
     }
 
-    public LiveData<Resource<String>> upload(Uri uri){
+    public LiveData<Resource<String>> upload(File uploadFile){
         return new NetworkOnlyResource<String, Result<String>>() {
             @NonNull
             @Override
             protected LiveData<Result<String>> createCall() {
-                File uploadFile = new File(uri.getPath());
-                if (!uploadFile.exists()) {
-                    uploadFile = new File(FileUtils.getRealPathFromUri(SealApp.getApplication(),uri));
-                }
+//                File uploadFile = new File(uri.getPath());
+//                if (!uploadFile.exists()) {
+//                    uploadFile = new File(FileUtils.getRealPathFromUri(SealApp.getApplication(),uri));
+//                }
                 RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"), uploadFile);
                 MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);//表单类型
 //                builder.addFormDataPart("uploadFile", uploadFile.getPath(), imageBody);//imgfile 后台接收图片流的参数名

@@ -22,7 +22,7 @@ import butterknife.OnClick;
 import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.event.ShowMoreEvent;
 import cn.rongcloud.im.niko.ui.activity.ContactsActivity;
-import cn.rongcloud.im.niko.ui.niko.SelectMemberActivity;
+import cn.rongcloud.im.niko.ui.activity.TitleAndSearchBaseActivity;
 import io.rong.eventbus.EventBus;
 
 public class ChatFragment extends BaseFragment {
@@ -140,7 +140,7 @@ public class ChatFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     mPopupWindow.dismiss();
-                    readyGo(SelectMemberActivity.class);
+                    readyGo(TitleAndSearchBaseActivity.SelectMemberActivity.class);
                 }
             });
             mPopupWindow = new PopupWindow(view, ViewPager.LayoutParams.WRAP_CONTENT, ViewPager.LayoutParams.WRAP_CONTENT, true);

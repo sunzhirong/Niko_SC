@@ -1,9 +1,13 @@
 package cn.rongcloud.im.niko.ui.activity;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
+import java.io.File;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
@@ -11,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.rongcloud.im.niko.R;
+import cn.rongcloud.im.niko.common.ThreadManager;
 import cn.rongcloud.im.niko.db.model.UserInfo;
 import cn.rongcloud.im.niko.event.CitySelectEvent;
 import cn.rongcloud.im.niko.model.Resource;
@@ -22,9 +27,11 @@ import cn.rongcloud.im.niko.ui.dialog.SelectPictureBottomDialog;
 import cn.rongcloud.im.niko.ui.view.SettingItemView;
 import cn.rongcloud.im.niko.ui.widget.wheel.date.DatePickerDialogFragment;
 import cn.rongcloud.im.niko.utils.BirthdayToAgeUtil;
+import cn.rongcloud.im.niko.utils.ImageUtils;
 import cn.rongcloud.im.niko.utils.ToastUtils;
 import cn.rongcloud.im.niko.utils.glideutils.GlideImageLoaderUtil;
 import cn.rongcloud.im.niko.viewmodel.UserInfoViewModel;
+import io.rong.common.FileUtils;
 import io.rong.eventbus.EventBus;
 
 public class SettingPersonInfoActivity extends BaseActivity {
@@ -204,7 +211,18 @@ public class SettingPersonInfoActivity extends BaseActivity {
         SelectPictureBottomDialog.Builder builder = new SelectPictureBottomDialog.Builder();
         builder.setOnSelectPictureListener(uri -> {
             //上传图片
-            mUserInfoViewModel.uploadAvatar(uri);
+            //查询点赞数据
+            ThreadManager.getInstance().runOnWorkThread(() ->{
+                Bitmap bitmap = ImageUtils.compressImageFromFile(uri.getPath(), 1024f);// 按尺寸压缩图片
+                File file = ImageUtils.compressImage(bitmap);  //按质量压缩图片
+                Log.e("file","file.length = "+file.length());
+                ThreadManager.getInstance().runOnUIThread(() -> {
+                    mUserInfoViewModel.uploadAvatar(file);
+                });
+            });
+
+
+
         });
         SelectPictureBottomDialog dialog = builder.build();
         dialog.show(getSupportFragmentManager(), "select_picture_dialog");
@@ -220,8 +238,8 @@ public class SettingPersonInfoActivity extends BaseActivity {
 
 
     public void onEventMainThread(CitySelectEvent event) {
-//        mSivCity.setValue(event.getCity());
         mUserInfoViewModel.updateProfile(2,"Location",event.getCity());
     }
+
 
 }

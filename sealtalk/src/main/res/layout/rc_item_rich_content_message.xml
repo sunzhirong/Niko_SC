@@ -9,7 +9,6 @@
         android:id="@+id/rc_layout"
         android:layout_width="231dp"
         android:layout_height="126dp"
-        android:layout_marginBottom="4dp"
         android:background="@android:color/white">
 
         <TextView
@@ -60,40 +59,44 @@
     </RelativeLayout>
 
 
+
     <ImageView
+        android:padding="4dp"
         android:visibility="gone"
         android:id="@+id/iv_like_left"
         android:layout_below="@+id/rc_layout"
         android:src="@drawable/img_chat_unlike"
-        android:layout_width="16dp"
-        android:layout_height="16dp"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <ImageView
+        android:padding="4dp"
         android:visibility="gone"
         android:id="@+id/iv_like_right"
         android:layout_alignEnd="@+id/rc_layout"
         android:layout_below="@+id/rc_layout"
         android:src="@drawable/img_chat_unlike"
-        android:layout_width="16dp"
-        android:layout_height="16dp"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <LinearLayout
         android:layout_toLeftOf="@+id/iv_like_right"
         android:id="@+id/ll_left"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="24dp"
         android:layout_below="@+id/rc_layout"
-        android:gravity="center_vertical"
         android:orientation="horizontal">
 
 
         <TextView
+            android:layout_gravity="center_vertical"
             android:id="@+id/tv_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:textSize="11sp" />
         <FrameLayout
+            android:layout_gravity="center_vertical"
             android:id="@+id/fl_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -107,19 +110,20 @@
         android:layout_toRightOf="@+id/iv_like_left"
         android:id="@+id/ll_right"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="24dp"
         android:layout_below="@+id/rc_layout"
-        android:gravity="center_vertical"
         android:orientation="horizontal">
 
 
         <FrameLayout
+            android:layout_gravity="center_vertical"
             android:id="@+id/fl_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
         </FrameLayout>
 
         <TextView
+            android:layout_gravity="center_vertical"
             android:id="@+id/tv_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -5,15 +5,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
-import com.alibaba.fastjson.JSON;
-import com.tencent.bugly.crashreport.CrashReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +19,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.rongcloud.im.niko.R;
 import cn.rongcloud.im.niko.common.IntentExtra;
 import cn.rongcloud.im.niko.db.model.FriendShipInfo;
@@ -36,17 +29,12 @@ import cn.rongcloud.im.niko.event.ShowMoreEvent;
 import cn.rongcloud.im.niko.sp.SPUtils;
 import cn.rongcloud.im.niko.ui.BaseActivity;
 import cn.rongcloud.im.niko.ui.fragment.ChatFragment;
-import cn.rongcloud.im.niko.ui.fragment.MainContactsListFragment;
-import cn.rongcloud.im.niko.ui.fragment.MainConversationListFragment;
-import cn.rongcloud.im.niko.ui.fragment.MainMeFragment;
-import cn.rongcloud.im.niko.ui.niko.SettingActivity;
 import cn.rongcloud.im.niko.ui.view.MainBottomTabGroupView;
 import cn.rongcloud.im.niko.ui.view.MainBottomTabItem;
 import cn.rongcloud.im.niko.ui.widget.ChatTipsPop;
 import cn.rongcloud.im.niko.ui.widget.DragPointView;
 import cn.rongcloud.im.niko.ui.widget.TabGroupView;
 import cn.rongcloud.im.niko.ui.widget.TabItem;
-import cn.rongcloud.im.niko.utils.log.SLog;
 import cn.rongcloud.im.niko.viewmodel.MainViewModel;
 import io.rong.eventbus.EventBus;
 import io.rong.imkit.RongIM;
@@ -245,7 +233,7 @@ public class MainActivity extends BaseActivity  {
 //                }
                 if (item.id!=mCurrentItem&&item.id == Tab.ME.getValue()) {
                     mCurrentItem = item.id;
-                    Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                    Intent intent = new Intent(MainActivity.this, TitleAndSearchBaseActivity.SettingActivity.class);
                     startActivity(intent);
                     return;
                 }
@@ -389,13 +377,6 @@ public class MainActivity extends BaseActivity  {
             switch (requestCode) {
                 case REQUEST_START_CHAT:
                     mainViewModel.startPrivateChat(data.getStringExtra(IntentExtra.STR_TARGET_ID));
-                    break;
-                case REQUEST_START_GROUP:
-                    ArrayList<String> memberList = data.getStringArrayListExtra(IntentExtra.LIST_STR_ID_LIST);
-                    SLog.i(TAG, "memberList.size = " + memberList.size());
-                    Intent intent = new Intent(this, CreateGroupActivity.class);
-                    intent.putExtra(IntentExtra.LIST_STR_ID_LIST, memberList);
-                    startActivity(intent);
                     break;
                 default:
                     break;

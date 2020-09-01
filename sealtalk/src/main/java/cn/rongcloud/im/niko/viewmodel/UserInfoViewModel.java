@@ -3,6 +3,7 @@ package cn.rongcloud.im.niko.viewmodel;
 import android.app.Application;
 import android.net.Uri;
 
+import java.io.File;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -291,7 +292,8 @@ public class UserInfoViewModel extends AndroidViewModel {
         updateProfileResult.setSource(userTask.updateProfile(type, key, value));
     }
 
-    public void uploadAvatar(Uri uri){
+    public void uploadAvatar(File uri){
+//        uploadResult.setSource(userTask.upload(uri));
         uploadResult.setSource(userTask.upload(uri));
     }
 

@@ -24,9 +24,6 @@ import io.rong.eventbus.EventBus;
 public class SelectNickNameColorActivity extends BaseActivity {
     @BindView(R.id.rv_nickname)
     RecyclerView mRvNickname;
-
-
-    //    private VipViewModel mVipViewModel;
     private NicknameRvAdapter mNicknameRvAdapter;
     private List<VIPConfigBean> mRsData;
     private UserInfoViewModel mUserInfoViewModel;
