@@ -75,9 +75,9 @@
 
     <!--Main-->
     <string-array name="tab_names">
+        <item>我的</item>
+        <item>三俩</item>
         <item>Chats</item>
-        <item>Contacts</item>
-        <item>Discover</item>
         <item>Me</item>
     </string-array>
 
@@ -613,7 +613,7 @@
     <string name="show_noti_detail">显示消息通知详情</string>
     <string name="no_disturb">消息免打扰</string>
     <string name="copy_email">复制邮箱</string>
-    <string name="company_email">li18207135010@163.com</string>
+    <string name="company_email">billow-ze@163.com</string>
     <string name="copy_success">复制成功</string>
     <string name="submit">确定</string>
     <string name="setting_pwd">设置密码</string>

@@ -66,12 +66,9 @@ import cn.rongcloud.im.niko.sp.SPUtils;
 import cn.rongcloud.im.niko.sp.UserCache;
 import cn.rongcloud.im.niko.sp.UserConfigCache;
 import cn.rongcloud.im.niko.ui.activity.ConversationActivity;
-import cn.rongcloud.im.niko.ui.activity.GroupNoticeListActivity;
-import cn.rongcloud.im.niko.ui.activity.NewFriendListActivity;
 import cn.rongcloud.im.niko.ui.activity.PokeInviteChatActivity;
 import cn.rongcloud.im.niko.ui.activity.SealPicturePagerActivity;
 import cn.rongcloud.im.niko.ui.activity.UserDetailActivity;
-import cn.rongcloud.im.niko.utils.glideutils.GlideImageLoaderUtil;
 import cn.rongcloud.im.niko.utils.log.SLog;
 import io.rong.contactcard.ContactCardExtensionModule;
 import io.rong.contactcard.IContactCardInfoProvider;
@@ -571,12 +568,6 @@ public class IMManager {
         RongIM.setConversationListBehaviorListener(new RongIM.ConversationListBehaviorListener() {
             @Override
             public boolean onConversationPortraitClick(Context context, Conversation.ConversationType conversationType, String s) {
-                //如果是群通知，点击头像进入群通知页面
-                if (s.equals("__group_apply__")) {
-                    Intent noticeListIntent = new Intent(context, GroupNoticeListActivity.class);
-                    context.startActivity(noticeListIntent);
-                    return true;
-                }
                 return false;
             }
 
@@ -612,13 +603,7 @@ public class IMManager {
                             }
                             RongIM.getInstance().startPrivateChat(context, uiConversation.getConversationSenderId(), bean.getSourceUserNickname());
                         }
-                    } else {
-                        context.startActivity(new Intent(context, NewFriendListActivity.class));
                     }
-                    return true;
-                } else if (messageContent instanceof GroupApplyMessage) {
-                    Intent noticeListIntent = new Intent(context, GroupNoticeListActivity.class);
-                    context.startActivity(noticeListIntent);
                     return true;
                 }
                 return false;

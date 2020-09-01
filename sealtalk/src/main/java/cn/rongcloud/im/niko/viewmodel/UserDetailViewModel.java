@@ -129,15 +129,6 @@ public class UserDetailViewModel extends AndroidViewModel {
     }
 
     /**
-     * 添加好友
-     *
-     * @param inviteMsg
-     */
-    public void inviteFriend(String inviteMsg) {
-        inviteResult.setSource(friendTask.inviteFriend(userId, inviteMsg));
-    }
-
-    /**
      * 添加到黑名单
      */
     public void addToBlackList() {

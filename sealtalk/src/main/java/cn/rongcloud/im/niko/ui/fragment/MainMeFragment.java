@@ -15,10 +15,6 @@ import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.model.VersionInfo;
 import cn.rongcloud.im.niko.model.qrcode.QrCodeDisplayType;
-import cn.rongcloud.im.niko.ui.activity.AboutSealTalkActivity;
-import cn.rongcloud.im.niko.ui.activity.AccountSettingActivity;
-import cn.rongcloud.im.niko.ui.activity.ChangeLanguageActivity;
-import cn.rongcloud.im.niko.ui.activity.MyAccountActivity;
 import cn.rongcloud.im.niko.ui.activity.QrCodeDisplayActivity;
 import cn.rongcloud.im.niko.ui.view.SettingItemView;
 import cn.rongcloud.im.niko.ui.view.UserInfoItemView;
@@ -101,15 +97,12 @@ public class MainMeFragment extends BaseFragment {
                 startActivity(qrCodeIntent);
                 break;
             case R.id.uiv_userinfo:
-                Intent intentUserInfo = new Intent(getActivity(), MyAccountActivity.class);
-                startActivity(intentUserInfo);
                 break;
             case R.id.siv_setting_account:
-                startActivity(new Intent(getActivity(), AccountSettingActivity.class));
 
                 break;
             case R.id.siv_language:
-                startActivity(new Intent(getActivity(), ChangeLanguageActivity.class));
+//                startActivity(new Intent(getActivity(), ChangeLanguageActivity.class));
 
                 break;
             case R.id.siv_feedback:
@@ -125,12 +118,6 @@ public class MainMeFragment extends BaseFragment {
                 RongIM.getInstance().startCustomerServiceChat(getActivity(), "service", getString(R.string.seal_main_mine_online_custom_service), builder.build());
                 break;
             case R.id.siv_about:
-                Intent intent = new Intent(getActivity(), AboutSealTalkActivity.class);
-                Resource<VersionInfo.AndroidVersion> resource = appViewModel.getHasNewVersion().getValue();
-                if (resource != null && resource.data != null && !TextUtils.isEmpty(resource.data.getUrl())) {
-                    intent.putExtra(IntentExtra.URL, resource.data.getUrl());
-                }
-                startActivity(intent);
                 break;
             default:
                 break;

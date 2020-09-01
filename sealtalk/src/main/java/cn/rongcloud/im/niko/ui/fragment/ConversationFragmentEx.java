@@ -129,13 +129,6 @@ public class ConversationFragmentEx extends ConversationFragment {
         showEvaluateDialog(dialogId);
     }
 
-//    @Override
-//    public List<IClickActions> getMoreClickActions() {
-//        List<IClickActions> actions = new ArrayList();
-//        actions.addAll(super.getMoreClickActions());
-//        actions.add(0, new ForwardClickActions());
-//        return actions;
-//    }
 
 
     @Override

@@ -107,16 +107,16 @@ public class SelectBaseViewModel extends AndroidViewModel {
      * @param keyword
      */
     public void searchFriend(String keyword) {
-        LiveData<List<FriendShipInfo>> searchDbLiveData = friendTask.searchFriendsFromDB(keyword);
-        // 转换数据库搜索结果
-        LiveData<Resource<List<FriendShipInfo>>> resourceLiveData = Transformations.switchMap(searchDbLiveData,
-                new Function<List<FriendShipInfo>, LiveData<Resource<List<FriendShipInfo>>>>() {
-                    @Override
-                    public LiveData<Resource<List<FriendShipInfo>>> apply(List<FriendShipInfo> input) {
-                        return new MutableLiveData<>(Resource.success(input));
-                    }
-                });
-        friendsLiveData.setSource(resourceLiveData);
+//        LiveData<List<FriendShipInfo>> searchDbLiveData = friendTask.searchFriendsFromDB(keyword);
+//        // 转换数据库搜索结果
+//        LiveData<Resource<List<FriendShipInfo>>> resourceLiveData = Transformations.switchMap(searchDbLiveData,
+//                new Function<List<FriendShipInfo>, LiveData<Resource<List<FriendShipInfo>>>>() {
+//                    @Override
+//                    public LiveData<Resource<List<FriendShipInfo>>> apply(List<FriendShipInfo> input) {
+//                        return new MutableLiveData<>(Resource.success(input));
+//                    }
+//                });
+//        friendsLiveData.setSource(resourceLiveData);
     }
 
 

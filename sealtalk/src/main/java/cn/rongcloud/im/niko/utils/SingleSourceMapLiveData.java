@@ -39,11 +39,13 @@ public class SingleSourceMapLiveData<F, R> extends MutableLiveData<R> {
             R mapResult = lastMapFunction.apply(t);
 
             lastResult = mapResult;
-            try{
-                setValue(lastResult);
-            }catch (Exception e){
-                ToastUtils.showToast(e.getMessage());
-            }
+            setValue(lastResult);
+
+//            try{
+//                setValue(lastResult);
+//            }catch (Exception e){
+//                ToastUtils.showToast(e.getMessage());
+//            }
         }
     };
 

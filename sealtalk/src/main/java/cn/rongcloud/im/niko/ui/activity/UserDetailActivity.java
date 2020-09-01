@@ -484,7 +484,6 @@ public class UserDetailActivity extends TitleBaseActivity implements View.OnClic
                 startVideo();
                 break;
             case R.id.profile_btn_detail_add_friend:
-                showAddFriendDialog();
                 break;
             case R.id.profile_tv_detail_phone:
             default:
@@ -638,29 +637,5 @@ public class UserDetailActivity extends TitleBaseActivity implements View.OnClic
         getApplicationContext().startActivity(intent);
     }
 
-    /**
-     * 显示添加好友对话框
-     */
-    private void showAddFriendDialog() {
-        SimpleInputDialog dialog = new SimpleInputDialog();
-        dialog.setInputHint(getString(R.string.profile_add_friend_hint));
-        dialog.setInputDialogListener(new SimpleInputDialog.InputDialogListener() {
-            @Override
-            public boolean onConfirmClicked(EditText input) {
-                String inviteMsg = input.getText().toString();
-                // 如果邀请信息为空则使用默认邀请语
-                if (TextUtils.isEmpty(inviteMsg) && myUserInfo != null) {
-                    // 当有附带群组名时显示来自哪个群组，没有时仅带自己的昵称
-                    if (!TextUtils.isEmpty(fromGroupName)) {
-                        inviteMsg = getString(R.string.profile_invite_friend_description_has_group_format, fromGroupName, myUserInfo.getName());
-                    } else {
-                        inviteMsg = getString(R.string.profile_invite_friend_description_format, myUserInfo.getName());
-                    }
-                }
-                userDetailViewModel.inviteFriend(inviteMsg);
-                return true;
-            }
-        });
-        dialog.show(getSupportFragmentManager(), null);
-    }
+
 }

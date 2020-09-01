@@ -170,6 +170,11 @@ public class SettingPersonInfoActivity extends BaseActivity {
                 updateDOB(year + "-" + month +"-" + day);
             }
         });
+        if( ProfileUtils.sProfileInfo!=null){
+            long dob = ProfileUtils.sProfileInfo.getDOB();
+            BirthdayToAgeUtil.longToInt(dob);
+            datePickerDialogFragment.setSelectedDate(BirthdayToAgeUtil.year,BirthdayToAgeUtil.month,BirthdayToAgeUtil.day);
+        }
         datePickerDialogFragment.show(getSupportFragmentManager(), "DatePickerDialogFragment");
     }
 

@@ -20,11 +20,12 @@ public class SingleSourceLiveData<T> extends MutableLiveData<T> {
                 return;
             }
             lastData = t;
-            try{
-                setValue(t);
-            }catch (Exception e){
-                ToastUtils.showToast(e.getMessage());
-            }
+            setValue(t);
+//            try{
+//                setValue(t);
+//            }catch (Exception e){
+//                ToastUtils.showToast(e.getMessage());
+//            }
         }
     };
 

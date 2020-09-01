@@ -13,9 +13,9 @@ public class BirthdayToAgeUtil {
     private static String ageStr;
     private static int age;
     //出生年、月、日
-    private static int year;
-    private static int month;
-    private static int day;
+    public static int year;
+    public static int month;
+    public static int day;
     public static String birthdayToAge(String birthday) {
         if(TextUtils.isEmpty(birthday)){return "";}
         BirthdayToAgeUtil.birthday = birthday;
@@ -96,6 +96,24 @@ public class BirthdayToAgeUtil {
         }
     }
 
+
+    public static void longToInt(long longTime) {
+        try {
+            //String类型转换为date类型
+            Calendar calendar = Calendar.getInstance();
+            Date date = new Date(longTime*1000);
+            calendar.setTime(date);
+            if (date == null) {
+            } else {
+                //date类型转成long类型
+                year = calendar.get(Calendar.YEAR);
+                month = calendar.get(Calendar.MONTH) + 1;
+                day = calendar.get(Calendar.DAY_OF_MONTH);
+            }
+        } catch (Exception e) {
+        }
+    }
+
     public final static String RIDE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public final static String FORMAT = "yyyy-MM-dd HH:mm:ss";
     public final static String FORMAT_Y_M = "MM-dd";
@@ -139,6 +157,16 @@ public class BirthdayToAgeUtil {
         return new SimpleDateFormat(FORMAT_Y_M).format(date);
     }
 
+    public static long date2TimeStamp(String date) {
+        String format = "yyyy-MM-dd";
 
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            return sdf.parse(date).getTime() / 1000L;
+        } catch (Exception var3) {
+            var3.printStackTrace();
+            return 0L;
+        }
+    }
 
 }

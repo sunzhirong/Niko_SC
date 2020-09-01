@@ -178,11 +178,13 @@ public class GroupDetailActivity extends TitleBaseActivity implements View.OnCli
                 } else if (member.getMemberRole() == GroupMember.Role.MANAGEMENT) {//管理员
                     groupPortraitUiv.setClickable(false);
                     groupNameSiv.setClickable(false);
+                    groupNameSiv.setCompoundDrawables(null,null,null,null);
                     quitGroupBtn.setText("退出群聊");
 //                    memberAdapter.setAllowDeleteMember(true);
                 } else {//普通群员
                     groupPortraitUiv.setClickable(false);
                     groupNameSiv.setClickable(false);
+                    groupNameSiv.setCompoundDrawables(null,null,null,null);
                     quitGroupBtn.setText("退出群聊");
 //                    memberAdapter.setAllowDeleteMember(false);
                 }

@@ -79,22 +79,6 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
         initData();
         EventBus.getDefault().register(this);
 
-//        ThreadManager.getInstance().runOnWorkThread(() -> {
-//            List<UserInfo> all = DbManager.getInstance(mContext).getUserDao().getAll();
-//            Log.e("all",all.size()+"");
-//        });
-//
-//        ThreadManager.getInstance().runOnWorkThread(() -> {
-//            List<FriendShipInfo> allFriendsExcludeGroup = DbManager.getInstance(mContext).getFriendDao().getAllFriendsExcludeGroup1("185");
-//            Log.e("all",allFriendsExcludeGroup.size()+"");
-//
-//        });
-//
-//        ThreadManager.getInstance().runOnWorkThread(() -> {
-//            List<FriendShipInfo> allFriendsExcludeGroup = DbManager.getInstance(mContext).getFriendDao().getAll();
-//            Log.e("all",allFriendsExcludeGroup.size()+"");
-//
-//        });
 
     }
 

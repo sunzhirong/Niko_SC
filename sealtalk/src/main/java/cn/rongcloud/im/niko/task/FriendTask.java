@@ -181,6 +181,10 @@ public class FriendTask {
 
     }
 
+    public LiveData<List<FriendShipInfo>> searchFriendsFromDB(String match) {
+        return dbManager.getFriendDao().searchFriendShip(match);
+    }
+
     /**
      * 获取用户信息
      *
@@ -343,103 +347,7 @@ public class FriendTask {
             }
         }.asLiveData();
     }
-//    /**
-//     * 获取好友信息
-//     *
-//     * @param userId
-//     * @return
-//     */
-//    public LiveData<Resource<FriendShipInfo>> getFriendInfo(String userId) {
-//        return new NetworkBoundResource<FriendShipInfo, Result<ProfileInfo>>() {
-//            @Override
-//            protected void saveCallResult(@NonNull Result<ProfileInfo> item) {
-//                UserDao userDao = dbManager.getUserDao();
-//                FriendDao friendDao = dbManager.getFriendDao();
-//                if (userDao == null || friendDao == null) return;
-//
-//                ProfileInfo rsData = item.getRsData();
-//                if (rsData == null) return;
-//
-//                FriendShipInfo friendShipInfo = new FriendShipInfo();
-//                friendShipInfo.setNameColor(rsData.getHead().getNameColor());
-//                if(TextUtils.isEmpty(rsData.getHead().getAlias())){
-//                    friendShipInfo.setDisplayName(rsData.getHead().getName());
-//                }else {
-//                    friendShipInfo.setDisplayName(rsData.getHead().getAlias());
-//                }
-//                FriendDetailInfo detailInfo = new FriendDetailInfo();
-//                detailInfo.setId(String.valueOf(rsData.getId()));
-//                if(TextUtils.isEmpty(rsData.getHead().getAlias())){
-//                    detailInfo.setNickname(rsData.getHead().getName());
-//                }else {
-//                    detailInfo.setNickname(rsData.getHead().getAlias());
-//                }
-//                detailInfo.setPortraitUri(GlideImageLoaderUtil.getScString(rsData.getHead().getUserIcon()));
-//                friendShipInfo.setUser(detailInfo);
-//
-//
-//                UserInfo userInfo = new UserInfo();
-//                FriendInfo friendInfo = new FriendInfo();
-//                userInfo.setId(friendShipInfo.getUser().getId());
-//                userInfo.setName(friendShipInfo.getUser().getNickname());
-//                String portraitUri = friendShipInfo.getUser().getPortraitUri();
-//                // 若头像为空则生成默认头像
-//                if (TextUtils.isEmpty(portraitUri)) {
-//                    portraitUri = RongGenerate.generateDefaultAvatar(context, friendShipInfo.getUser().getId(), friendShipInfo.getUser().getNickname());
-//                }
-//                userInfo.setPortraitUri(portraitUri);
-//                userInfo.setAlias(friendShipInfo.getDisplayName());
-//                userInfo.setFriendStatus(FriendStatus.IS_FRIEND.getStatusCode());
-//                userInfo.setPhoneNumber(friendShipInfo.getUser().getPhone());
-//                userInfo.setRegion(friendShipInfo.getUser().getRegion());
-//                userInfo.setAliasSpelling(SearchUtils.fullSearchableString(friendShipInfo.getDisplayName()));
-//                userInfo.setAliasSpellingInitial(SearchUtils.initialSearchableString(friendShipInfo.getDisplayName()));
-//                userInfo.setNameSpelling(SearchUtils.fullSearchableString(friendShipInfo.getUser().getNickname()));
-//                userInfo.setNameSpellingInitial(SearchUtils.initialSearchableString(friendShipInfo.getUser().getNickname()));
-//                if (!TextUtils.isEmpty(friendShipInfo.getDisplayName())) {
-//                    userInfo.setOrderSpelling(CharacterParser.getInstance().getSpelling(friendShipInfo.getDisplayName()));
-//                } else {
-//                    userInfo.setOrderSpelling(CharacterParser.getInstance().getSpelling(friendShipInfo.getUser().getNickname()));
-//                }
-//
-//                friendInfo.setId(friendShipInfo.getUser().getId());
-//                friendInfo.setMessage(friendShipInfo.getMessage());
-//                friendInfo.setUpdatedAt(friendShipInfo.getUpdatedAt() == null ? friendShipInfo.getUser().getUpdatedAt() : friendShipInfo.getUpdatedAt());
-//
-//                userDao.insertUser(userInfo);
-//                friendDao.insertFriendShip(friendInfo);
-//
-//                // 更新 IMKit 显示缓存
-//                String name = userInfo.getAlias();
-//                if (TextUtils.isEmpty(name)) {
-//                    name = userInfo.getName();
-//                }
-//                IMManager.getInstance().updateUserInfoCache(userInfo.getId(), name, Uri.parse(userInfo.getPortraitUri()));
-//            }
-//
-//            @NonNull
-//            @Override
-//            protected LiveData<FriendShipInfo> loadFromDb() {
-//                FriendDao friendDao = dbManager.getFriendDao();
-//                LiveData<FriendShipInfo> friendInfo;
-//                if (friendDao == null) {
-//                    friendInfo = new MutableLiveData<>(null);
-//                } else {
-//                    friendInfo = friendDao.getFriendInfo(userId);
-//                }
-//                return friendInfo;
-//            }
-//
-//            @NonNull
-//            @Override
-//            protected LiveData<Result<ProfileInfo>> createCall() {
-//                HashMap<String, Object> bodyMap = new HashMap<>();
-//                bodyMap.put("Data",Integer.parseInt(userId));
-//                return friendService.getFriendInfo(RetrofitUtil.createJsonRequest(bodyMap));
-////                return friendService.getFriendInfo(userId);
-//            }
-//        }.asLiveData();
-//    }
+
 
     public FriendShipInfo getFriendShipInfoFromDBSync(String userId) {
         return dbManager.getFriendDao().getFriendInfoSync(userId);
@@ -453,71 +361,8 @@ public class FriendTask {
         return dbManager.getFriendDao().getFriendInfoList(userIds);
     }
 
-    /**
-     * 接受好友请求
-     *
-     * @param friendId
-     * @return
-     */
-    public LiveData<Resource<Boolean>> agree(String friendId) {
-        return new NetworkOnlyResource<Boolean, Result<Boolean>>() {
-
-            @NonNull
-            @Override
-            protected LiveData<Result<Boolean>> createCall() {
-                HashMap<String, Object> paramsMap = new HashMap<>();
-                paramsMap.put("friendId", friendId);
-                RequestBody body = RetrofitUtil.createJsonRequest(paramsMap);
-                return friendService.agreeFriend(body);
-            }
-        }.asLiveData();
-    }
-
-    /**
-     * 忽略好友请求
-     *
-     * @param friendId
-     * @return
-     */
-    public LiveData<Resource<Void>> ingore(String friendId) {
-        return new NetworkOnlyResource<Void, Result<Void>>() {
-
-            @NonNull
-            @Override
-            protected LiveData<Result<Void>> createCall() {
-                HashMap<String, Object> paramsMap = new HashMap<>();
-                paramsMap.put("friendId", friendId);
-                RequestBody body = RetrofitUtil.createJsonRequest(paramsMap);
-                return friendService.ingoreFriend(body);
-            }
-        }.asLiveData();
-    }
-
-    public LiveData<List<FriendShipInfo>> searchFriendsFromDB(String match) {
-        return dbManager.getFriendDao().searchFriendShip(match);
-    }
 
 
-
-    /**
-     * 申请添加好友
-     *
-     * @param friendId
-     * @param inviteMsg
-     * @return
-     */
-    public LiveData<Resource<AddFriendResult>> inviteFriend(String friendId, String inviteMsg) {
-        return new NetworkOnlyResource<AddFriendResult, Result<AddFriendResult>>() {
-            @NonNull
-            @Override
-            protected LiveData<Result<AddFriendResult>> createCall() {
-                HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("friendId", friendId);
-                bodyMap.put("message", inviteMsg);
-                return friendService.inviteFriend(RetrofitUtil.createJsonRequest(bodyMap));
-            }
-        }.asLiveData();
-    }
 
     /**
      * 删除好友
@@ -593,13 +438,6 @@ public class FriendTask {
         return dbManager.getFriendDao().searchFriendsExcludeGroup(excludeGroupId, matchSearch);
     }
 
-    public LiveData<List<FriendShipInfo>> getAllFriendsIncludeGroup(String includeGroupId) {
-        return dbManager.getFriendDao().getFriendsIncludeGroup(includeGroupId);
-    }
-
-    public LiveData<List<FriendShipInfo>> searchFriendsIncludeGroup(String includeGroupId, String matchSearch) {
-        return dbManager.getFriendDao().searchFriendsIncludeGroup(includeGroupId, matchSearch);
-    }
 
     public LiveData<Resource<SearchFriendInfo>> searchFriendFromServer(String stAccount, String region, String phone) {
         return new NetworkOnlyResource<SearchFriendInfo, Result<SearchFriendInfo>>() {

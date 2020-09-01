@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.multidex.MultiDexApplication;
 
 import com.facebook.stetho.Stetho;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import cn.rongcloud.im.niko.common.ErrorCode;
 import cn.rongcloud.im.niko.common.NetConstant;
@@ -78,6 +79,7 @@ public class SealApp extends MultiDexApplication {
         observeAppInBackground();
 
         NetConstant.DETAULT_DV = String.valueOf(System.currentTimeMillis());
+        CrashReport.initCrashReport(this);
     }
 
     public static SealApp getApplication() {

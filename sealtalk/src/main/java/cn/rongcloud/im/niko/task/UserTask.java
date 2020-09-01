@@ -1103,6 +1103,7 @@ public class UserTask {
                     switch (key){
                         case "Name":
                             userDao.updateNickName(userId, (String)value,CharacterParser.getInstance().getSpelling((String)value));
+                            ProfileUtils.sProfileInfo.getHead().setName((String)value);
                             break;
                         case "Bio":
                             userDao.updateBIO(userId, (String)value);
@@ -1115,6 +1116,7 @@ public class UserTask {
                             break;
                         case "DOB":
                             userDao.updateDOB(userId, (String)value);
+                            ProfileUtils.sProfileInfo.setDOB(BirthdayToAgeUtil.date2TimeStamp((String)value));
                             break;
                         case "Gender":
                             userDao.updateGender(userId, (boolean)value);

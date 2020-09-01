@@ -27,33 +27,6 @@ import retrofit2.http.QueryMap;
 
 public interface FriendService {
 
-
-    /**
-     * 同意添加好友
-     *
-     * @return
-     */
-    @POST(SealTalkUrl.ARGEE_FRIENDS)
-    LiveData<Result<Boolean>> agreeFriend(@Body RequestBody body);
-
-    /**
-     * 忽略好友请求
-     *
-     * @return
-     */
-    @POST(SealTalkUrl.INGORE_FRIENDS)
-    LiveData<Result<Void>> ingoreFriend(@Body RequestBody body);
-
-
-    /**
-     * 申请添加好友
-     *
-     * @param body
-     * @return
-     */
-    @POST(SealTalkUrl.INVITE_FRIEND)
-    LiveData<Result<AddFriendResult>> inviteFriend(@Body RequestBody body);
-
     /**
      * 搜索好友
      *

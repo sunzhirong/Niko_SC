@@ -17,10 +17,8 @@ import cn.rongcloud.im.niko.db.model.FriendStatus;
 import cn.rongcloud.im.niko.im.IMManager;
 import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Status;
-import cn.rongcloud.im.niko.ui.activity.GroupListActivity;
 import cn.rongcloud.im.niko.ui.activity.MainActivity;
 import cn.rongcloud.im.niko.ui.activity.MultiDeleteFriendsActivity;
-import cn.rongcloud.im.niko.ui.activity.NewFriendListActivity;
 import cn.rongcloud.im.niko.ui.activity.PublicServiceActivity;
 import cn.rongcloud.im.niko.ui.activity.UserDetailActivity;
 import cn.rongcloud.im.niko.ui.adapter.CommonListAdapter;
@@ -207,26 +205,26 @@ public class MyContactsListFragment extends CommonListBaseFragment {
      * @param functionInfo
      */
     private void handleFunItemClick(FunctionInfo functionInfo) {
-        final String id = functionInfo.getId();
-        switch (id) {
-            case "1":
-                //新的朋友
-                viewModel.setFunRedDotShowStatus(id, false);
-                Intent intent = new Intent(getActivity(), NewFriendListActivity.class);
-                startActivity(intent);
-                break;
-            case "2":
-                //群组
-                intent = new Intent(getActivity(), GroupListActivity.class);
-                startActivity(intent);
-                break;
-            case "3":
-                //公众号
-                intent = new Intent(getActivity(), PublicServiceActivity.class);
-                startActivity(intent);
-                break;
-            default:
-                break;
-        }
+//        final String id = functionInfo.getId();
+//        switch (id) {
+//            case "1":
+//                //新的朋友
+//                viewModel.setFunRedDotShowStatus(id, false);
+//                Intent intent = new Intent(getActivity(), NewFriendListActivity.class);
+//                startActivity(intent);
+//                break;
+//            case "2":
+//                //群组
+//                intent = new Intent(getActivity(), GroupListActivity.class);
+//                startActivity(intent);
+//                break;
+//            case "3":
+//                //公众号
+//                intent = new Intent(getActivity(), PublicServiceActivity.class);
+//                startActivity(intent);
+//                break;
+//            default:
+//                break;
+//        }
     }
 }

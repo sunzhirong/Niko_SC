@@ -109,35 +109,6 @@ public interface FriendDao {
             "order by user.order_spelling")
     LiveData<List<FriendShipInfo>> searchFriendsExcludeGroup(String excludeGroupId, String matchSearch);
 
-    @Query("SELECT group_member.user_id as id ,alias,portrait_uri,name,region,phone_number,friend_status,alias_spelling, name_spelling,order_spelling,message, updateAt, nickname, nickname_spelling " +
-            "FROM group_member " +
-            "left join user " +
-            "on group_member.user_id = user.id " +
-            "left join friend " +
-            "on group_member.user_id = friend.id " +
-            "where group_member.group_id =:includeGroupId " +
-            "order by user.order_spelling")
-    LiveData<List<FriendShipInfo>> getFriendsIncludeGroup(String includeGroupId);
-
-    @Query("SELECT group_member.user_id as id ,alias,portrait_uri,name,region,phone_number,friend_status,alias_spelling, name_spelling,order_spelling,message, updateAt, nickname, nickname_spelling " +
-            "FROM group_member " +
-            "left join user " +
-            "on group_member.user_id = user.id " +
-            "left join friend " +
-            "on group_member.user_id = friend.id " +
-            "where group_member.group_id =:includeGroupId " +
-            "and (" +
-            "user.name like '%' || :matchSearch || '%'" +
-            "OR user.alias like '%' || :matchSearch || '%' " +
-            "OR user.name_spelling like '%$' || :matchSearch || '%' " +
-            "OR user.alias_spelling like '%$' || :matchSearch || '%' " +
-            "OR user.name_spelling_initial  like '%' || :matchSearch || '%' " +
-            "OR user.alias_spelling_initial  like '%' || :matchSearch || '%' " +
-            "OR group_member.nickname like '%' || :matchSearch || '%' " +
-            "OR group_member.nickname_spelling like '%' || :matchSearch || '%' " +
-            ")" +
-            "order by user.order_spelling")
-    LiveData<List<FriendShipInfo>> searchFriendsIncludeGroup(String includeGroupId, String matchSearch);
 
     @Query("DELETE FROM friend WHERE id=:friendId")
     void deleteFriend(String friendId);
@@ -169,16 +140,6 @@ public interface FriendDao {
     void insertFriendDescription(FriendDescription friendDescription);
 
 
-
-
-    @Query("SELECT friend.id as id ,alias,portrait_uri,name,region,phone_number,friend_status,message,updateAt,alias_spelling, name_spelling,order_spelling,name_color " +
-            "FROM friend " +
-            "left join user " +
-            "on friend.id = user.id " +
-            "where friend.id " +
-            "not in (select DISTINCT(group_member.user_id) from group_member where group_member.group_id =:excludeGroupId) " +
-            "order by user.order_spelling")
-    List<FriendShipInfo> getAllFriendsExcludeGroup1(String excludeGroupId);
 
     @Query("SELECT friend.id as id ,alias,portrait_uri,name,region,phone_number,friend_status,message,updateAt,alias_spelling, name_spelling,order_spelling,name_color " +
             "FROM friend " +

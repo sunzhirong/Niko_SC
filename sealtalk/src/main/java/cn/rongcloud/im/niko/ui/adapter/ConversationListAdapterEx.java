@@ -86,22 +86,26 @@ public class ConversationListAdapterEx extends ConversationListAdapter {
             //更新未读消息数
             updateGroupApplyView(groupView);
         }
-        TextView tvTitle = (TextView) v.findViewById(R.id.rc_content).findViewById(R.id.rc_conversation_title);
-        Log.e("tvTitle",tvTitle.getText().toString());
-        if(data.getConversationType() == Conversation.ConversationType.PRIVATE){
-            //设置颜色，查询serderid的用户信息
-            //查询点赞数据
-            ThreadManager.getInstance().runOnWorkThread(() ->{
-                String userId = data.getConversationSenderId();
-                UserDao userDao = DbManager.getInstance(SealApp.getApplication()).getUserDao();
-                UserInfo userInfo = userDao.getUserByIdSync(userId);
-                ThreadManager.getInstance().runOnWorkThread(() ->{
-                    tvTitle.setTextColor(ProfileUtils.getNameColor(userInfo.getNameColor()));
-                });
-            });
-        }else {
-            tvTitle.setTextColor(Color.parseColor("#000000"));
-        }
+//        TextView tvTitle = (TextView) v.findViewById(R.id.rc_content).findViewById(R.id.rc_conversation_title);
+//        Log.e("tvTitle",tvTitle.getText().toString());
+//        if(data.getConversationType() == Conversation.ConversationType.PRIVATE){
+//            //设置颜色，查询serderid的用户信息
+//            //查询点赞数据
+//            ThreadManager.getInstance().runOnWorkThread(() ->{
+//                String userId = data.getConversationSenderId();
+//                UserDao userDao = DbManager.getInstance(SealApp.getApplication()).getUserDao();
+//                UserInfo userInfo = userDao.getUserByIdSync(userId);
+//                ThreadManager.getInstance().runOnWorkThread(() -> {
+//                    if(userInfo!=null) {
+//                        tvTitle.setTextColor(ProfileUtils.getNameColor(userInfo.getNameColor()));
+//                    }else {
+//                        tvTitle.setTextColor(Color.parseColor("#000000"));
+//                    }
+//                });
+//            });
+//        }else {
+//            tvTitle.setTextColor(Color.parseColor("#000000"));
+//        }
     }
 
     private boolean isGroupApplyMessage(UIConversation data) {

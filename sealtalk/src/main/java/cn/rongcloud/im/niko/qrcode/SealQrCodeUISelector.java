@@ -18,7 +18,6 @@ import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.model.qrcode.QRCodeResult;
 import cn.rongcloud.im.niko.task.GroupTask;
-import cn.rongcloud.im.niko.ui.activity.JoinGroupActivity;
 import cn.rongcloud.im.niko.ui.activity.UserDetailActivity;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
@@ -150,10 +149,6 @@ public class SealQrCodeUISelector {
      * @param groupId
      */
     private void showJoinGroup(String groupId, MutableLiveData<Resource<String>> result) {
-        Intent intent = new Intent(context, JoinGroupActivity.class);
-        intent.putExtra(IntentExtra.STR_TARGET_ID, groupId);
-        context.startActivity(intent);
-        result.postValue(Resource.success(null));
     }
 
     /**
