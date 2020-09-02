@@ -19,7 +19,6 @@ import cn.rongcloud.im.niko.common.IntentExtra;
 import cn.rongcloud.im.niko.sp.UserConfigCache;
 import cn.rongcloud.im.niko.ui.activity.ForwardActivity;
 import cn.rongcloud.im.niko.ui.activity.GroupReadReceiptDetailActivity;
-import cn.rongcloud.im.niko.ui.dialog.EvaluateBottomDialog;
 import io.rong.common.RLog;
 import io.rong.imkit.RongExtension;
 import io.rong.imkit.RongIM;
@@ -126,7 +125,7 @@ public class ConversationFragmentEx extends ConversationFragment {
     @Override
     public void onShowStarAndTabletDialog(String dialogId) {
         // 评星的dialog 或者自定义评价 dialog 可在此自定义显示
-        showEvaluateDialog(dialogId);
+//        showEvaluateDialog(dialogId);
     }
 
 
@@ -240,35 +239,35 @@ public class ConversationFragmentEx extends ConversationFragment {
     }
 
 
-    /**
-     * 显示客服评价的dialog。
-     *
-     * @param dialogId
-     */
-    private void showEvaluateDialog(final String dialogId) {
-        EvaluateBottomDialog.Builder builder = new EvaluateBottomDialog.Builder();
-        builder.setTargetId(getTargetId());
-        builder.setDialogId(dialogId);
-        EvaluateBottomDialog dialog = builder.build();
-        dialog.setOnEvaluateListener(new EvaluateBottomDialog.OnEvaluateListener() {
-            @Override
-            public void onCancel() {
-                FragmentActivity activity = getActivity();
-                if (activity != null) {
-                    activity.finish();
-                }
-            }
-
-            @Override
-            public void onSubmitted() {
-                FragmentActivity activity = getActivity();
-                if (activity != null) {
-                    activity.finish();
-                }
-            }
-        });
-        dialog.show(getActivity().getSupportFragmentManager(), dialogId);
-    }
+//    /**
+//     * 显示客服评价的dialog。
+//     *
+//     * @param dialogId
+//     */
+//    private void showEvaluateDialog(final String dialogId) {
+//        EvaluateBottomDialog.Builder builder = new EvaluateBottomDialog.Builder();
+//        builder.setTargetId(getTargetId());
+//        builder.setDialogId(dialogId);
+//        EvaluateBottomDialog dialog = builder.build();
+//        dialog.setOnEvaluateListener(new EvaluateBottomDialog.OnEvaluateListener() {
+//            @Override
+//            public void onCancel() {
+//                FragmentActivity activity = getActivity();
+//                if (activity != null) {
+//                    activity.finish();
+//                }
+//            }
+//
+//            @Override
+//            public void onSubmitted() {
+//                FragmentActivity activity = getActivity();
+//                if (activity != null) {
+//                    activity.finish();
+//                }
+//            }
+//        });
+//        dialog.show(getActivity().getSupportFragmentManager(), dialogId);
+//    }
 
     /**
      * 设置通知信息回调。

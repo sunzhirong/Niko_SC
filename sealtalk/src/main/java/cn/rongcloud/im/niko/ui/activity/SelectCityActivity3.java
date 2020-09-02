@@ -46,7 +46,6 @@ public class SelectCityActivity3 extends BaseActivity {
             selectCityRvAdpter.setOnItemClickListener(new BaseRvAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
-                    ToastUtils.showToast("无下级，提交");
                     EventBus.getDefault().post(new CitySelectEvent(
                             countryName + stateName + list.get(position).getCity_name(),
                             countryCode,

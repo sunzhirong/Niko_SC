@@ -1107,12 +1107,15 @@ public class UserTask {
                             break;
                         case "Bio":
                             userDao.updateBIO(userId, (String)value);
+                            ProfileUtils.sProfileInfo.setBio((String)value);
                             break;
                         case "Location":
                             userDao.updateLocation(userId, (String)value);
+                            ProfileUtils.sProfileInfo.setLocation((String)value);
                             break;
                         case "School":
                             userDao.updateSchool(userId, (String)value);
+                            ProfileUtils.sProfileInfo.setSchool((String)value);
                             break;
                         case "DOB":
                             userDao.updateDOB(userId, (String)value);
@@ -1120,12 +1123,21 @@ public class UserTask {
                             break;
                         case "Gender":
                             userDao.updateGender(userId, (boolean)value);
+                            ProfileHeadInfo head1 = ProfileUtils.sProfileInfo.getHead();
+                            head1.setGender((boolean)value);
+                            ProfileUtils.sProfileInfo.setHead(head1);
                             break;
                         case "NameColor":
                             userDao.updateNameColor(userId, (String)value);
+                            ProfileHeadInfo head2 = ProfileUtils.sProfileInfo.getHead();
+                            head2.setNameColor((String)value);
+                            ProfileUtils.sProfileInfo.setHead(head2);
                             break;
                         case "UserIcon":
                             userDao.updatePortraitUri(userId, (String)value);
+                            ProfileHeadInfo head3 = ProfileUtils.sProfileInfo.getHead();
+                            head3.setUserIcon((String)value);
+                            ProfileUtils.sProfileInfo.setHead(head3);
                             break;
                     }
 

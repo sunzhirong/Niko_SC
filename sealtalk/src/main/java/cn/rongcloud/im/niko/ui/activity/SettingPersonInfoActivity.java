@@ -173,7 +173,6 @@ public class SettingPersonInfoActivity extends BaseActivity {
         datePickerDialogFragment.setOnDateChooseListener(new DatePickerDialogFragment.OnDateChooseListener() {
             @Override
             public void onDateChoose(int year, int month, int day) {
-                ToastUtils.showToast(year + "-" + month +"-" + day);
                 updateDOB(year + "-" + month +"-" + day);
             }
         });

@@ -29,15 +29,11 @@ import cn.rongcloud.im.niko.model.niko.ProfileInfo;
 import cn.rongcloud.im.niko.model.niko.TokenBean;
 import cn.rongcloud.im.niko.sp.ProfileUtils;
 import cn.rongcloud.im.niko.sp.SPUtils;
-import cn.rongcloud.im.niko.task.UserTask;
 import cn.rongcloud.im.niko.ui.activity.MainActivity;
-import cn.rongcloud.im.niko.ui.activity.SelectCountryActivity;
 import cn.rongcloud.im.niko.ui.widget.ClearWriteEditText;
-import cn.rongcloud.im.niko.utils.log.SLog;
 import cn.rongcloud.im.niko.viewmodel.LoginViewModel;
 
 public class LoginFragment extends BaseFragment {
-    private static final int REQUEST_CODE_SELECT_COUNTRY = 1000;
     private ClearWriteEditText phoneNumberEdit;
     private ClearWriteEditText passwordEdit;
     private TextView countryNameTv;
@@ -227,15 +223,6 @@ public class LoginFragment extends BaseFragment {
     }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == getActivity().RESULT_OK && requestCode == REQUEST_CODE_SELECT_COUNTRY) {
-            CountryInfo info = data.getParcelableExtra(SelectCountryActivity.RESULT_PARAMS_COUNTRY_INFO);
-            countryNameTv.setText(info.getCountryName());
-            countryCodeTv.setText(info.getZipCode());
-        }
-    }
 
     /**
      * 设置上参数

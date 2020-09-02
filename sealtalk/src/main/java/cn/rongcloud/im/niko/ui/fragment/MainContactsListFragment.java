@@ -20,7 +20,6 @@ import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.ui.activity.MainActivity;
 import cn.rongcloud.im.niko.ui.activity.MultiDeleteFriendsActivity;
-import cn.rongcloud.im.niko.ui.activity.PublicServiceActivity;
 import cn.rongcloud.im.niko.ui.activity.UserDetailActivity;
 import cn.rongcloud.im.niko.ui.adapter.CommonListAdapter;
 import cn.rongcloud.im.niko.ui.adapter.ListWithSideBarBaseAdapter;

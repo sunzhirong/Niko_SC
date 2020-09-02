@@ -23,13 +23,6 @@ public class ToastUtils {
         //根据错误码进行对应错误提示
         String message = errorCode.getMessage();
         if (TextUtils.isEmpty(message)) return;
-
-//        if (lastToast != null) {
-//            lastToast.setText(message);
-//        } else {
-//            lastToast = Toast.makeText(SealApp.getApplication(), message, Toast.LENGTH_SHORT);
-//        }
-//        lastToast.setGravity(Gravity.CENTER, 0, 0);
         lastToast = makeToast(SealApp.getApplication(), message);
         lastToast.show();
     }
@@ -59,12 +52,6 @@ public class ToastUtils {
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         } else {
-//            if (lastToast != null) {
-//                lastToast.setText(message);
-//            } else {
-//                lastToast = Toast.makeText(SealApp.getApplication(), message, duration);
-//            }
-//            lastToast.setGravity(Gravity.CENTER, 0, 0);
             lastToast = makeToast(SealApp.getApplication(), message);
             lastToast.show();
         }

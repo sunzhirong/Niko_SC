@@ -55,7 +55,6 @@ public class SelectCityActivity1 extends BaseActivity {
                     bundle.putString("country_name", areaBean.getState_name());
                     readyGo(SelectCityActivity2.class, bundle);
                 } else {
-                    ToastUtils.showToast("无下级，提交");
                     EventBus.getDefault().post(new CitySelectEvent(
                             areaBeans.get(position).getState_name(),
                             areaBeans.get(position).getState_code(),

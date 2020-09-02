@@ -344,20 +344,13 @@ public class MyTextMessageItemProvider extends TextMessageItemProvider {
 
                 @Override
                 public void onSuccess(Message message) {
-                    ThreadManager.getInstance().runOnUIThread(() -> {
-                        ToastUtils.showToast("点赞发送成功" + isLike);
 
-                    });
                 }
 
 
                 @Override
                 public void onError(Message message, RongIMClient.ErrorCode errorCode) {
-                    ThreadManager.getInstance().runOnUIThread(() -> {
-                        ToastUtils.showToast("点赞发送失败"+errorCode.getMessage());
 
-
-                    });
                 }
             });
 

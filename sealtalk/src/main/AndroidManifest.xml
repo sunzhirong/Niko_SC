@@ -156,33 +156,28 @@
         <activity
             android:name=".ui.activity.SearchHistoryMessageActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.PublicServiceActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.PublicServiceSearchActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.PublicServiceInfoActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data
-                    android:host="cn.rongcloud.im.niko"
-                    android:pathPrefix="/publicServiceProfile"
-                    android:scheme="rong" />
-            </intent-filter>
 
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data
-                    android:host="cn.rongcloud.im.niko"
-                    android:pathPrefix="/publicServiceInfo"
-                    android:scheme="rong" />
-            </intent-filter>
-        </activity>
+<!--        <activity-->
+<!--            android:name=".ui.activity.PublicServiceInfoActivity"-->
+<!--            android:screenOrientation="portrait">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <data-->
+<!--                    android:host="cn.rongcloud.im.niko"-->
+<!--                    android:pathPrefix="/publicServiceProfile"-->
+<!--                    android:scheme="rong" />-->
+<!--            </intent-filter>-->
+
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <data-->
+<!--                    android:host="cn.rongcloud.im.niko"-->
+<!--                    android:pathPrefix="/publicServiceInfo"-->
+<!--                    android:scheme="rong" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
 
 
         <activity
@@ -224,31 +219,13 @@
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".ui.activity.GroupUserInfoActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.SelectChatBgActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.activity.ImagePreviewActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.NewMessageRemindActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.MessageDonotDisturbSettingActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.MemberMentionedExActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.QrCodeDisplayActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.activity.QrCodeDisplayWindowActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentNoTitleActivity" />
+            android:name=".ui.activity.MemberMentionedExActivity"
+            android:screenOrientation="portrait" />
+
 
         <activity
             android:name=".ui.activity.SealPicturePagerActivity"
@@ -263,15 +240,8 @@
         <activity
             android:name=".ui.activity.ForwardSelectedDetailActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.RequestContactPermissionActivity"
-            android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".ui.activity.PokeInviteChatActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/DeepBlackTranslucentNoTitleActivity" />
+
 
         <activity
             android:name=".ui.activity.MultiDeleteFriendsActivity"

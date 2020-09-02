@@ -492,11 +492,11 @@ public class UserDetailActivity extends TitleBaseActivity implements View.OnClic
     }
 
     private void toGroupUserInfoDetail() {
-        Intent intentUserInfo = new Intent(this, GroupUserInfoActivity.class);
-        intentUserInfo.putExtra(IntentExtra.START_FROM_ID, GroupUserInfoActivity.FROM_USER_DETAIL);
-        intentUserInfo.putExtra(IntentExtra.GROUP_ID, groupId);
-        intentUserInfo.putExtra(IntentExtra.STR_TARGET_ID, userId);
-        startActivity(intentUserInfo);
+//        Intent intentUserInfo = new Intent(this, GroupUserInfoActivity.class);
+//        intentUserInfo.putExtra(IntentExtra.START_FROM_ID, GroupUserInfoActivity.FROM_USER_DETAIL);
+//        intentUserInfo.putExtra(IntentExtra.GROUP_ID, groupId);
+//        intentUserInfo.putExtra(IntentExtra.STR_TARGET_ID, userId);
+//        startActivity(intentUserInfo);
     }
 
     private void showOperatePhoneNumDialog() {
