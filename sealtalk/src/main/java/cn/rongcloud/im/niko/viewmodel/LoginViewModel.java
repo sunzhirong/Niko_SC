@@ -1,26 +1,19 @@
 package cn.rongcloud.im.niko.viewmodel;
 
 import android.app.Application;
-import android.os.CountDownTimer;
 
 import androidx.annotation.NonNull;
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
-import cn.rongcloud.im.niko.common.ErrorCode;
-import cn.rongcloud.im.niko.model.RegisterResult;
 import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.model.Result;
-import cn.rongcloud.im.niko.model.Status;
 import cn.rongcloud.im.niko.model.UserCacheInfo;
 import cn.rongcloud.im.niko.model.niko.TokenBean;
 import cn.rongcloud.im.niko.task.UserTask;
 import cn.rongcloud.im.niko.utils.SingleSourceLiveData;
-import cn.rongcloud.im.niko.utils.SingleSourceMapLiveData;
 
 public class LoginViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<String>> loginResult = new SingleSourceLiveData<>();

@@ -36,7 +36,6 @@ import cn.rongcloud.im.niko.event.DeleteFriendEvent;
 import cn.rongcloud.im.niko.im.IMManager;
 import cn.rongcloud.im.niko.model.GroupMember;
 import cn.rongcloud.im.niko.model.Resource;
-import cn.rongcloud.im.niko.model.ScreenCaptureData;
 import cn.rongcloud.im.niko.model.TypingInfo;
 import cn.rongcloud.im.niko.sp.UserConfigCache;
 import cn.rongcloud.im.niko.ui.dialog.RencentPicturePopWindow;
@@ -72,7 +71,6 @@ public class ConversationActivity extends TitleBaseActivity {
     private boolean isExtensionExpanded;
     private int extensionExpandedHeight;
     private int extensionCollapsedHeight;
-    private ScreenCaptureData rencentScreenCaptureData;
     private static List<String> rencentShowIdList = new ArrayList<>();
     private RencentPicturePopWindow rencentPicturePopWindow;
     private UserConfigCache userConfigCache;

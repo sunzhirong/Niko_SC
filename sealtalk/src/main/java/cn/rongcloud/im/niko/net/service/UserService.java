@@ -5,16 +5,8 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import cn.rongcloud.im.niko.common.NetConstant;
-import cn.rongcloud.im.niko.db.model.FriendBlackInfo;
-import cn.rongcloud.im.niko.db.model.UserInfo;
-import cn.rongcloud.im.niko.model.ContactGroupResult;
-import cn.rongcloud.im.niko.model.GetPokeResult;
 import cn.rongcloud.im.niko.model.LoginResult;
-import cn.rongcloud.im.niko.model.RegionResult;
-import cn.rongcloud.im.niko.model.RegisterResult;
 import cn.rongcloud.im.niko.model.Result;
-import cn.rongcloud.im.niko.model.UploadTokenResult;
-import cn.rongcloud.im.niko.model.VerifyResult;
 import cn.rongcloud.im.niko.model.niko.CommentBean;
 import cn.rongcloud.im.niko.model.niko.FollowBean;
 import cn.rongcloud.im.niko.model.niko.FollowRequestInfo;

@@ -19,15 +19,6 @@ public class SealTalkUrl {
     public static final String GET_FRIEND_PROFILE = "friendship/{friendId}/profile";
 
 
-    public static final String SET_PRIVACY = "user/set_privacy";
-
-    public static final String GET_PRIVACY = "user/get_privacy";
-
-
-
-
-
-
 
 
 }
