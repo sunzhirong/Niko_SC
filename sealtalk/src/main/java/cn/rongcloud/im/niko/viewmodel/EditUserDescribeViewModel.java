@@ -18,7 +18,6 @@ import cn.rongcloud.im.niko.utils.SingleSourceLiveData;
  */
 public class EditUserDescribeViewModel extends AndroidViewModel {
 
-    private SingleSourceLiveData<Resource<FriendDescription>> friendDescription = new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Boolean>> setFriendDescriptionResult = new SingleSourceLiveData<>();
     private FriendTask friendTask;
     private String userId;
@@ -31,19 +30,8 @@ public class EditUserDescribeViewModel extends AndroidViewModel {
         super(application);
         this.userId = userId;
         this.friendTask = new FriendTask(application);
-        requestFriendDescription();
     }
 
-    /**
-     * 获取朋友描述
-     */
-    public void requestFriendDescription() {
-        friendDescription.setSource(friendTask.getFriendDescription(userId));
-    }
-
-    public LiveData<Resource<FriendDescription>> getFriendDescription() {
-        return friendDescription;
-    }
 
     /**
      * 设置朋友描述

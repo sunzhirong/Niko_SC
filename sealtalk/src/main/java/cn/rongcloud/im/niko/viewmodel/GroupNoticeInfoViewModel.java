@@ -23,7 +23,6 @@ public class GroupNoticeInfoViewModel extends AndroidViewModel {
     private GroupTask groupTask;
     private UserTask userTask;
     private SingleSourceLiveData<Resource<List<GroupNoticeInfo>>> groupNoticeInfo = new SingleSourceLiveData<>();
-    private SingleSourceLiveData<Resource<Void>> clearNoticeResult = new SingleSourceLiveData<>();
     private MutableLiveData<GroupEntity> showCertifiTipsDialog = new MutableLiveData<>();
 
     public GroupNoticeInfoViewModel(@NonNull Application application) {
@@ -44,17 +43,6 @@ public class GroupNoticeInfoViewModel extends AndroidViewModel {
         return groupNoticeInfo;
     }
 
-    /**
-     * 设置消息状态
-     *
-     * @param groupId
-     * @param receiverId
-     * @param status
-     * @param noticeId
-     */
-    public LiveData<Resource<Void>> setGroupNoticeStatus(String groupId, String receiverId, String status, String noticeId) {
-        return groupTask.setNoticeStatus(groupId, receiverId, status, noticeId);
-    }
 
     /**
      * 获取群信息
@@ -93,16 +81,7 @@ public class GroupNoticeInfoViewModel extends AndroidViewModel {
         return showCertifiTipsDialog;
     }
 
-    /**
-     * 清空群信息
-     */
-    public void clearNotice() {
-        clearNoticeResult.setSource(groupTask.clearGroupNotice());
-    }
 
-    public LiveData<Resource<Void>> getClearNoticeResult() {
-        return clearNoticeResult;
-    }
 
     /**
      * 获取用户信息

@@ -102,14 +102,6 @@ public class LiveDataCallAdapter<R> implements CallAdapter<R, LiveData<R>> {
                                 R body = null;
                                 //暂不处理
                                 SLog.d(LogTag.API, "onFailure: 提示应为" + ErrorCode.NETWORK_ERROR.getCode());
-
-//                                Result result = new Result();
-//                                result.setRsCode(ErrorCode.NETWORK_ERROR.getCode());
-//                                try {
-//                                    body = (R) result;
-//                                } catch (Exception e) {
-//                                    // 可能部分接口并不是由 result 包裹，此时无法获取错误码
-//                                }
                                 postValue(body);
                             } else {
                                 postValue(null);

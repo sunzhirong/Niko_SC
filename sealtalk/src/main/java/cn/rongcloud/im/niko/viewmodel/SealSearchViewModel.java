@@ -463,9 +463,6 @@ public class SealSearchViewModel extends AndroidViewModel {
         return messageSearch;
     }
 
-    public void requestGroupContactList() {
-        groupContactList.setSource(userTask.getContactGroupList());
-    }
 
     public LiveData<Resource<List<GroupEntity>>> getGroupContactList() {
         return groupContactList;

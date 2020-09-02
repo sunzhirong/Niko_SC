@@ -85,14 +85,7 @@ public class EditUserDescribeActivity extends BaseActivity {
     private void initViewModel() {
         editUserDescribeViewModel = ViewModelProviders.of(this,
                 new EditUserDescribeViewModel.Factory(getApplication(), userId)).get(EditUserDescribeViewModel.class);
-        editUserDescribeViewModel.getFriendDescription().observe(this, new Observer<Resource<FriendDescription>>() {
-            @Override
-            public void onChanged(Resource<FriendDescription> friendDescriptionResource) {
-                if (friendDescriptionResource.status != Status.LOADING && friendDescriptionResource.data != null) {
-                    updateView(friendDescriptionResource.data);
-                }
-            }
-        });
+//
         editUserDescribeViewModel.setFriendDescriptionResult().observe(this, new Observer<Resource<Boolean>>() {
             @Override
             public void onChanged(Resource<Boolean> voidResource) {
@@ -109,11 +102,6 @@ public class EditUserDescribeActivity extends BaseActivity {
         });
     }
 
-    private void updateView(FriendDescription friendDescriptionResource) {
-        if (!TextUtils.isEmpty(friendDescriptionResource.getDisplayName())) {
-            mEtNickname.setText(friendDescriptionResource.getDisplayName(), TextView.BufferType.EDITABLE);
-        }
-    }
 
 
     private void setFriendDescription() {

@@ -219,22 +219,6 @@ public class UserDetailActivity extends TitleBaseActivity implements View.OnClic
             }
         });
 
-        // 获取删除好友
-        userDetailViewModel.getDeleteFriendResult().observe(this, new Observer<Resource<Void>>() {
-            @Override
-            public void onChanged(Resource<Void> resource) {
-                if (resource.status == Status.SUCCESS) {
-                    ToastUtils.showToast(R.string.common_delete_successful);
-                    EventBus.getDefault().post(new DeleteFriendEvent(userId,true));
-                    // 删除成功后关闭界面
-                    finish();
-                } else if (resource.status == Status.ERROR) {
-                    // 删除失败时置回删除行为
-                    isInDeleteAction = false;
-                    ToastUtils.showToast(resource.message);
-                }
-            }
-        });
 
         // 获取自己的信息
         UserInfoViewModel userInfoViewModel = ViewModelProviders.of(this).get(UserInfoViewModel.class);
@@ -247,14 +231,7 @@ public class UserDetailActivity extends TitleBaseActivity implements View.OnClic
             }
         });
 
-        userDetailViewModel.getFriendDescription().observe(this, new Observer<Resource<FriendDescription>>() {
-            @Override
-            public void onChanged(Resource<FriendDescription> friendDescriptionResource) {
-                if (friendDescriptionResource.status != Status.LOADING && friendDescriptionResource.data != null) {
-                    updateDescription(friendDescriptionResource.data);
-                }
-            }
-        });
+
         // 如果来自群聊，获取群信息
         if (!TextUtils.isEmpty(groupId)) {
             userDetailViewModel.requestMemberInfoDes(groupId, userId);
@@ -552,7 +529,6 @@ public class UserDetailActivity extends TitleBaseActivity implements View.OnClic
                     public void onPositiveClick(View v, Bundle bundle) {
                         // 标记正在删除好友
                         isInDeleteAction = true;
-                        userDetailViewModel.deleteFriend(userId);
                         userDetailViewModel.addToBlackList();
                     }
 

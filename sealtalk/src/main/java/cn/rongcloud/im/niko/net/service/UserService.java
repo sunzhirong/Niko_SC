@@ -39,56 +39,6 @@ public interface UserService {
     @GET(SealTalkUrl.GET_TOKEN)
     Call<Result<LoginResult>> getToken();
 
-    @GET(SealTalkUrl.GET_USER_INFO)
-    LiveData<Result<UserInfo>> getUserInfo(@Path("user_id") String userId);
-
-
-    @GET(SealTalkUrl.REGION_LIST)
-    LiveData<Result<List<RegionResult>>> getRegionList();
-
-
-    @POST(SealTalkUrl.SET_NICK_NAME)
-    LiveData<Result> setMyNickName(@Body RequestBody requestBody);
-
-    @POST(SealTalkUrl.SET_ST_ACCOUNT)
-    LiveData<Result> setStAccount(@Body RequestBody requestBody);
-
-    @POST(SealTalkUrl.SET_GENDER)
-    LiveData<Result> setGender(@Body RequestBody requestBody);
-
-    @GET(SealTalkUrl.GET_IMAGE_UPLOAD_TOKEN)
-    LiveData<Result<UploadTokenResult>> getImageUploadToken();
-
-    @POST(SealTalkUrl.SET_PORTRAIT)
-    LiveData<Result> setPortrait(@Body RequestBody body);
-
-    @POST(SealTalkUrl.CHANGE_PASSWORD)
-    LiveData<Result> changePassword(@Body RequestBody body);
-
-
-    /**
-     * 获取通讯录中的群组列表
-     *
-     * @return
-     */
-    @GET(SealTalkUrl.GROUP_GET_ALL_IN_CONTACT)
-    LiveData<Result<ContactGroupResult>> getGroupListInContact();
-
-    /**
-     * 设置接收戳一下消息状态
-     *
-     * @param body
-     * @return
-     */
-    @POST(SealTalkUrl.SET_RECEIVE_POKE_MESSAGE_STATUS)
-    LiveData<Result> setReceivePokeMessageStatus(@Body RequestBody body);
-
-
-
-
-
-
-
 
 
 

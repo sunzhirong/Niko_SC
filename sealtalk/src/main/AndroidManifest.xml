@@ -243,11 +243,6 @@
 
 
 
-        <activity
-            android:name=".ui.activity.MultiDeleteFriendsActivity"
-            android:screenOrientation="portrait" />
-
-
         <!-- 请将CHANNAL改为app的发布渠道 < -->
         <meta-data
             android:name="InstallChannel"

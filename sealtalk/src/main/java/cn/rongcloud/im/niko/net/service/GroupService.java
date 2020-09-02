@@ -32,53 +32,13 @@ public interface GroupService {
 
 
 
-    @POST(SealTalkUrl.GROUP_JOIN)
-    LiveData<Result> joinGroup(@Body RequestBody body);
-
-    @POST(SealTalkUrl.GROUP_TRANSFER)
-    LiveData<Result> transferGroup(@Body RequestBody body);
-
-
     @POST(SealTalkUrl.GROUP_SET_PORTRAIT_URL)
     LiveData<Result> setGroupPortraitUri(@Body RequestBody body);
 
-    @POST(SealTalkUrl.GROUP_SET_DISPLAY_NAME)
-    LiveData<Result> setMemberDisplayName(@Body RequestBody body);
-
-
-    @POST(SealTalkUrl.GROUP_REMOVE_MANAGER)
-    LiveData<Result> removeManager(@Body RequestBody body);
-
-    @POST(SealTalkUrl.GROUP_ADD_MANAGER)
-    LiveData<Result> addManager(@Body RequestBody body);
-
-    @POST(SealTalkUrl.GROUP_SAVE_TO_CONTACT)
-    LiveData<Result> saveToContact(@Body RequestBody body);
-
-    @HTTP(method = "DELETE", path = SealTalkUrl.GROUP_SAVE_TO_CONTACT, hasBody = true)
-    LiveData<Result> removeFromContact(@Body RequestBody body);
-
-
-    @POST(SealTalkUrl.GROUP_MUTE_ALL)
-    LiveData<Result> muteAll(@Body RequestBody body);
-
-    @POST(SealTalkUrl.GROUP_MEMBER_PROTECTION)
-    LiveData<Result> setGroupProtection(@Body RequestBody body);
-
-    @POST(SealTalkUrl.GROUP_SET_CERTIFICATION)
-    LiveData<Result<Void>> setCertification(@Body RequestBody body);
 
     @GET(SealTalkUrl.GROUP_GET_NOTICE_INFO)
     LiveData<Result<List<GroupNoticeInfoResult>>> getGroupNoticeInfo();
 
-    @POST(SealTalkUrl.GROUP_SET_NOTICE_STATUS)
-    LiveData<Result<Void>> setGroupNoticeStatus(@Body RequestBody body);
-
-    @POST(SealTalkUrl.GROUP_CLEAR_NOTICE)
-    LiveData<Result<Void>> clearGroupNotice();
-
-    @POST(SealTalkUrl.GROUP_COPY)
-    LiveData<Result<CopyGroupResult>> copyGroup(@Body RequestBody body);
 
     @POST(SealTalkUrl.GROUP_GET_EXITED)
     LiveData<Result<List<GroupExitedMemberInfo>>> getGroupExitedMemberInfo(@Body RequestBody body);
@@ -86,8 +46,6 @@ public interface GroupService {
     @POST(SealTalkUrl.GROUP_GET_MEMBER_INFO_DES)
     LiveData<Result<GroupMemberInfoDes>> getGroupInfoDes(@Body RequestBody body);
 
-    @POST(SealTalkUrl.GROUP_SET_MEMBER_INFO_DES)
-    LiveData<Result<Void>> setGroupInfoDes(@Body RequestBody body);
 
 
 

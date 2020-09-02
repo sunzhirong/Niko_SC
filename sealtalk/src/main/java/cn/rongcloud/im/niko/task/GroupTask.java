@@ -108,23 +108,6 @@ public class GroupTask {
         }.asLiveData();
     }
 
-    /**
-     * 加入群组
-     *
-     * @param groupId
-     * @return
-     */
-    public LiveData<Resource<Void>> joinGroup(String groupId) {
-        return new NetworkOnlyResource<Void, Result>() {
-            @NonNull
-            @Override
-            protected LiveData<Result> createCall() {
-                HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("groupId", groupId);
-                return groupService.joinGroup(RetrofitUtil.createJsonRequest(bodyMap));
-            }
-        }.asLiveData();
-    }
 
     /**
      * 群主或群管理将群成员移出群组
@@ -231,26 +214,6 @@ public class GroupTask {
         }.asLiveData();
     }
 
-    /**
-     * 转移群主
-     *
-     * @param groupId
-     * @param userId
-     * @return
-     */
-    public LiveData<Resource<Void>> transferGroup(String groupId, String userId) {
-        return new NetworkOnlyResource<Void, Result>() {
-            @NonNull
-            @Override
-            protected LiveData<Result> createCall() {
-                HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("groupId", groupId);
-                bodyMap.put("userId", userId);
-                return groupService.transferGroup(RetrofitUtil.createJsonRequest(bodyMap));
-            }
-
-        }.asLiveData();
-    }
 
     /**
      * 重命名群名称
@@ -330,38 +293,38 @@ public class GroupTask {
     public LiveData<Resource<Void>> uploadAndSetGroupPortrait(String groupId, Uri portraitUrl) {
         MediatorLiveData<Resource<Void>> result = new MediatorLiveData<>();
         // 先上传图片文件
-        LiveData<Resource<String>> uploadResource = fileManager.uploadImage(portraitUrl);
-        result.addSource(uploadResource, resource -> {
-            if (resource.status != Status.LOADING) {
-                result.removeSource(uploadResource);
-            }
-
-            if (resource.status == Status.ERROR) {
-                result.setValue(Resource.error(resource.code, null));
-                return;
-            }
-
-            if (resource.status == Status.SUCCESS) {
-                String uploadUrl = resource.data;
-
-                // 获取上传成功的地址后更新地址
-                LiveData<Resource<Void>> setPortraitResource = setGroupPortrait(groupId, uploadUrl);
-                result.addSource(setPortraitResource, portraitResultResource -> {
-                    if (portraitResultResource.status != Status.LOADING) {
-                        result.removeSource(setPortraitResource);
-                    }
-
-                    if (portraitResultResource.status == Status.ERROR) {
-                        result.setValue(Resource.error(portraitResultResource.code, null));
-                        return;
-                    }
-
-                    if (portraitResultResource.status == Status.SUCCESS) {
-                        result.setValue(Resource.success(null));
-                    }
-                });
-            }
-        });
+//        LiveData<Resource<String>> uploadResource = fileManager.uploadImage(portraitUrl);
+//        result.addSource(uploadResource, resource -> {
+//            if (resource.status != Status.LOADING) {
+//                result.removeSource(uploadResource);
+//            }
+//
+//            if (resource.status == Status.ERROR) {
+//                result.setValue(Resource.error(resource.code, null));
+//                return;
+//            }
+//
+//            if (resource.status == Status.SUCCESS) {
+//                String uploadUrl = resource.data;
+//
+//                // 获取上传成功的地址后更新地址
+//                LiveData<Resource<Void>> setPortraitResource = setGroupPortrait(groupId, uploadUrl);
+//                result.addSource(setPortraitResource, portraitResultResource -> {
+//                    if (portraitResultResource.status != Status.LOADING) {
+//                        result.removeSource(setPortraitResource);
+//                    }
+//
+//                    if (portraitResultResource.status == Status.ERROR) {
+//                        result.setValue(Resource.error(portraitResultResource.code, null));
+//                        return;
+//                    }
+//
+//                    if (portraitResultResource.status == Status.SUCCESS) {
+//                        result.setValue(Resource.success(null));
+//                    }
+//                });
+//            }
+//        });
 
         return result;
     }
@@ -402,25 +365,6 @@ public class GroupTask {
         }.asLiveData();
     }
 
-    /**
-     * 设置群内昵称
-     *
-     * @param groupId
-     * @param displayName
-     * @return
-     */
-    public LiveData<Resource<Void>> setMemberDisplayName(String groupId, String displayName) {
-        return new NetworkOnlyResource<Void, Result>() {
-            @NonNull
-            @Override
-            protected LiveData<Result> createCall() {
-                HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("groupId", groupId);
-                bodyMap.put("displayName", displayName);
-                return groupService.setMemberDisplayName(RetrofitUtil.createJsonRequest(bodyMap));
-            }
-        }.asLiveData();
-    }
 
     /**
      * 获取群组信息
@@ -498,22 +442,6 @@ public class GroupTask {
     }
 
 
-    /**
-     * 获取群组 list 信息 ( 异步 )
-     *
-     * @param groupIds
-     * @return
-     */
-    public LiveData<List<GroupEntity>> getGroupInfoList(String[] groupIds) {
-        GroupDao groupDao = dbManager.getGroupDao();
-        LiveData<List<GroupEntity>> groupInfoList = null;
-        if (groupDao != null) {
-            groupInfoList = groupDao.getGroupInfoList(groupIds);
-        } else {
-            groupInfoList = new MutableLiveData<>(null);
-        }
-        return groupInfoList;
-    }
 
     public LiveData<GroupEntity> getGroupInfoInDB(String groupIds) {
         GroupDao groupDao = dbManager.getGroupDao();
@@ -658,13 +586,6 @@ public class GroupTask {
         return getGroupMemberInfoList(groupId, null);
     }
 
-    public LiveData<List<GroupMember>> getGroupMemberInfoListInDB(final String groupId) {
-        GroupMemberDao groupMemberDao = dbManager.getGroupMemberDao();
-        if (groupMemberDao != null) {
-            return groupMemberDao.getGroupMemberList(groupId);
-        }
-        return null;
-    }
 
     public LiveData<List<GroupMember>> searchGroupMemberInDB(final String groupId, String searchKey) {
         GroupMemberDao groupMemberDao = dbManager.getGroupMemberDao();
@@ -682,137 +603,7 @@ public class GroupTask {
         return dbManager.getGroupDao().searchGroupByName(match);
     }
 
-    /**
-     * 删除管理员
-     *
-     * @param groupId
-     * @param memberIds
-     * @return
-     */
-    public LiveData<Resource<Void>> removeManager(String groupId, String[] memberIds) {
-        return new NetworkOnlyResource<Void, Result>() {
-            @NonNull
-            @Override
-            protected LiveData createCall() {
-                HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("groupId", groupId);
-                bodyMap.put("memberIds", memberIds);
-                RequestBody body = RetrofitUtil.createJsonRequest(bodyMap);
-                return groupService.removeManager(body);
-            }
-        }.asLiveData();
-    }
 
-    /**
-     * 设置禁言
-     *
-     * @param groupId
-     * @param muteStatus 1开启禁言，0关闭禁言
-     * @param userId     可发言用户id，不设置除了群主和管理员，全员禁言
-     * @return
-     */
-    public LiveData<Resource<Void>> setMuteAll(String groupId, int muteStatus, String userId) {
-        return new NetworkOnlyResource<Void, Result>() {
-            @NonNull
-            @Override
-            protected LiveData<Result> createCall() {
-                HashMap<String, Object> paramMap = new HashMap<>();
-                paramMap.put("groupId", groupId);
-                paramMap.put("muteStatus", muteStatus);
-                if (!TextUtils.isEmpty(userId)) {
-                    paramMap.put("userId", userId);
-                }
-                return groupService.muteAll(RetrofitUtil.createJsonRequest(paramMap));
-            }
-
-            @Override
-            protected void saveCallResult(@NonNull Void item) {
-                GroupDao groupDao = dbManager.getGroupDao();
-                if (groupDao != null) {
-                    groupDao.updateMuteAllState(groupId, muteStatus);
-                }
-            }
-        }.asLiveData();
-    }
-
-    /**
-     * 设置群成员保护
-     *
-     * @param groupId
-     * @param memberProtection 成员保护模式: 0 关闭、1 开启
-     * @return
-     */
-    public LiveData<Resource<Void>> setMemberProtection(String groupId, int memberProtection) {
-        return new NetworkOnlyResource<Void, Result>() {
-            @NonNull
-            @Override
-            protected LiveData<Result> createCall() {
-                HashMap<String, Object> paramMap = new HashMap<>();
-                paramMap.put("groupId", groupId);
-                paramMap.put("memberProtection", memberProtection);
-                return groupService.setGroupProtection(RetrofitUtil.createJsonRequest(paramMap));
-            }
-
-            @Override
-            protected void saveCallResult(@NonNull Void item) {
-                GroupDao groupDao = dbManager.getGroupDao();
-                if (groupDao != null) {
-                    groupDao.updateMemberProtectionState(groupId, memberProtection);
-                }
-            }
-        }.asLiveData();
-    }
-
-    /**
-     * 入群认证
-     *
-     * @param groupId
-     * @param certiStatus 认证状态： 0 开启(需要认证)、1 关闭（不需要认证）
-     * @return
-     */
-    public LiveData<Resource<Void>> setCertification(String groupId, int certiStatus) {
-        return new NetworkOnlyResource<Void, Result<Void>>() {
-
-            @NonNull
-            @Override
-            protected LiveData<Result<Void>> createCall() {
-                HashMap<String, Object> paramMap = new HashMap<>();
-                paramMap.put("groupId", groupId);
-                paramMap.put("certiStatus", certiStatus);
-                return groupService.setCertification(RetrofitUtil.createJsonRequest(paramMap));
-            }
-
-            @Override
-            protected void saveCallResult(@NonNull Void item) {
-                GroupDao groupDao = dbManager.getGroupDao();
-                if (groupDao != null) {
-                    groupDao.updateCertiStatus(groupId, certiStatus);
-                }
-                super.saveCallResult(item);
-            }
-        }.asLiveData();
-    }
-
-    /**
-     * 添加管理员
-     *
-     * @param groupId
-     * @param membersIds
-     * @return
-     */
-    public LiveData<Resource<Void>> addManager(String groupId, String[] membersIds) {
-        return new NetworkOnlyResource<Void, Result>() {
-            @NonNull
-            @Override
-            protected LiveData createCall() {
-                HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("groupId", groupId);
-                bodyMap.put("memberIds", membersIds);
-                RequestBody body = RetrofitUtil.createJsonRequest(bodyMap);
-                return groupService.addManager(body);
-            }
-        }.asLiveData();
-    }
 
     /**
      * 获取所有群信息
@@ -823,61 +614,6 @@ public class GroupTask {
         return dbManager.getGroupDao().getAllGroupInfoList();
     }
 
-    /**
-     * 群组保存到通讯录
-     *
-     * @return
-     */
-    public LiveData<Resource<Void>> saveGroupToContact(String groupId) {
-        return new NetworkOnlyResource<Void, Result>() {
-            @Override
-            protected void saveCallResult(@NonNull Void item) {
-                updateGroupContactStateInDB(groupId, true);
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<Result> createCall() {
-                HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("groupId", groupId);
-                return groupService.saveToContact(RetrofitUtil.createJsonRequest(bodyMap));
-            }
-        }.asLiveData();
-    }
-
-    /**
-     * 群组从通讯录中移除
-     *
-     * @return
-     */
-    public LiveData<Resource<Void>> removeGroupFromContact(String groupId) {
-        return new NetworkOnlyResource<Void, Result>() {
-            @Override
-            protected void saveCallResult(@NonNull Void item) {
-                updateGroupContactStateInDB(groupId, false);
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<Result> createCall() {
-                HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("groupId", groupId);
-                return groupService.removeFromContact(RetrofitUtil.createJsonRequest(bodyMap));
-            }
-        }.asLiveData();
-    }
-
-    /**
-     * 更新群组在通讯录状态
-     *
-     * @param isToContact
-     */
-    private void updateGroupContactStateInDB(String groupId, boolean isToContact) {
-        GroupDao groupDao = dbManager.getGroupDao();
-        if (groupDao == null) return;
-
-        groupDao.updateGroupContactState(groupId, isToContact ? 1 : 0);
-    }
 
     /**
      * 获取群通知消息详情
@@ -951,87 +687,7 @@ public class GroupTask {
         }.asLiveData();
     }
 
-    /**
-     * 设置消息状态
-     *
-     * @param groupId
-     * @param receiverId
-     * @param status     0 忽略、 1 同意
-     * @return
-     */
-    public LiveData<Resource<Void>> setNoticeStatus(String groupId, String receiverId, String status, String noticeId) {
-        return new NetworkOnlyResource<Void, Result<Void>>() {
 
-            @NonNull
-            @Override
-            protected LiveData<Result<Void>> createCall() {
-                HashMap<String, Object> paramMap = new HashMap<>();
-                paramMap.put("groupId", groupId);
-                paramMap.put("receiverId", receiverId);
-                paramMap.put("status", Integer.valueOf(status));
-                return groupService.setGroupNoticeStatus(RetrofitUtil.createJsonRequest(paramMap));
-            }
-
-            @Override
-            protected void saveCallResult(@NonNull Void item) {
-                GroupDao groupDao = dbManager.getGroupDao();
-                // 更新通知状态
-                if (groupDao != null) {
-                    groupDao.updateGroupNoticeStatus(noticeId, Integer.valueOf(status));
-                }
-                super.saveCallResult(item);
-            }
-        }.asLiveData();
-    }
-
-    /**
-     * 清空所有消息
-     *
-     * @return
-     */
-    public LiveData<Resource<Void>> clearGroupNotice() {
-        return new NetworkOnlyResource<Void, Result<Void>>() {
-
-            @NonNull
-            @Override
-            protected LiveData<Result<Void>> createCall() {
-                return groupService.clearGroupNotice();
-            }
-
-            @Override
-            protected void saveCallResult(@NonNull Void item) {
-                GroupDao groupDao = dbManager.getGroupDao();
-                if (groupDao != null) {
-                    groupDao.deleteAllGroupNotice();
-                }
-                super.saveCallResult(item);
-            }
-        }.asLiveData();
-    }
-
-    /**
-     * 复制群组
-     *
-     * @param groupId
-     * @param name
-     * @param portraitUri
-     * @return
-     */
-    public LiveData<Resource<CopyGroupResult>> copyGroup(String groupId, String name, String portraitUri) {
-        return new NetworkOnlyResource<CopyGroupResult, Result<CopyGroupResult>>() {
-            @NonNull
-            @Override
-            protected LiveData<Result<CopyGroupResult>> createCall() {
-                HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("groupId", groupId);
-                bodyMap.put("name", name);
-                if (!TextUtils.isEmpty(portraitUri)) {
-                    bodyMap.put("portraitUri", portraitUri);
-                }
-                return groupService.copyGroup(RetrofitUtil.createJsonRequest(bodyMap));
-            }
-        }.asLiveData();
-    }
 
     /**
      * 获取群通知消息详情
@@ -1126,82 +782,6 @@ public class GroupTask {
                 return groupService.getGroupInfoDes(RetrofitUtil.createJsonRequest(bodyMap));
             }
 
-        }.asLiveData();
-    }
-
-    /**
-     * 设置群成员用户信息
-     *
-     * @param groupId       群 Id	String	必填
-     * @param memberId      群用户 Id	String	必填
-     * @param groupNickname 群成员昵称 String	非必填
-     * @param region        区号	String	非必填
-     * @param phone         电话	String	非必填
-     * @param WeChat        微信号	String	非必填
-     * @param Alipay        支付宝号	String	非必填
-     * @param memberDesc    描述 array 非必填
-     * @return
-     */
-    public LiveData<Resource<Void>> setGroupMemberInfoDes(String groupId, String memberId, String groupNickname
-            , String region, String phone, String WeChat, String Alipay, ArrayList<String> memberDesc) {
-        return new NetworkOnlyResource<Void, Result<Void>>() {
-            @NonNull
-            @Override
-            protected LiveData<Result<Void>> createCall() {
-                HashMap<String, Object> bodyMap = new HashMap<>();
-                bodyMap.put("groupId", groupId);
-                bodyMap.put("memberId", memberId);
-                if (groupNickname != null) {
-                    bodyMap.put("groupNickname", groupNickname);
-                }
-                if (region != null) {
-                    bodyMap.put("region", region);
-                }
-                if (phone != null) {
-                    bodyMap.put("phone", phone);
-                }
-                if (WeChat != null) {
-                    bodyMap.put("WeChat", WeChat);
-                }
-                if (Alipay != null) {
-                    bodyMap.put("Alipay", Alipay);
-                }
-                if (memberDesc != null) {
-                    bodyMap.put("memberDesc", memberDesc);
-                }
-                return groupService.setGroupInfoDes(RetrofitUtil.createJsonRequest(bodyMap));
-            }
-
-            @Override
-            protected void saveCallResult(@NonNull Void item) {
-                super.saveCallResult(item);
-                GroupMemberInfoDes groupMemberInfoDes = new GroupMemberInfoDes();
-                groupMemberInfoDes.setGroupId(groupId);
-                groupMemberInfoDes.setMemberId(memberId);
-                if (groupNickname != null) {
-                    groupMemberInfoDes.setGroupNickname(groupNickname);
-                    //设置成功后更新 groupMember 数据库 NickName
-                    GroupMemberDao groupMemberDao = dbManager.getGroupMemberDao();
-                    groupMemberDao.updateMemberNickName(groupNickname, groupId, memberId);
-                }
-                if (region != null) {
-                    groupMemberInfoDes.setRegion(region);
-                }
-                if (phone != null) {
-                    groupMemberInfoDes.setPhone(phone);
-                }
-                if (WeChat != null) {
-                    groupMemberInfoDes.setWeChat(WeChat);
-                }
-                if (Alipay != null) {
-                    groupMemberInfoDes.setAlipay(Alipay);
-                }
-                if (memberDesc != null) {
-                    groupMemberInfoDes.setMemberDesc(memberDesc);
-                }
-                GroupDao groupDao = dbManager.getGroupDao();
-                groupDao.insertGroupMemberInfoDes(groupMemberInfoDes);
-            }
         }.asLiveData();
     }
 }

@@ -31,8 +31,6 @@ import cn.rongcloud.im.niko.model.niko.FriendBean;
 import cn.rongcloud.im.niko.sp.SPUtils;
 import cn.rongcloud.im.niko.ui.BaseActivity;
 import cn.rongcloud.im.niko.ui.adapter.MembersAdapter;
-import cn.rongcloud.im.niko.ui.fragment.MainContactsListFragment;
-import cn.rongcloud.im.niko.ui.fragment.MyContactsListFragment;
 import cn.rongcloud.im.niko.utils.glideutils.GlideImageLoaderUtil;
 import cn.rongcloud.im.niko.utils.log.SLog;
 import cn.rongcloud.im.niko.viewmodel.UserInfoViewModel;

@@ -173,14 +173,6 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
         });
 
 
-        userDetailViewModel.getFriendDescription().observe(this, new Observer<Resource<FriendDescription>>() {
-            @Override
-            public void onChanged(Resource<FriendDescription> friendDescriptionResource) {
-                if (friendDescriptionResource.status != Status.LOADING && friendDescriptionResource.data != null) {
-                    updateDescription(friendDescriptionResource.data);
-                }
-            }
-        });
 
     }
 
@@ -242,25 +234,6 @@ public class PrivateChatSettingActivity extends TitleBaseActivity implements Vie
         }
     }
 
-
-    private void updateDescription(FriendDescription data) {
-        if (!TextUtils.isEmpty(data.getDescription())) {
-            sivDescription.setContent(R.string.profile_set_display_des);
-            sivDescription.setValue(data.getDescription());
-            sivDescription.getValueView().setSingleLine();
-            sivDescription.getValueView().setMaxEms(10);
-            sivDescription.getValueView().setEllipsize(TextUtils.TruncateAt.END);
-        } else {
-            // 同时为空显示'设置备注和描述'
-            if (TextUtils.isEmpty(data.getPhone())) {
-                sivDescription.setContent(R.string.profile_set_display_name);
-            } else {
-                sivDescription.setContent(R.string.profile_set_display_des);
-            }
-            sivDescription.setValue("");
-        }
-
-    }
 
     /**
      * 跳转到设置备注名

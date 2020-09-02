@@ -30,8 +30,6 @@ public class GroupManagementViewModel extends AndroidViewModel {
     private String groupId;
     private MediatorLiveData<Resource<List<GroupMember>>> groupManagements = new MediatorLiveData<>();
     private MutableLiveData<GroupMember> groupOwner = new MutableLiveData<>();
-    private MediatorLiveData<Resource<Void>> removeManagerResult = new MediatorLiveData<>();
-    private MediatorLiveData<Resource<Void>> addManagerResult = new MediatorLiveData<>();
     private MediatorLiveData<GroupEntity> groupInfo = new MediatorLiveData<>();
     private GroupTask groupTask;
     private SingleSourceMapLiveData<Resource<List<GroupMember>>, List<GroupMember>> groupMembersWithoutGroupOwner;
@@ -157,104 +155,7 @@ public class GroupManagementViewModel extends AndroidViewModel {
         return groupManagements;
     }
 
-    /**
-     * 删除管理员结果
-     *
-     * @return
-     */
-    public LiveData<Resource<Void>> getRemoveManagerResult() {
-        return removeManagerResult;
-    }
 
-    /**
-     * 添加管理员结果
-     *
-     * @return
-     */
-    public LiveData<Resource<Void>> getAddManagerResult() {
-        return addManagerResult;
-    }
-
-
-    /**
-     * 除群主之外的所有成员
-     *
-     * @return
-     */
-    public LiveData<List<GroupMember>> getGroupMembersWithoutGroupOwner() {
-        return groupMembersWithoutGroupOwner;
-    }
-    /**
-     * 删除管理员
-     *
-     * @param member
-     */
-    public void deleteManagement(GroupMember member) {
-
-        LiveData<Resource<Void>> resourceLiveData = groupTask.removeManager(member.getGroupId(), new String[]{member.getUserId()});
-
-        removeManagerResult.addSource(resourceLiveData, new Observer<Resource<Void>>() {
-            @Override
-            public void onChanged(Resource<Void> resource) {
-                if (resource.status != Status.LOADING) {
-                    removeManagerResult.removeSource(resourceLiveData);
-                }
-
-                if (resource.status == Status.SUCCESS) {
-                    groupMemberInfo(groupId);
-                    removeManagerResult.addSource(groupManagements, new Observer<Resource<List<GroupMember>>>() {
-                        @Override
-                        public void onChanged(Resource<List<GroupMember>> listResource) {
-                            if (listResource.status != Status.LOADING) {
-                                removeManagerResult.removeSource(groupManagements);
-                                removeManagerResult.postValue(resource);
-                            }
-                        }
-                    });
-                } else {
-                    removeManagerResult.postValue(resource);
-                }
-            }
-        });
-    }
-
-    /**
-     * 添加管理员
-     *
-     * @param membersIds
-     */
-    public void addManagement(List<String> membersIds) {
-        String[] memIds = new String[membersIds.size()];
-        for (int i = 0; i < membersIds.size(); i++) {
-            memIds[i] = membersIds.get(i);
-        }
-
-        LiveData<Resource<Void>> resourceLiveData = groupTask.addManager(groupId, memIds);
-
-        addManagerResult.addSource(resourceLiveData, new Observer<Resource<Void>>() {
-            @Override
-            public void onChanged(Resource<Void> resource) {
-                if (resource.status != Status.LOADING) {
-                    addManagerResult.removeSource(resourceLiveData);
-                }
-
-                if (resource.status == Status.SUCCESS) {
-                    groupMemberInfo(groupId);
-                    addManagerResult.addSource(groupManagements, new Observer<Resource<List<GroupMember>>>() {
-                        @Override
-                        public void onChanged(Resource<List<GroupMember>> listResource) {
-                            if (listResource.status != Status.LOADING) {
-                                addManagerResult.removeSource(groupManagements);
-                                addManagerResult.postValue(resource);
-                            }
-                        }
-                    });
-                } else {
-                    addManagerResult.postValue(resource);
-                }
-            }
-        });
-    }
 
 
 

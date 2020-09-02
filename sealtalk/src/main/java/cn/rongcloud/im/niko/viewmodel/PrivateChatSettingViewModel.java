@@ -11,14 +11,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import cn.rongcloud.im.niko.db.model.FriendDetailInfo;
-import cn.rongcloud.im.niko.db.model.FriendShipInfo;
 import cn.rongcloud.im.niko.db.model.UserInfo;
 import cn.rongcloud.im.niko.im.IMManager;
 import cn.rongcloud.im.niko.model.Resource;
-import cn.rongcloud.im.niko.model.ScreenCaptureResult;
 import cn.rongcloud.im.niko.task.FriendTask;
-import cn.rongcloud.im.niko.task.PrivacyTask;
 import cn.rongcloud.im.niko.task.UserTask;
 import cn.rongcloud.im.niko.utils.SingleSourceLiveData;
 import io.rong.imlib.model.Conversation;

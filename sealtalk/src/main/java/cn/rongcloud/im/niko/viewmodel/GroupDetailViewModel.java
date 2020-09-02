@@ -21,11 +21,9 @@ import java.util.List;
 import cn.rongcloud.im.niko.db.model.GroupEntity;
 import cn.rongcloud.im.niko.im.IMManager;
 import cn.rongcloud.im.niko.model.GroupMember;
-import cn.rongcloud.im.niko.model.GroupNoticeResult;
 import cn.rongcloud.im.niko.model.Resource;
 import cn.rongcloud.im.niko.net.request.GroupDataReq;
 import cn.rongcloud.im.niko.task.GroupTask;
-import cn.rongcloud.im.niko.task.PrivacyTask;
 import cn.rongcloud.im.niko.utils.SingleSourceLiveData;
 import cn.rongcloud.im.niko.utils.SingleSourceMapLiveData;
 import cn.rongcloud.im.niko.utils.log.SLog;
@@ -218,7 +216,7 @@ public class GroupDetailViewModel extends AndroidViewModel {
      * @param imageUri
      */
     public void setGroupPortrait(Uri imageUri) {
-        uploadPortraitResult.setSource(groupTask.uploadAndSetGroupPortrait(groupId, imageUri));
+//        uploadPortraitResult.setSource(groupTask.uploadAndSetGroupPortrait(groupId, imageUri));
     }
 
     /**

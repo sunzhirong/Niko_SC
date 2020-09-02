@@ -27,41 +27,6 @@ import retrofit2.http.QueryMap;
 
 public interface FriendService {
 
-    /**
-     * 搜索好友
-     *
-     * @param queryMap
-     * @return
-     */
-    @GET(SealTalkUrl.FIND_FRIEND)
-    LiveData<Result<SearchFriendInfo>> searchFriend(@QueryMap(encoded = true) Map<String, String> queryMap);
-
-    @POST(SealTalkUrl.DELETE_FREIND)
-    LiveData<Result> deleteFriend(@Body RequestBody body);
-
-    /**
-     * 获取手机通讯录中的人员信息
-     *
-     * @param body
-     * @return
-     */
-    @POST(SealTalkUrl.GET_CONTACTS_INFO)
-    LiveData<Result<List<GetContactInfoResult>>> getContactsInfo(@Body RequestBody body);
-
-
-    @POST(SealTalkUrl.GET_FRIEND_DESCRIPTION)
-    LiveData<Result<FriendDescription>> getFriendDescription(@Body RequestBody body);
-
-    /**
-     * 批量删除好友
-     *
-     * @param body
-     * @return
-     */
-    @POST(SealTalkUrl.MULTI_DELETE_FRIEND)
-    LiveData<Result> deleteMultiFriend(@Body RequestBody body);
-
-
 
     /**
      * 获取所有好友信息

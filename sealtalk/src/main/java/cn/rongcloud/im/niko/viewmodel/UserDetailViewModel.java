@@ -38,7 +38,6 @@ public class UserDetailViewModel extends AndroidViewModel {
     private SingleSourceMapLiveData<Resource<AddFriendResult>, Resource<AddFriendResult>> inviteResult;
     private SingleSourceMapLiveData<Resource<Boolean>, Resource<Boolean>> addBlackListResult;
     private SingleSourceMapLiveData<Resource<Boolean>, Resource<Boolean>> removeBlackListResult;
-    private SingleSourceLiveData<Resource<Void>> removeFriendResult = new SingleSourceLiveData<>();
     private LiveData<Boolean> isInBlackList;
     private SingleSourceLiveData<Resource<FriendDescription>> friendDescription = new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<GroupMemberInfoDes>> groupMemberInfoDes = new SingleSourceLiveData<>();
@@ -116,7 +115,6 @@ public class UserDetailViewModel extends AndroidViewModel {
             }
         });
 
-        requestFriendDescription();
     }
 
     /**
@@ -142,23 +140,6 @@ public class UserDetailViewModel extends AndroidViewModel {
         removeBlackListResult.setSource(userTask.removeFromBlackList(userId));
     }
 
-    /**
-     * 删除好友
-     *
-     * @param friendId
-     */
-    public void deleteFriend(String friendId) {
-        removeFriendResult.setSource(friendTask.deleteFriend(friendId));
-    }
-
-    /**
-     * 获取删除好友结果
-     *
-     * @return
-     */
-    public LiveData<Resource<Void>> getDeleteFriendResult() {
-        return removeFriendResult;
-    }
 
     /**
      * 判断当前用户是否在黑名单
@@ -211,16 +192,6 @@ public class UserDetailViewModel extends AndroidViewModel {
         });
     }
 
-    /**
-     * 获取朋友描述
-     */
-    public void requestFriendDescription() {
-        friendDescription.setSource(friendTask.getFriendDescription(userId));
-    }
-
-    public LiveData<Resource<FriendDescription>> getFriendDescription() {
-        return friendDescription;
-    }
 
     /**
      * 获取群成员用户信息

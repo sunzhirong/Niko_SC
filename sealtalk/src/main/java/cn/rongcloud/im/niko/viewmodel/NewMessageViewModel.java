@@ -25,7 +25,6 @@ public class NewMessageViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<QuietHours>> setNotifiQuietHoursResult = new SingleSourceLiveData<>();
     private SingleSourceMapLiveData<Boolean, Boolean> remindStatus;
     private MediatorLiveData<QuietHours> donotDistrabStatus = new MediatorLiveData<>();
-    private SingleSourceLiveData<Resource<Void>> setReceivePokeMsgStatusResult = new SingleSourceLiveData<>();
     private SingleSourceLiveData<Resource<Boolean>> getPushNotifyDetailResult = new SingleSourceLiveData<>();
 
     private UserTask userTask;
@@ -115,21 +114,6 @@ public class NewMessageViewModel extends AndroidViewModel {
         setNotifiQuietHoursResult.setSource(imManager.setNotificationQuietHours(startTime, spanMinutes, true));
     }
 
-    /**
-     * 设置接受戳一下消息
-     */
-    public void setReceivePokeMessageStatus(boolean isReceive) {
-        setReceivePokeMsgStatusResult.setSource(userTask.setReceivePokeMessageState(isReceive));
-    }
-
-    /**
-     * 获取设置接受戳一下消息结果
-     *
-     * @return
-     */
-    public LiveData<Resource<Void>> getSetReceivePokeMessageStatusResult() {
-        return setReceivePokeMsgStatusResult;
-    }
 
 
 

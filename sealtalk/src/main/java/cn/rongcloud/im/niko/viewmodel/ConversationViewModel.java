@@ -50,7 +50,6 @@ public class ConversationViewModel extends AndroidViewModel {
     private IMManager imManager;
     private FriendTask friendTask;
     private LiveData<String> groupAt;
-    private PrivacyTask privacyTask;
 
     public ConversationViewModel(Application application) {
         super(application);
@@ -61,7 +60,6 @@ public class ConversationViewModel extends AndroidViewModel {
         imManager = IMManager.getInstance();
         friendTask = new FriendTask(application);
         groupTask = new GroupTask(application);
-        privacyTask = new PrivacyTask(application);
 
         /**
          * 设置人工评价监听
